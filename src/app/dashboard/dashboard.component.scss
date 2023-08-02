@@ -1,0 +1,52 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+}
+
+.box {
+  background-color: rgba(255, 234, 0, 0.7); /* Replace with desired color */
+  border: 1px solid #ffffff;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.box:nth-child(2) {
+  background-color: rgba(255, 0, 0, 0.7); /* Replace with desired color */
+}
+
+.box:nth-child(3) {
+  background-color: #ff0000; /* Replace with desired color */
+}
+
+.box:nth-child(4) {
+  background-color: #22c46f; /* Replace with desired color */
+}
+
+.box:nth-child(5) {
+  background-color: #ffea00;  /* Replace with desired color */
+}
+
+.box:nth-child(6) {
+  background-color: rgba(255, 0, 0, 0.7); /* Replace with desired color */
+}
+
+.box:nth-child(7) {
+  background-color: #3ee18b; /* Replace with desired color */
+}
+
+.box:nth-child(8) {
+  background-color: #22c46f; /* Replace with desired color */
+}
+
+.box:nth-child(9) {
+  background-color: rgba(255, 234, 0, 0.7); /* Replace with desired color */
+}
+
+.message {
+  background-color: #ddd;
+  padding: 1rem;
+  text-align: center;
+}
+

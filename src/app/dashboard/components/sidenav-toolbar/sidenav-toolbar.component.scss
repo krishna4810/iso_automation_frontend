@@ -1,0 +1,52 @@
+
+.example-sidenav-content {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  height: 100vh; /* Adjust this value if needed */
+  overflow: hidden; /* Hide overflow from the container */
+}
+
+.example-sidenav {
+  padding: 20px;
+}
+
+.custom-sidenav {
+  width: 250px;
+}
+
+.example-toolbar {
+  background-color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999; /* Adjust the z-index value if needed */
+}
+
+.custom-sidenav {
+  width: 250px;
+  position: fixed;
+  top: 56px; /* Adjust this value to match the height of your toolbar */
+  bottom: 0;
+  overflow-y: auto; /* Allow vertical scrolling */
+}
+
+.mat-sidenav-content {
+  background-color: #F5F5F5;
+  overflow-y: auto; /* Allow vertical scrolling */
+  margin-top: 70px;
+  padding: 20px;/* Adjust this value to match the height of your toolbar */
+
+}
+
+.is-active{
+  background-color: #E1F1E8;
+  color: #089046;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+

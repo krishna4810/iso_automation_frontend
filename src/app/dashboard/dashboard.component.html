@@ -1,0 +1,16 @@
+<div class="grid">
+  <div class="box" (mouseover)="showMessage('Message 1')" (mouseout)="clearMessage()">
+    H1 H2 H1 H2 H1 H2 H1 H2 H1 H2
+  </div>
+  <div class="box" (mouseover)="showMessage('Message 2')" (mouseout)="clearMessage()"></div>
+  <div class="box" (mouseover)="showMessage('Message 3')" (mouseout)="clearMessage()"></div>
+  <div class="box" (mouseover)="showMessage('Message 4')" (mouseout)="clearMessage()"></div>
+  <div class="box" (mouseover)="showMessage('Message 5')" (mouseout)="clearMessage()"></div>
+  <div class="box" (mouseover)="showMessage('Message 6')" (mouseout)="clearMessage()">H4</div>
+  <div class="box" (mouseover)="showMessage('Message 7')" (mouseout)="clearMessage()"></div>
+  <div class="box" (mouseover)="showMessage('Message 8')" (mouseout)="clearMessage()"></div>
+  <div class="box" (mouseover)="showMessage('Message 9')" (mouseout)="clearMessage()"></div>
+</div>
+
+<div class="message" *ngIf="hoveredMessage">{{ hoveredMessage }}</div>
+

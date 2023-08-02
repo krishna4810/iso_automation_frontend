@@ -1,0 +1,47 @@
+<mat-card>
+  <mat-card-content>
+    <div class="flex items-center justify-between">
+      <h5 class="card-header">Function Details</h5>
+      <div class="flex space-x-2">
+        <div class="button-container">
+          <button mat-raised-button mat-button color="primary" (click)="openFunctionalComponent()">
+            Add{{tabGroup.selectedIndex === 0 ? ' HIRA ' : tabGroup.selectedIndex === 1 ? ' EAI ' : ' ARR '}} Function
+          </button>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<mat-card class="my-5">
+  <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" dynamicHeight #tabGroup [(selectedIndex)]="selectedTabIndex">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon">
+          <span class="font-semibold">power</span>
+        </mat-icon>
+        <span class="pl-2 font-semibold">HIRA</span>
+      </ng-template>
+      <app-hira-table #hiraTable></app-hira-table>
+    </mat-tab>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon">
+          <span class="font-semibold">local_florist</span>
+        </mat-icon>
+        <span class="pl-2 font-semibold">EAI</span>
+      </ng-template>
+
+      <app-permission-table #permissionTable></app-permission-table>
+    </mat-tab>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon">
+          <span class="font-semibold">table_chart</span>
+        </mat-icon>
+        <span class="pl-2 font-semibold">ARR</span>
+      </ng-template>
+      <app-user-table #usersTable></app-user-table>
+    </mat-tab>
+  </mat-tab-group>
+</mat-card>

@@ -1,0 +1,39 @@
+<div class="example-container" [class.example-is-mobile]="mobileQuery.matches">
+  <mat-toolbar class="example-toolbar" [class.mat-elevation-z2]="true">
+    <button mat-icon-button (click)="snav.toggle()">
+      <mat-icon class="font-semibold text-green-600">menu</mat-icon>
+    </button>
+    <img src="https://eas.drukgreen.bt/assets/images/dgpc_logo.png" alt="logo" class="w-auto h-8 mx-2">
+    <h1 class="text-green-600 text-2xl">ISO Automation System</h1>
+    <span class="example-spacer"></span>
+    <button mat-icon-button [matMenuTriggerFor]="dropdownMenu">
+      <mat-menu #dropdownMenu x-position="before">
+        <a mat-menu-item href="" (click)="logout()">
+          <mat-icon>exit_to_app</mat-icon>
+          <span>Logout</span>
+        </a>
+      </mat-menu>
+      <mat-icon color="primary">power_settings_new</mat-icon>
+    </button>
+
+  </mat-toolbar>
+  <mat-sidenav-container class="example-sidenav-container">
+    <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'"
+                 [fixedInViewport]="mobileQuery.matches"
+                 fixedTopGap="56" opened class="custom-sidenav">
+      <mat-nav-list>
+        <a mat-list-item [routerLink]="[nav.link]" [routerLinkActive]="['is-active']" *ngFor="let nav of filteredNav">
+          <mat-icon matListItemIcon>
+            <span [routerLinkActive]="['is-active']" >{{nav.icon}}</span>
+          </mat-icon>
+          <div matListItemTitle>
+            <span [routerLinkActive]="['is-active']" class="text-sm">{{nav.name}}</span>
+          </div>
+        </a>
+      </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

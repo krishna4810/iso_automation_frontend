@@ -1,0 +1,38 @@
+<mat-card>
+  <mat-card-content>
+    <div class="flex items-center justify-between">
+      <h5 class="card-header">Manage User Details</h5>
+      <div class="flex space-x-2">
+        <div class="button-container">
+          <button mat-raised-button *ngIf="tabGroup.selectedIndex === 0" mat-button color="primary" (click)="updateUserTable()">Add Employee</button>
+        </div>
+        <div class="button-container">
+          <button mat-raised-button *ngIf="tabGroup.selectedIndex === 1" mat-button color="primary" (click)="updatePermissionInChild()">Update Permission</button>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<mat-card class="my-5">
+  <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" dynamicHeight #tabGroup>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon">
+          <span class="font-semibold">people_outline</span>
+        </mat-icon>
+        <span class="pl-2 font-semibold">Users</span>
+      </ng-template>
+      <app-user-table #usersTable></app-user-table>
+    </mat-tab>
+    <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="example-tab-icon">
+        <span class="font-semibold">lock_open</span>
+      </mat-icon>
+      <span class="pl-2 font-semibold">Permissions</span>
+    </ng-template>
+      <app-permission-table #permissionTable></app-permission-table>
+    </mat-tab>
+  </mat-tab-group>
+</mat-card>

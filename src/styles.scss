@@ -1,1 +1,84 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$DGPC_ISO_AUTOMATION-primary: mat.define-palette(mat.$green-palette, 700);
+$DGPC_ISO_AUTOMATION-accent: mat.define-palette(mat.$blue-palette, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$DGPC_ISO_AUTOMATION-warn: mat.define-palette(mat.$red-palette);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$DGPC_ISO_AUTOMATION-theme: mat.define-light-theme((
+  color: (
+    primary: $DGPC_ISO_AUTOMATION-primary,
+    accent: $DGPC_ISO_AUTOMATION-accent,
+    warn: $DGPC_ISO_AUTOMATION-warn,
+  )
+));
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($DGPC_ISO_AUTOMATION-theme);
+
 /* You can add global styles to this file, and also import other style files */
+.snackbar-success {
+  background-color: green !important;
+  color: white !important;
+}
+
+.snackbar-error {
+  background-color: red !important;
+  color: white !important;
+}
+
+.snackbar-warning {
+  background-color: orange;
+  color: white;
+}
+.custom-error {
+  color: red;
+  font-size: 0.8rem;
+}
+
+.card-header{
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 300
+}
+
+.table-container {
+  overflow-x: auto;
+  max-width: 100%;
+  margin: 15px;
+}
+
+table {
+  width: auto;
+  min-width: 100%;
+}
+
+.small-green-header {
+  font-size: 14px; /* Adjust the font size as per your preference */
+  font-weight: normal;
+}
+
+html, body { height: 100%; }
+body { background-color: #F5F5F5; margin: 0;
+  font-family: LatoRegular, "Helvetica Neue", sans-serif;
+  font-size: 15px}

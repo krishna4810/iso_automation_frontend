@@ -1,0 +1,96 @@
+<div class="text-center p-5">
+  <h2 class="text-2xl">Add User</h2>
+  <form [formGroup]="employeeForm" class="mt-4">
+    <div class="flex flex-wrap">
+      <div class="w-full md:w-1/2 pr-4">
+        <mat-form-field class="w-full">
+          <mat-label>Employee ID</mat-label>
+          <input type="email" matInput formControlName="UserId" placeholder="Employee ID">
+          <mat-error class="mb-1" *ngIf="employeeForm.get('UserId')?.hasError('required')">
+            Employee ID is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="w-full md:w-1/2">
+        <mat-form-field class="w-full">
+          <mat-label>Choose User Role</mat-label>
+          <mat-select formControlName="UserRole">
+            <mat-option *ngFor="let option of userRoles" [value]="option.id">
+              {{ option.role_name }}
+            </mat-option>
+          </mat-select>
+          <mat-error class="mb-1" *ngIf="employeeForm.get('UserRole')?.hasError('required')">
+          Select user role
+        </mat-error>
+        </mat-form-field>
+
+      </div>
+    </div>
+
+    <div class="flex flex-wrap mb-4">
+      <div class="w-full md:w-1/2 pr-4">
+        <mat-form-field class="w-full">
+          <mat-label>Employee Name</mat-label>
+          <input matInput formControlName="Name" placeholder="Name" [disabled]="true">
+        </mat-form-field>
+      </div>
+      <div class="w-full md:w-1/2">
+        <mat-form-field class="w-full">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="Email" placeholder="Email" [disabled]="true">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap mb-4">
+      <div class="w-full md:w-1/2 pr-4">
+        <mat-form-field class="w-full">
+          <mat-label>Designation</mat-label>
+          <input matInput formControlName="Designation" placeholder="Designation" [disabled]="true">
+        </mat-form-field>
+      </div>
+      <div class="w-full md:w-1/2">
+        <mat-form-field class="w-full">
+          <mat-label>Department</mat-label>
+          <input matInput formControlName="Department" placeholder="Department" [disabled]="true">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap mb-4">
+      <div class="w-full md:w-1/2 pr-4">
+        <mat-form-field class="w-full">
+          <mat-label>Plant</mat-label>
+          <input matInput formControlName="Plant" placeholder="Plant" [disabled]="true">
+        </mat-form-field>
+      </div>
+      <div class="w-full md:w-1/2">
+        <mat-form-field class="w-full">
+          <mat-label>Unit</mat-label>
+          <input matInput formControlName="Unit" placeholder="Unit" [disabled]="true">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap mb-4">
+      <div class="w-full md:w-1/2 pr-4">
+        <mat-form-field class="w-full">
+          <mat-label>Division</mat-label>
+          <input matInput formControlName="Division" placeholder="Division" [disabled]="true">
+        </mat-form-field>
+      </div>
+      <div class="w-full md:w-1/2">
+        <mat-form-field class="w-full">
+          <mat-label>Grade</mat-label>
+          <input matInput formControlName="Grade" placeholder="Grade" [disabled]="true">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="flex justify-center">
+      <button mat-raised-button color="primary" class="mr-4" [disabled] = "employeeForm.invalid" (click)="onSubmit()">Add User</button>
+      <button mat-raised-button (click)="onCancel()">Cancel</button>
+    </div>
+  </form>
+</div>

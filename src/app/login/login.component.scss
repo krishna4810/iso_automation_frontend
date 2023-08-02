@@ -1,0 +1,28 @@
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://www.drukgreen.bt/wp-content/uploads/2023/02/MHP-downstream-scaled.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.login-card {
+  background-color: white !important;
+  width: 370px;
+  margin: auto;
+  margin-top: 50px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+
+
+
+
