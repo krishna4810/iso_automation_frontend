@@ -48,7 +48,7 @@
   </mat-step>
 
   <mat-step [stepControl]="secondFormGroup" label="Before Activity Details">
-    <form [formGroup]="secondFormGroup">
+    <form [formGroup]="secondFormGroup" (submit)="addHira()">
       <div class="grid grid-cols-2 gap-4">
         <mat-form-field class="col-span-1">
           <mat-label>Activity Name</mat-label>
@@ -128,7 +128,7 @@
     </form>
   </mat-step>
   <mat-step [stepControl]="thirdFormGroup" label="After Activity Details">
-    <form [formGroup]="thirdFormGroup" (submit)="addHira()">
+    <form [formGroup]="thirdFormGroup">
       <div class="grid grid-cols-4 gap-4">
         <mat-form-field class="col-span-2">
           <mat-label>Existing control</mat-label>

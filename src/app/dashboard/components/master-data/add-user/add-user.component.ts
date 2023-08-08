@@ -1,12 +1,12 @@
 import {Component} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ApiService} from "../../../../../services/api.service";
+import {ApiService} from "../../../../services/api.service";
 import {MatDialogRef} from "@angular/material/dialog";
 import {debounceTime, distinctUntilChanged, filter, switchMap, takeUntil} from 'rxjs/operators';
-import {Role} from "../../../../../model/interfaces";
+import {Role} from "../../../../model/interfaces";
 import {Subject} from "rxjs";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {BlService} from "../../../../../services/bl.service";
+import {BlService} from "../../../../services/bl.service";
 
 @Component({
   selector: 'app-add-user',

@@ -125,7 +125,7 @@ export class ApiService {
     return this.httpClient.delete(`${API_BASE_URL}/deleteField`, {params: param});
   }
 
-  addHiraField(payload: any): Observable<any>{ debugger
+  addHiraField(payload: any): Observable<any>{
     return this.httpClient.post(`${API_BASE_URL}/addNewField`, payload);
   }
 }

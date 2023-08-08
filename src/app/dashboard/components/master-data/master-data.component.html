@@ -4,10 +4,10 @@
       <h5 class="card-header">Manage User Details</h5>
       <div class="flex space-x-2">
         <div class="button-container">
-          <button mat-raised-button *ngIf="tabGroup.selectedIndex === 0" mat-button color="primary" (click)="updateUserTable()">Add Employee</button>
+          <button mat-raised-button *ngIf="tabGroup.selectedIndex === 0" mat-button color="primary" (click)="addUser()">Add Employee</button>
         </div>
         <div class="button-container">
-          <button mat-raised-button *ngIf="tabGroup.selectedIndex === 1" mat-button color="primary" (click)="updatePermissionInChild()">Update Permission</button>
+          <button mat-raised-button *ngIf="tabGroup.selectedIndex === 1" mat-button color="primary" (click)="updatePermission()">Update Permission</button>
         </div>
       </div>
     </div>
@@ -23,7 +23,7 @@
         </mat-icon>
         <span class="pl-2 font-semibold">Users</span>
       </ng-template>
-      <app-user-table #usersTable></app-user-table>
+      <app-shared-table [dataSource]="userDataSource" [displayedColumns]="userDisplayedColumns"></app-shared-table>
     </mat-tab>
     <mat-tab>
     <ng-template mat-tab-label>
@@ -32,7 +32,7 @@
       </mat-icon>
       <span class="pl-2 font-semibold">Permissions</span>
     </ng-template>
-      <app-permission-table #permissionTable></app-permission-table>
+      <app-shared-table [dataSource]="dataSource" [displayedColumns]="displayedColumns" [isFromPermission]="true"></app-shared-table>
     </mat-tab>
   </mat-tab-group>
 </mat-card>

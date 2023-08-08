@@ -22,7 +22,9 @@
         </mat-icon>
         <span class="pl-2 font-semibold">HIRA</span>
       </ng-template>
-      <app-hira-table #hiraTable></app-hira-table>
+      <app-shared-table
+        [dataSource]="dataSource" [displayedColumns]="displayedColumns" (openMatDialog) = "editHira()">
+      </app-shared-table>
     </mat-tab>
     <mat-tab>
       <ng-template mat-tab-label>
@@ -32,8 +34,9 @@
         <span class="pl-2 font-semibold">EAI</span>
       </ng-template>
 
-      <app-permission-table #permissionTable></app-permission-table>
-    </mat-tab>
+      <app-shared-table
+        [dataSource]="dataSource" [displayedColumns]="displayedColumns">
+      </app-shared-table>    </mat-tab>
     <mat-tab>
       <ng-template mat-tab-label>
         <mat-icon class="example-tab-icon">
@@ -41,7 +44,9 @@
         </mat-icon>
         <span class="pl-2 font-semibold">ARR</span>
       </ng-template>
-      <app-user-table #usersTable></app-user-table>
+      <app-shared-table
+        [dataSource]="dataSource" [displayedColumns]="displayedColumns">
+      </app-shared-table>
     </mat-tab>
   </mat-tab-group>
 </mat-card>
