@@ -7,6 +7,9 @@ import {FunctionDetailsComponent} from "./dashboard/components/function-details/
 import {MasterDataComponent} from "./dashboard/components/master-data/master-data.component";
 import {SidenavToolbarComponent} from "./dashboard/components/sidenav-toolbar/sidenav-toolbar.component";
 import {FormsComponent} from "./dashboard/components/forms/forms.component";
+import {
+  ViewFunctionDetailsComponent
+} from "./dashboard/components/function-details/view-function-details/view-function-details.component";
 
 const routes: Routes = [
   {
@@ -32,7 +35,12 @@ const routes: Routes = [
       {
         path: 'functionalDetails',
         component: FunctionDetailsComponent,
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'functionalDetails/:id',
+        component: ViewFunctionDetailsComponent,
+        canActivate: [AuthGuard],
       },
       {
         path: 'masterData',

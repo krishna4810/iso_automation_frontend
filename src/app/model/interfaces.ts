@@ -92,19 +92,35 @@ export interface DocumentNumber {
 }
 
 export interface HiraActivity {
-  activityName?: string;
-  address?: string;
-  date?: string;
-  department?: string;
-  docNumber?: string;
-  g_impact?: number;
-  g_likelihood?: number;
-  g_ranking?: string;
-  hazard?: string;
-  plant?: string;
-  startDate?: Date;
-  subActivityName?: string;
-  unit?: string;
+  activity_name: string;
+  address: string;
+  completion_date: string | null;
+  created_at: string;
+  date: string;
+  department: string;
+  doc_number: string;
+  existing_control: string | null;
+  gross_impact: number;
+  gross_likelihood: number;
+  gross_ranking: string;
+  gross_ranking_value: number;
+  hazard: string;
+  id: string;
+  plant: string;
+  residual_impact: number | null;
+  residual_likelihood: number | null;
+  residual_ranking: string | null;
+  residual_ranking_value: number | null;
+  routine_activity: string | null;
+  start_date: string;
+  mitigation_measures: string | null;
+  further_action_required: string | null;
+  sub_activity_name: string;
+  unit: string;
+  updated_at: string;
+  workers_involved: string | null;
+  year: string;
+  status: string;
 }
 
 export interface HiraFormFields {
@@ -112,6 +128,11 @@ export interface HiraFormFields {
   name: string,
   column_value: string,
   category: number
+}
+
+export interface Status {
+  value: string,
+  action: string
 }
 
 

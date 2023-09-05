@@ -10,7 +10,7 @@ import {MatPaginator} from "@angular/material/paginator";
 })
 export class SharedTableComponent {
 
-  @Output() openMatDialog = new EventEmitter<void>();
+  @Output() openMatDialog = new EventEmitter<any>();
   // @ts-ignore
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @Input() displayedColumns: string[] = [];
@@ -21,7 +21,7 @@ export class SharedTableComponent {
     this.dataSource.paginator = this.paginator;
   }
 
-  openDialog() {
-      this.openMatDialog.emit();
+  openDialog(row: any) {
+      this.openMatDialog.emit(row);
   }
 }

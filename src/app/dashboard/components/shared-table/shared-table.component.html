@@ -16,17 +16,23 @@
               </td>
             </ng-container>
             <ng-template #showCheckBoxes>
-              <td mat-cell *matCellDef="let element">
+              <td class="text-center" mat-cell *matCellDef="let element">
                 <ng-container>
-                  {{ element[column] }}
+                  <ng-container *ngIf="element[column] === null; else valueTemplate">
+                    <p class="text-center"> - </p>
+                  </ng-container>
+                  <ng-template #valueTemplate>
+                    {{ element[column] }}
+                  </ng-template>
                 </ng-container>
               </td>
             </ng-template>
+
           </ng-container>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns" class="mat-header-row"></tr>
-        <tr class="odd:bg-white even:bg-green-50" mat-row *matRowDef="let row; columns: displayedColumns;" style="cursor: pointer"  (click)="openDialog()"></tr>
+        <tr class="odd:bg-white even:bg-green-50" mat-row *matRowDef="let row; columns: displayedColumns;" style="cursor: pointer"  (click)="openDialog(row)"></tr>
       </table>
     </div>
 
@@ -34,7 +40,7 @@
   </ng-container>
 
   <ng-template #noDataMessage>
-    <div class="flex items-center justify-center h-48">
+    <div class="flex items-center justify-center h-96">
       <p class="text-center text-green-600 text-xl">No Data Available</p>
     </div>
   </ng-template>

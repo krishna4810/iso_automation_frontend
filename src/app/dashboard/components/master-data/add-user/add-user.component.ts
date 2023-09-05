@@ -1,9 +1,9 @@
-import {Component} from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ApiService} from "../../../../services/api.service";
-import {MatDialogRef} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {debounceTime, distinctUntilChanged, filter, switchMap, takeUntil} from 'rxjs/operators';
-import {Role} from "../../../../model/interfaces";
+import {Role, UserData} from "../../../../model/interfaces";
 import {Subject} from "rxjs";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {BlService} from "../../../../services/bl.service";
@@ -14,7 +14,19 @@ import {BlService} from "../../../../services/bl.service";
   styleUrls: ['./add-user.component.scss']
 })
 export class AddUserComponent {
-  employeeForm!: FormGroup;
+  employeeForm: FormGroup = this.formBuilder.group({
+    UserId: ['', Validators.required],
+    Name: [{value: '', disabled: true}],
+    Email: [{value: '', disabled: true}],
+    Designation: [{value: '', disabled: true}],
+    Department: [{value: '', disabled: true}],
+    Plant: [{value: '', disabled: true}],
+    Unit: [{value: '', disabled: true}],
+    Division: [{value: '', disabled: true}],
+    Grade: [{value: '', disabled: true}],
+    UserName: [{value: '', disabled: true}],
+    UserRole: [{value: '', disabled: false}, Validators.required],
+  });
   userRoles: Role[] = [];
   private destroy$ = new Subject<void>();
 
@@ -24,25 +36,34 @@ export class AddUserComponent {
     private snackBar: MatSnackBar,
     private formBuilder: FormBuilder,
     private apiService: ApiService,
-    public dialogRef: MatDialogRef<AddUserComponent>
+    public dialogRef: MatDialogRef<AddUserComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: {isFromEdit: boolean, userData?: any}
+
   ) {
   }
 
-  ngOnInit() {
-    this.employeeForm = this.formBuilder.group({
-      UserId: ['', Validators.required],
-      Name: [{value: '', disabled: true}],
-      Email: [{value: '', disabled: true}],
-      Designation: [{value: '', disabled: true}],
-      Department: [{value: '', disabled: true}],
-      Plant: [{value: '', disabled: true}],
-      Unit: [{value: '', disabled: true}],
-      Division: [{value: '', disabled: true}],
-      Grade: [{value: '', disabled: true}],
-      UserName: [{value: '', disabled: true}],
-      UserRole: [{value: '', disabled: false}, Validators.required],
-    });
+  async ngOnInit() {
+    await this.getUserRole();
+    this.data?.isFromEdit ? this.patchEditData() : this.initializeForm();
+  }
 
+  async patchEditData(){
+    console.log(this.userRoles);
+    this.employeeForm.patchValue({
+      UserId: this.data.userData?.UserId,
+      Name: this.data.userData?.Name,
+      Email: this.data.userData?.Email,
+      Designation: this.data.userData?.Designation,
+      Department: this.data.userData?.Department,
+      Plant: this.data.userData?.Plant,
+      Unit: this.data.userData?.Unit,
+      Division: this.data.userData?.Division,
+      Grade: this.data.userData?.Grade,
+      UserName: this.data.userData?.UserName,
+    })
+  }
+
+  initializeForm () {
     // @ts-ignore
     this.employeeForm.get('UserId')?.valueChanges.pipe(
       distinctUntilChanged(),
@@ -75,7 +96,6 @@ export class AddUserComponent {
         this.blService.openSnackBar("Failed to load employee Data");
       }
     );
-    this.getUserRole();
   }
 
   getUserRole() {

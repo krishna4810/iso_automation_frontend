@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>Rejection Confirmation</h1>
+<div mat-dialog-content>
+  <span>Please give comments for your rejection.</span>
+  <br>
+  <mat-form-field class="w-full mt-3">
+    <textarea matInput [(ngModel)]="rejectionComments" name="rejectionComments" placeholder="Comments"></textarea>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-flat-button mat-button color="primary">Reject</button>
+</div>

@@ -7,6 +7,9 @@ import {StateService} from "../../../services/state.service";
 import {Role} from "../../../model/interfaces";
 import {AddUserComponent} from "./add-user/add-user.component";
 import {BlService} from "../../../services/bl.service";
+import {debounceTime, distinctUntilChanged, filter, switchMap, takeUntil} from "rxjs/operators";
+import {FormBuilder, FormControl} from "@angular/forms";
+import {Subject} from "rxjs";
 
 @Component({
   selector: 'app-master-data',
@@ -14,21 +17,27 @@ import {BlService} from "../../../services/bl.service";
   styleUrls: ['./master-data.component.scss']
 })
 export class MasterDataComponent {
-
+  constructor(public dialog: MatDialog, private blService: BlService,
+              private apiService: ApiService, private stateService: StateService,
+              private _formBuilder: FormBuilder,) {
+  }
   userList: any = [];
+  searchFormGroup = this._formBuilder.group({
+    search: undefined,
+  });
   userDisplayedColumns: string[]=[];
   userDataSource = new MatTableDataSource<any>([]);
   displayedColumns: string[] = [];
   permissionList: Role[] = [];
   dataSource = new MatTableDataSource<Role>([]);
+  private destroy$ = new Subject<void>();
   // @ts-ignore
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(public dialog: MatDialog, private blService: BlService,
-              private apiService: ApiService, private stateService: StateService) {
-  }
+
 
   async ngOnInit() {
+    await this.searchUser();
     await this.getUserData();
     await this.getPermissionData();
   }
@@ -42,8 +51,6 @@ export class MasterDataComponent {
           ['role_id','Mobile', 'user_name', 'Grade', 'Unit',
             'created_at', 'updated_at', 'id', 'OfficePhone',
             'IPPhone', 'UserName'].includes(key)));
-        this.userDataSource = new MatTableDataSource<Role>(this.userList);
-        this.userDataSource.paginator = this.paginator;
         this.userDataSource = new MatTableDataSource<Role>(this.userList);
         this.userDataSource.paginator = this.paginator;
       }
@@ -69,7 +76,37 @@ export class MasterDataComponent {
 
   addUser() {
     this.dialog.open(AddUserComponent, {
+      data: {
+        isFromEdit: false,
+      },
       width: '600px',
     });
+  }
+
+  viewUserDetail(event: any) {
+    this.dialog.open(AddUserComponent, {
+      data: {
+        isFromEdit: true,
+        userData: event
+      },
+    });
+  }
+
+  searchUser () {
+    // @ts-ignore
+    this.searchFormGroup.get('search')?.valueChanges.pipe(
+      distinctUntilChanged(),
+      debounceTime(1000),
+      filter((value) => !!value),
+      takeUntil(this.destroy$),
+      switchMap((value) => this.filterUserData(value)),
+    ).subscribe((res)=> {
+      this.userDataSource = new MatTableDataSource<Role>(res);
+
+    });
+  }
+
+  filterUserData(data: any){
+    return this.userDataSource.filteredData.filter(user => user.UserId == +data)
   }
 }

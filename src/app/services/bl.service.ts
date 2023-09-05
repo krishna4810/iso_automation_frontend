@@ -10,18 +10,14 @@ export class BlService {
   constructor(private snackBar: MatSnackBar) {
   }
 
-  calculateRanking(likelihood: number, impact: number): string {
+  calculateRanking(ranking: number): string {
     switch (true) {
-      case likelihood === 1 && (impact && impact <= 2) || (likelihood === 2 && impact === 1):
+      case ranking > 0 && ranking <=2:
         return 'Low';
-      case (likelihood === 1 && impact === 3):
+      case ranking > 2 && ranking <=4:
         return 'Medium';
-      case (likelihood === 2 && impact === 2) || (likelihood === 3 && impact && (impact < 2)):
-        return 'Medium';
-      case (likelihood === 3 && (impact === 3 || impact === 2)) || (likelihood === 2 && impact === 3):
+      case ranking > 4:
         return 'High';
-      default:
-        return '';
     }
     return '';
   }

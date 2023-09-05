@@ -4,6 +4,7 @@ import {AuthService} from "../../../services/auth.service";
 import {sideNav, UserRole} from "../../../model/interfaces";
 import {NAV_ITEMS} from "../../../model/constants";
 import {ApiService} from "../../../services/api.service";
+import {StateService} from "../../../services/state.service";
 
 @Component({
   selector: 'app-sidenav-toolbar',
@@ -16,8 +17,9 @@ export class SidenavToolbarComponent {
   navItems: sideNav[] = NAV_ITEMS;
   filteredNav: sideNav[] = [];
   userName: string | null = sessionStorage?.getItem('username');
+  userState?: any;
 
-  constructor(private apiService: ApiService, private authService: AuthService, changeDetectorRef: ChangeDetectorRef, media: MediaMatcher) {
+  constructor(private stateService: StateService, private apiService: ApiService, private authService: AuthService, changeDetectorRef: ChangeDetectorRef, media: MediaMatcher) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
@@ -29,10 +31,14 @@ export class SidenavToolbarComponent {
   }
 
   async ngOnInit() {
+    await this.apiService.getLoggedInUserDataWithRoles(sessionStorage.getItem('username'));
     this.apiService.checkRoles(this.userName).subscribe((role: UserRole) => {
       this.filteredNav = this.navItems.filter(item => {
         return role[item.permission] == 1;
       });
+    });
+    this.stateService.stateChanged.subscribe((state) => {
+      this.userState = state.loggedInUserData
     });
   }
 

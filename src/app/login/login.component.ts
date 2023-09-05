@@ -60,7 +60,7 @@ export class LoginComponent {
           await this.apiService.getLoggedInUserDataWithRoles(this.getUsername);
           await this.apiService.addUser(this.getUsername).subscribe(response => {
             this.router.navigate(['/home/dashboard']);
-            this.openSnackBar(`Welcome ${this.getUsername} to ISO Automation System`, 'snackbar-success');
+            this.openSnackBar(`Welcome ${this.getUsername} to ISO Compliance System`, 'snackbar-success');
 
           });
         }

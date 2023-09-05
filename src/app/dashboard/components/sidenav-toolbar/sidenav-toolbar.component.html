@@ -4,11 +4,11 @@
       <mat-icon class="font-semibold text-green-600">menu</mat-icon>
     </button>
     <img src="https://eas.drukgreen.bt/assets/images/dgpc_logo.png" alt="logo" class="w-auto h-8 mx-2">
-    <h1 class="text-green-600 text-2xl">ISO Automation System</h1>
+    <h1 class="text-green-600 text-2xl">ISO Compliance System</h1>
     <span class="example-spacer"></span>
     <button mat-icon-button [matMenuTriggerFor]="dropdownMenu">
       <mat-menu #dropdownMenu x-position="before">
-        <a mat-menu-item href="" (click)="logout()">
+        <a mat-menu-item (click)="logout()">
           <mat-icon>exit_to_app</mat-icon>
           <span>Logout</span>
         </a>
@@ -21,10 +21,16 @@
     <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'"
                  [fixedInViewport]="mobileQuery.matches"
                  fixedTopGap="56" opened class="custom-sidenav">
-      <mat-nav-list>
+      <div class="flex flex-col items-center mt-9 mb-4 mx-5">
+        <mat-icon color="primary">account_circle</mat-icon>
+        <span class="pt-2">{{userState.userData.Name}}</span>
+        <span class="text-xs text-gray-500">{{userState.role.role_name}}</span>
+      </div>
+      <mat-divider></mat-divider>
+      <mat-nav-list class="mt-6">
         <a mat-list-item [routerLink]="[nav.link]" [routerLinkActive]="['is-active']" *ngFor="let nav of filteredNav">
           <mat-icon matListItemIcon>
-            <span [routerLinkActive]="['is-active']" >{{nav.icon}}</span>
+            <span [routerLinkActive]="['is-active']">{{nav.icon}}</span>
           </mat-icon>
           <div matListItemTitle>
             <span [routerLinkActive]="['is-active']" class="text-sm">{{nav.name}}</span>

@@ -1,4 +1,4 @@
-import {FunctionRanking, LoggedInUserData, sideNav} from "./interfaces";
+import {FunctionRanking, HiraActivity, LoggedInUserData, sideNav, Status} from "./interfaces";
 
 // export const AUTH_TOKEN: string | null =
 export const API_KEY: string = "api_key=%2Fapi%2FUser%2FAuthenticate";
@@ -7,6 +7,17 @@ export const API_BASE_URL: string = "http://127.0.0.1:8000/api";
 export const AUTHENTICATION_API_BASE_URL: string = "https://api.drukgreen.bt/api";
 export const API_LOGIN: string = "User/Authenticate";
 
+export const STATUS: string[] = [
+  'Awaiting IMS Focal\'s Approval',
+  'Awaiting Head\'s Approval',
+  'Requested Changes by Reviewer',
+  'Awaiting Director\'s Approval',
+  'Awaiting QCAD Approval',
+  'Requested Changes by QCAD',
+  'Awaiting Director, CAD Approval',
+  'Pre-Activity Details Accepted',
+  'Post-Activity Details Accepted',
+]
 export const ROUTINE_ACTIVITY: any[] = [
   {
     name: "Routine Activity"
@@ -78,5 +89,5 @@ export const NAV_ITEMS: sideNav[] = [
 export interface StoreState {
   users: any[];
   loggedInUserData: LoggedInUserData;
-  hiraList: any[]
+  hiraList: HiraActivity[]
 }

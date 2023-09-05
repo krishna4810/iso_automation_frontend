@@ -1,15 +1,14 @@
-import {Component} from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {FormBuilder, Validators} from "@angular/forms";
 import {map, Observable} from "rxjs";
 import {BreakpointObserver} from "@angular/cdk/layout";
 import {StepperOrientation} from "@angular/cdk/stepper";
 import {FunctionRanking, LoggedInUserData} from "../../../../model/interfaces";
-import {FUNCTION_RATING_DETAILS, ROUTINE_ACTIVITY} from "../../../../model/constants";
+import {FUNCTION_RATING_DETAILS, ROUTINE_ACTIVITY, STATUS} from "../../../../model/constants";
 import {BlService} from "../../../../services/bl.service";
-import {MatSelectChange} from "@angular/material/select";
 import {StateService} from "../../../../services/state.service";
 import {ApiService} from "../../../../services/api.service";
-import {MatDialogRef} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {DatePipe} from "@angular/common";
 
 @Component({
@@ -20,9 +19,11 @@ import {DatePipe} from "@angular/common";
 export class AddHiraComponent {
   currentDate: Date = new Date();
   formattedDate = this.datePipe.transform(this.currentDate, 'dd/MM/yyyy');
-  likelihood: number = 1;
-  impact: number = 1;
-  rankingData?: string
+  grossRanking?: string
+  residualRanking?: string
+  residualRankingValue?: number;
+  grossRankingValue?: number;
+  userState: any;
   ranking: FunctionRanking[] = FUNCTION_RATING_DETAILS;
   activities: any[] = ROUTINE_ACTIVITY;
   firstFormGroup = this._formBuilder.group({
@@ -37,10 +38,10 @@ export class AddHiraComponent {
     activityName: ['', Validators.required],
     subActivityName: ['', Validators.required],
     hazard: ['', Validators.required],
-    startDate: ['', Validators.required],
-    g_likelihood: ['', Validators.required],
-    g_impact: ['', Validators.required],
-    g_ranking: [{value: '', disabled: true}],
+    startDate: [undefined, Validators.required],
+    g_impact: [undefined, Validators.required],
+    g_likelihood: [undefined, Validators.required],
+    g_ranking: [{value: undefined, disabled: true}],
   });
 
   thirdFormGroup = this._formBuilder.group({
@@ -50,13 +51,14 @@ export class AddHiraComponent {
     completionDate: ['', Validators.required],
     routineActivity: ['', Validators.required],
     workersInvolved: ['', Validators.required],
-    r_likelihood: ['', Validators.required],
-    r_impact: ['', Validators.required],
-    r_ranking: [{value: '', disabled: true}],
+    r_likelihood: [undefined, Validators.required],
+    r_impact: [undefined, Validators.required],
+    r_ranking: [{value: undefined, disabled: true}],
   });
 
   stepperOrientation: Observable<StepperOrientation>;
   loggedInData?: LoggedInUserData;
+  status: string[] = STATUS;
 
   constructor(private blService: BlService,
               private datePipe: DatePipe,
@@ -64,7 +66,9 @@ export class AddHiraComponent {
               private stateService: StateService,
               private _formBuilder: FormBuilder,
               public dialogRef: MatDialogRef<AddHiraComponent>,
-              breakpointObserver: BreakpointObserver) {
+              breakpointObserver: BreakpointObserver,
+              @Inject(MAT_DIALOG_DATA) public data: {isFromEdit: boolean, formData?: any}
+  ) {
 
     this.stepperOrientation = breakpointObserver
       .observe('(min-width: 800px)')
@@ -72,11 +76,76 @@ export class AddHiraComponent {
   }
 
   ngOnInit() {
+    this.stateService.stateChanged.subscribe((state) => {
+      this.userState = state.loggedInUserData
+    });
+    this.data.isFromEdit ? this.editHira() : this.patchAddHiraData();
+  }
+
+  patchAddHiraData () {
     this.apiService.getLoggedInUserDataWithRoles(sessionStorage.getItem('username'));
     this.stateService?.stateChanged.subscribe(state => {
       this.loggedInData = state?.loggedInUserData;
       this.mapFirstFormData(this.loggedInData);
     })
+  }
+  editHira() {
+    this.patchFirstFormData();
+    this.patchSecondFormData();
+    this.patchThirdFormData();
+  }
+
+  patchFirstFormData() {
+    this.firstFormGroup.patchValue({
+      plant: this.data.formData.plant,
+      department: this.data.formData.department,
+      unit: this.data.formData.unit,
+      docNumber: this.data.formData.doc_number,
+      date: this.data.formData.date,
+      address: this.data.formData.address,
+    });
+  }
+  patchSecondFormData() {
+    let selectedGrossLikelihood: any = this.ranking.find(option => option.value == +this.data.formData.gross_likelihood);
+    let selectedGrossImpact: any = this.ranking.find(option => option.value == +this.data.formData.gross_impact);
+    this.secondFormGroup.patchValue({
+      activityName: this.data.formData.activity_name,
+      subActivityName: this.data.formData.sub_activity_name,
+      hazard: this.data.formData.hazard,
+      g_ranking: this.data.formData.gross_ranking,
+      // @ts-ignore
+      startDate: this.parseDate(this.data.formData.start_date),
+      g_likelihood: selectedGrossLikelihood.value,
+      g_impact: selectedGrossImpact.value,
+    });
+    this.grossRankingValue = this.data.formData.gross_ranking_value;
+    this.grossRanking = this.data.formData.gross_ranking;
+  }
+  patchThirdFormData() {
+    let selectedResidualLikelihood: any = this.ranking.find(option => option.value == +this.data.formData.residual_likelihood);
+    let selectedResidualImpact: any = this.ranking.find(option => option.value == +this.data.formData.residual_impact);
+    this.thirdFormGroup.patchValue({
+      existingControl: this.data.formData.existing_control,
+      mitigationMeasures: this.data.formData.mitigation_measures,
+      routineActivity: this.data.formData.routine_activity,
+      workersInvolved: this.data.formData.workers_involved,
+      furtherAction: this.data.formData.further_action_required,
+      r_ranking: this.data.formData.residual_ranking,
+      // @ts-ignore
+      completionDate: this.parseDate(this.data.formData.completion_date),
+      r_likelihood: selectedResidualLikelihood.value,
+      r_impact: selectedResidualImpact.value,
+    });
+    this.residualRankingValue = this.data.formData.residual_ranking_value;
+    this.residualRanking = this.data.formData.residual_ranking;
+  }
+
+  parseDate(dateStr: string): Date {
+    const parts = dateStr.split('/');
+    const day = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1;
+    const year = parseInt(parts[2], 10);
+    return new Date(year, month, day);
   }
 
   async mapFirstFormData(loggedInData: LoggedInUserData) {
@@ -95,15 +164,11 @@ export class AddHiraComponent {
   }
 
   getDocumentNumber() {
-    let date = this.firstFormGroup.get('date')?.value;
-    let unit = this.firstFormGroup.get('unit')?.value;
-    let department = this.firstFormGroup.get('department')?.value;
-    let plant = this.firstFormGroup.get('plant')?.value;
     const document = {
-      year: date?.split('/')[2],
-      unit: unit,
-      department: department,
-      plant: plant
+      year: this.firstFormGroup.get('date')?.value?.split('/')[2],
+      unit: this.firstFormGroup.get('unit')?.value,
+      department: this.firstFormGroup.get('department')?.value,
+      plant: this.firstFormGroup.get('plant')?.value
     }
 
     this.apiService.getDocumentNumber(document).subscribe(res => {
@@ -111,44 +176,80 @@ export class AddHiraComponent {
     });
   }
 
-  clearImpact($event: MatSelectChange) {
-    this.likelihood = $event.value;
-    this.secondFormGroup.get('g_impact')?.setValue('');
+  clearGrossImpact(formControl: string) {
+    if (formControl === 'gross') {
+      this.secondFormGroup.get('g_impact')?.setValue(undefined);
+    } else {
+      this.thirdFormGroup.get('r_impact')?.setValue(undefined);
+    }
   }
 
-  calculateRanking($event: MatSelectChange) {
-    this.impact = $event.value;
-    this.rankingData = this.blService.calculateRanking(this.likelihood, this.impact);
-    this.secondFormGroup?.get('g_ranking')?.setValue(this.rankingData);
+  calculateGrossRanking(formControl: string) {
+    if (formControl === 'gross') {
+      // @ts-ignore
+      this.grossRankingValue = this.secondFormGroup.get('g_likelihood')?.value * this.secondFormGroup.get('g_impact')?.value;
+      this.grossRanking = this.blService.calculateRanking(this.grossRankingValue);
+      // @ts-ignore
+      this.secondFormGroup?.get('g_ranking')?.setValue(this.grossRanking);
+    } else {
+      // @ts-ignore
+      this.residualRankingValue = this.thirdFormGroup.get('r_likelihood')?.value * this.thirdFormGroup.get('r_impact')?.value;
+      this.residualRanking = this.blService.calculateRanking(this.residualRankingValue);
+      // @ts-ignore
+      this.thirdFormGroup?.get('r_ranking')?.setValue(this.residualRanking);
+      console.log(this.thirdFormGroup);
+    }
   }
 
   getRankingBackgroundColor() {
-    if (this.rankingData === 'High') {
+    if (this.grossRanking  === 'High') {
       return 'bg-red-500';
-    } else if (this.rankingData === 'Medium')
-      return 'bg-yellow-100';
-    else if (this.rankingData === 'Low') {
+    } else if (this.grossRanking === 'Medium')
+      return 'bg-yellow-200';
+    else if (this.grossRanking === 'Low') {
+      return 'bg-green-500';
+    }
+    return '';
+  }
+
+  getResidualRankingBackgroundColor() {
+    if (this.residualRanking  === 'High') {
+      return 'bg-red-500';
+    } else if (this.residualRanking === 'Medium')
+      return 'bg-yellow-200';
+    else if (this.residualRanking === 'Low') {
       return 'bg-green-500';
     }
     return '';
   }
 
   addHira() {
-    if (this.secondFormGroup.invalid) {
+    if (this.data?.formData?.status == this.status[6] && this.thirdFormGroup.invalid) {
+      this.thirdFormGroup.markAllAsTouched();
+    }
+    else if (this.secondFormGroup.invalid) {
       this.secondFormGroup.markAllAsTouched();
       return;
     } else {
       this.secondFormGroup.enable();
-      let date = this.secondFormGroup.get('startDate')?.value;
-      let startDate = this.datePipe.transform(date, 'MM/dd/yyyy');
+      this.thirdFormGroup.enable();
+      let startDate = this.datePipe.transform(this.secondFormGroup.get('startDate')?.value, 'dd/MM/yyyy');
+      let completionDate = this.datePipe.transform(this.thirdFormGroup.get('completionDate')?.value, 'dd/MM/yyyy');
       let hiraPayload = {
         ...this.firstFormGroup.value,
         ...this.secondFormGroup.value,
+        ...this.thirdFormGroup.value,
         start_date: startDate,
+        completion_date: completionDate,
+        residualRankingValue: this.residualRankingValue,
+        grossRankingValue: this.grossRankingValue,
+        userID: this.userState.userData.UserId,
         // @ts-ignore
-        year: startDate.split('/')[2]
+        year: startDate.split('/')[2],
+        status: !this.data.isFromEdit ? this.status[0] : this.data?.formData?.status
       }
       this.secondFormGroup.disable();
+      this.thirdFormGroup.disable();
       this.apiService.addHiraActivity(hiraPayload).subscribe(res => {
           this.blService.openSnackBar(res.message);
             this.apiService.getHira()
@@ -156,10 +257,6 @@ export class AddHiraComponent {
       );
       this.dialogRef.close();
     }
-  }
-
-  checkValidity() {
-
   }
 }
 

@@ -89,7 +89,7 @@
     </div>
 
     <div class="flex justify-center">
-      <button mat-raised-button color="primary" class="mr-4" [disabled] = "employeeForm.invalid" (click)="onSubmit()">Add User</button>
+      <button mat-raised-button color="primary" class="mr-4" [disabled] = "employeeForm.invalid" (click)="onSubmit()">{{data.isFromEdit ? 'Update' : 'Add'}} User</button>
       <button mat-raised-button (click)="onCancel()">Cancel</button>
     </div>
   </form>

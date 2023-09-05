@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {
-  ApiResponse, HiraActivity, HiraFormFields,
+  ApiResponse, HiraFormFields,
   LoggedInUserData,
   loginData,
   loginResponse,
@@ -9,16 +9,19 @@ import {
   UserData,
   UserRole
 } from "../model/interfaces";
-import {API_BASE_URL, API_LOGIN, AUTHENTICATION_API_BASE_URL} from "../model/constants";
-import {forkJoin, map, Observable} from "rxjs";
-import {switchMap} from "rxjs/operators";
+import {API_BASE_URL, API_LOGIN, AUTHENTICATION_API_BASE_URL, STATUS} from "../model/constants";
+import {forkJoin, map, Observable, throwError} from "rxjs";
+import {switchMap, catchError, tap} from "rxjs/operators";
 import {StateService} from "./state.service";
+import {AuthService} from "./auth.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  constructor(private httpClient: HttpClient, private stateService: StateService) {
+
+  status: string[] = STATUS;
+  constructor(private authService: AuthService, private httpClient: HttpClient, private stateService: StateService) {
   }
 
   // USER API CALLS
@@ -49,9 +52,17 @@ export class ApiService {
     let headers = new HttpHeaders({
       'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}`
     });
+
     return this.httpClient.get<UserData>(`${AUTHENTICATION_API_BASE_URL}/User/${employeeId}`, {
       headers: headers
-    });
+    }).pipe(
+      catchError(error => {
+        if (error.status === 401) {
+          this.authService.logout();
+        }
+        return throwError(error);
+      })
+    );
   }
   getLoggedInUserDataWithRoles(userName: string | null) {
     this.checkRoles(userName).pipe(
@@ -102,7 +113,30 @@ export class ApiService {
   // HIRA API CALLS
 
   getHira() {
-    this.httpClient.get<any>(`${API_BASE_URL}/getHira`).subscribe( res => {
+    let payload: any;
+    let roleStatus: string;
+    this.stateService.stateChanged.subscribe(state => {
+      if (state.loggedInUserData.role.id == 4) {
+        roleStatus = this.status[0];
+      } else if (state.loggedInUserData.role.id == 5) {
+        roleStatus = this.status[1];
+      } else if (state.loggedInUserData.role.id == 6) {
+        roleStatus = this.status[3];
+      } else if (state.loggedInUserData.role.id == 7) {
+        roleStatus = this.status[4];
+      } else if (state.loggedInUserData.role.id == 8) {
+        roleStatus = this.status[6];
+      }
+      payload = {
+        role_id: state.loggedInUserData.role.id,
+        user_id: state.loggedInUserData.userData.UserId,
+        plant: state.loggedInUserData.userData.Plant,
+        department: state.loggedInUserData.userData.Department,
+        division: state.loggedInUserData.userData.Division,
+        status: roleStatus,
+      }
+    });
+    this.httpClient.get<any>(`${API_BASE_URL}/getHira`, {params: payload}).subscribe( res => {
       this.stateService.addHiraList(res);
       }
     );

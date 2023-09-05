@@ -38,6 +38,9 @@ import { FormsComponent } from './dashboard/components/forms/forms.component';
 import { HiraFormComponent } from './dashboard/components/forms/hira-form/hira-form.component';
 import {MatChipsModule} from "@angular/material/chips";
 import { SharedTableComponent } from './dashboard/components/shared-table/shared-table.component';
+import { ViewFunctionDetailsComponent } from './dashboard/components/function-details/view-function-details/view-function-details.component';
+import { SharedApproveDialogComponent } from './dashboard/components/shared-approve-dialog/shared-approve-dialog.component';
+import { SharedRejectDialogComponent } from './dashboard/components/shared-reject-dialog/shared-reject-dialog.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +56,9 @@ import { SharedTableComponent } from './dashboard/components/shared-table/shared
     FormsComponent,
     HiraFormComponent,
     SharedTableComponent,
+    ViewFunctionDetailsComponent,
+    SharedApproveDialogComponent,
+    SharedRejectDialogComponent,
 
   ],
     imports: [
