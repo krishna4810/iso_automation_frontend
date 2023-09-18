@@ -27,7 +27,7 @@ export class AddUserComponent {
     UserName: [{value: '', disabled: true}],
     UserRole: [{value: '', disabled: false}, Validators.required],
   });
-  userRoles: Role[] = [];
+  userRoles?: Role[];
   private destroy$ = new Subject<void>();
 
   // @ts-ignore
@@ -43,12 +43,22 @@ export class AddUserComponent {
   }
 
   async ngOnInit() {
-    await this.getUserRole();
-    this.data?.isFromEdit ? this.patchEditData() : this.initializeForm();
+    try {
+      const res = await this.apiService.getPermissions().toPromise();
+      this.userRoles = res;
+
+      if (this.data?.isFromEdit) {
+        await this.patchEditData();
+      } else {
+        this.initializeForm();
+      }
+    } catch (error) {
+      console.error("Error fetching permissions:", error);
+    }
   }
 
-  async patchEditData(){
-    console.log(this.userRoles);
+  async patchEditData() {
+    let roleName: any = this.userRoles?.find(option => option.id == +this.data.userData.role_id);
     this.employeeForm.patchValue({
       UserId: this.data.userData?.UserId,
       Name: this.data.userData?.Name,
@@ -60,8 +70,11 @@ export class AddUserComponent {
       Division: this.data.userData?.Division,
       Grade: this.data.userData?.Grade,
       UserName: this.data.userData?.UserName,
-    })
+      UserRole: roleName.id
+    });
   }
+
+
 
   initializeForm () {
     // @ts-ignore
@@ -98,11 +111,6 @@ export class AddUserComponent {
     );
   }
 
-  getUserRole() {
-    this.apiService.getPermissions().subscribe(res => {
-      this.userRoles = res;
-    })
-  }
 
   onSubmit() {
     this.apiService.addUserWithRole(this.employeeForm.get('UserName')?.value,

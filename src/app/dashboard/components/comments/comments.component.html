@@ -1,0 +1,33 @@
+<section class="bg-white dark:bg-gray-900 py-4 lg:py-4 antialiased" *ngIf="combinedData.length > 0; else noDataMessage">
+  <div class="max-w-2xl mx-auto px-4">
+    <div class="flex justify-between items-center mb-2">
+      <h2 class="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">Comments ({{combinedData.length}})</h2>
+    </div>
+    <article class="pb-10 pt-8 pl-8 pr-8 text-base bg-white border-t border-gray-200 dark:border-gray-700 dark:bg-gray-900"  *ngFor="let data of combinedData">
+      <footer class="flex justify-between items-center mb-2">
+        <div class="flex items-center">
+          <p class="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white font-semibold">
+            <mat-icon class="mr-2 w-6 h-6 rounded-full" color="primary">
+              account_circle</mat-icon>
+            {{data.userData.Name}}
+          </p>
+          <p class="text-sm text-gray-600 dark:text-gray-400">({{data.userData.Designation}}) </p>
+        </div>
+      </footer>
+      <p class="text-gray-500 dark:text-gray-400">
+        {{data.comment}}
+      </p>
+      <p class="italic float-right pt-3 text-sm text-gray-300 dark:text-gray-400"> {{data.created_at | timeAgo}}</p>
+    </article>
+  </div>
+</section>
+
+<ng-template #noDataMessage>
+  <h2 mat-dialog-title>No Comments</h2>
+  <mat-dialog-content class="mat-typography">
+    <p>All the comments given by higher authorities will appear here.</p>
+</mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button [mat-dialog-close]="true" color="primary">Close</button>
+  </mat-dialog-actions>
+</ng-template>

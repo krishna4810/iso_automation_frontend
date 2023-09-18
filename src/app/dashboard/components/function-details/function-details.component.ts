@@ -7,7 +7,6 @@ import {ApiService} from "../../../services/api.service";
 import {StateService} from "../../../services/state.service";
 import {Role, Status} from "../../../model/interfaces";
 import {ActivatedRoute, Router} from "@angular/router";
-import {STATUS} from "../../../model/constants";
 
 @Component({
   selector: 'app-function-details',
@@ -30,24 +29,26 @@ export class FunctionDetailsComponent {
               private stateService: StateService) {
   }
   async ngOnInit() {
-    this.stateService.stateChanged.subscribe(state => { debugger
+    this.stateService.stateChanged.subscribe(state => {
       this.userState = state.loggedInUserData
     });
-      this.apiService.getHira();
+    await this.apiService.getHira();
     this.stateService.stateChanged.subscribe(state => {
       if(state?.hiraList) {
         this.hiraList = state?.hiraList;
         // @ts-ignore
-        this.displayedColumns = Object.keys(this.hiraList[0]).filter(key => !(
-          ['address','unit', 'doc_number',
-            'routine_activity', 'workers_involved', 'gross_ranking_value',
-            'residual_likelihood', 'residual_impact', 'residual_ranking_value',
-            'created_at', 'updated_at', 'year', 'further_action_required', 'mitigation_measures',
-            'sub_activity_name','gross_likelihood', 'user_id',
-            'gross_impact', 'existing_control', 'completion_date',
-            'start_date'].includes(key)));
-        this.dataSource = new MatTableDataSource<Role>(this.hiraList);
-        this.dataSource.paginator = this.paginator;
+        if (this.hiraList?.length>0) {
+          this.displayedColumns = Object.keys(this.hiraList[0]).filter(key => !(
+            ['address','unit', 'doc_number',
+              'routine_activity', 'workers_involved', 'gross_ranking_value',
+              'residual_likelihood', 'residual_impact', 'residual_ranking_value',
+              'created_at', 'updated_at', 'year', 'further_action_required', 'mitigation_measures',
+              'sub_activity_name','gross_likelihood', 'user_id',
+              'gross_impact', 'existing_control', 'completion_date',
+              'start_date'].includes(key)));
+          this.dataSource = new MatTableDataSource<Role>(this.hiraList);
+          this.dataSource.paginator = this.paginator;
+        }
       }
     });
   }

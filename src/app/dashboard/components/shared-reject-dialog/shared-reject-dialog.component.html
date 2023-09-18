@@ -1,6 +1,6 @@
-<h1 mat-dialog-title>Rejection Confirmation</h1>
+<h1 mat-dialog-title>Request Changes</h1>
 <div mat-dialog-content>
-  <span>Please give comments for your rejection.</span>
+  <span>Please give comments on why you want to request changes.</span>
   <br>
   <mat-form-field class="w-full mt-3">
     <textarea matInput [(ngModel)]="rejectionComments" name="rejectionComments" placeholder="Comments"></textarea>
@@ -8,5 +8,5 @@
 </div>
 <div mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-flat-button mat-button color="primary">Reject</button>
+  <button mat-flat-button mat-button color="primary" (click)="requestChange()">Request Change</button>
 </div>

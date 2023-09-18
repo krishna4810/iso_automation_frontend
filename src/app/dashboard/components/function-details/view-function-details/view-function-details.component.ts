@@ -7,6 +7,9 @@ import {AddHiraComponent} from "../add-hira/add-hira.component";
 import {MatDialog} from "@angular/material/dialog";
 import {SharedApproveDialogComponent} from "../../shared-approve-dialog/shared-approve-dialog.component";
 import {SharedRejectDialogComponent} from "../../shared-reject-dialog/shared-reject-dialog.component";
+import {data} from "autoprefixer";
+import {STATUS} from "../../../../model/constants";
+import {CommentsComponent} from "../../comments/comments.component";
 
 @Component({
   selector: 'app-view-function-details',
@@ -18,6 +21,7 @@ export class ViewFunctionDetailsComponent {
   userState: any;
   // @ts-ignore
   functionalDetail: HiraActivity | undefined;
+  status = STATUS;
   constructor( private apiService: ApiService,
                private route: ActivatedRoute,
                public dialog: MatDialog,
@@ -25,7 +29,7 @@ export class ViewFunctionDetailsComponent {
   }
 
   ngOnInit(): void {
-    this.stateService.stateChanged.subscribe(state => { debugger
+    this.stateService.stateChanged.subscribe(state => {
       this.userState = state.loggedInUserData
     });
     this.apiService.getHira();
@@ -55,7 +59,8 @@ export class ViewFunctionDetailsComponent {
   openApproveDialog(data: any) {
     this.dialog.open(SharedApproveDialogComponent, {
       data: {
-        formData: data
+        formData: data,
+        role_id: this.userState?.role?.id
       }
     });
   }
@@ -63,9 +68,19 @@ export class ViewFunctionDetailsComponent {
   openRejectDialog(data: any) {
     this.dialog.open(SharedRejectDialogComponent, {
       data: {
-        formData: data
+        formData: data,
+        role_id: this.userState?.role?.id
       },
       maxWidth: '900px'
+    });
+  }
+
+  viewComment(id: any) {
+    this.dialog.open(CommentsComponent, {
+      data: {
+        id: id
+      },
+      maxHeight: '90vh'
     });
   }
 }

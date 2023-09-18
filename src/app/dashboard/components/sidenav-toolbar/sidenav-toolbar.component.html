@@ -8,12 +8,16 @@
     <span class="example-spacer"></span>
     <button mat-icon-button [matMenuTriggerFor]="dropdownMenu">
       <mat-menu #dropdownMenu x-position="before">
+        <a mat-menu-item (click)="showProfile()">
+          <mat-icon color="primary">account_circle</mat-icon>
+          <span>Profile</span>
+        </a>
         <a mat-menu-item (click)="logout()">
-          <mat-icon>exit_to_app</mat-icon>
+          <mat-icon color="primary">exit_to_app</mat-icon>
           <span>Logout</span>
         </a>
       </mat-menu>
-      <mat-icon color="primary">power_settings_new</mat-icon>
+      <mat-icon color="primary">keyboard_arrow_down</mat-icon>
     </button>
 
   </mat-toolbar>
@@ -23,8 +27,8 @@
                  fixedTopGap="56" opened class="custom-sidenav">
       <div class="flex flex-col items-center mt-9 mb-4 mx-5">
         <mat-icon color="primary">account_circle</mat-icon>
-        <span class="pt-2">{{userState.userData.Name}}</span>
-        <span class="text-xs text-gray-500">{{userState.role.role_name}}</span>
+        <span class="pt-2">{{userState?.userData?.Name}}</span>
+        <span class="text-xs text-gray-500">{{userState?.role?.role_name}}</span>
       </div>
       <mat-divider></mat-divider>
       <mat-nav-list class="mt-6">

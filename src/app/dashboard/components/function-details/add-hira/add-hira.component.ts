@@ -26,6 +26,7 @@ export class AddHiraComponent {
   userState: any;
   ranking: FunctionRanking[] = FUNCTION_RATING_DETAILS;
   activities: any[] = ROUTINE_ACTIVITY;
+
   firstFormGroup = this._formBuilder.group({
     plant: [{value: '', disabled: true}],
     department: [{value: '', disabled: true}],
@@ -120,6 +121,9 @@ export class AddHiraComponent {
     });
     this.grossRankingValue = this.data.formData.gross_ranking_value;
     this.grossRanking = this.data.formData.gross_ranking;
+    if (this.data.formData.status == this.status[7]) {
+      this.disableFormControls();
+    }
   }
   patchThirdFormData() {
     let selectedResidualLikelihood: any = this.ranking.find(option => option.value == +this.data.formData.residual_likelihood);
@@ -140,8 +144,19 @@ export class AddHiraComponent {
     this.residualRanking = this.data.formData.residual_ranking;
   }
 
+  disableFormControls() {
+    // Get all the control names from the form group
+    const controlNames = Object.keys(this.secondFormGroup.controls);
+
+    // Loop through each control name and disable the control
+    controlNames.forEach((controlName) => {
+      const control = this.secondFormGroup.get(controlName);
+      control?.disable();
+    });
+  }
+
   parseDate(dateStr: string): Date {
-    const parts = dateStr.split('/');
+    const parts = dateStr?.split('/');
     const day = parseInt(parts[0], 10);
     const month = parseInt(parts[1], 10) - 1;
     const year = parseInt(parts[2], 10);
@@ -224,7 +239,7 @@ export class AddHiraComponent {
   }
 
   addHira() {
-    if (this.data?.formData?.status == this.status[6] && this.thirdFormGroup.invalid) {
+    if (this.data?.formData?.status == this.status[7] && this.thirdFormGroup.invalid) {
       this.thirdFormGroup.markAllAsTouched();
     }
     else if (this.secondFormGroup.invalid) {
@@ -244,9 +259,13 @@ export class AddHiraComponent {
         residualRankingValue: this.residualRankingValue,
         grossRankingValue: this.grossRankingValue,
         userID: this.userState.userData.UserId,
+        creatorName: this.userState.userData.Name,
         // @ts-ignore
         year: startDate.split('/')[2],
-        status: !this.data.isFromEdit ? this.status[0] : this.data?.formData?.status
+        status: !this.data.isFromEdit ? this.status[0] :
+          (this.data?.formData?.status ==
+            (this.status[1] || this.status[3] || this.status[6] || this.status[7]))
+            ? this.status[0] : this.data?.formData?.status
       }
       this.secondFormGroup.disable();
       this.thirdFormGroup.disable();

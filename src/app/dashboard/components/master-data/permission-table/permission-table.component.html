@@ -5,7 +5,7 @@
         <ng-container *ngFor="let column of displayedColumns">
           <ng-container matColumnDef="{{ column }}">
             <th mat-header-cell *matHeaderCellDef class="small-green-header">{{ column | headerFormat}}</th>
-            <ng-container *ngIf="isFromPermission; else showCheckBoxes">
+            <ng-container>
               <td mat-cell *matCellDef="let element">
                 <ng-container *ngIf="column !== 'role_name'">
                   <mat-checkbox [(ngModel)]="element[column]" [ngModelOptions]="{standalone: true}" (ngModelChange)="element[column] = element[column] ? 1 : 0" color="primary"></mat-checkbox>
@@ -15,24 +15,11 @@
                 </ng-container>
               </td>
             </ng-container>
-            <ng-template #showCheckBoxes>
-              <td class="text-center" mat-cell *matCellDef="let element">
-                <ng-container>
-                  <ng-container *ngIf="element[column] === null; else valueTemplate">
-                    <p class="text-center"> - </p>
-                  </ng-container>
-                  <ng-template #valueTemplate>
-                    {{ element[column] }}
-                  </ng-template>
-                </ng-container>
-              </td>
-            </ng-template>
-
           </ng-container>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns" class="mat-header-row"></tr>
-        <tr class="odd:bg-white even:bg-green-50" mat-row *matRowDef="let row; columns: displayedColumns;" style="cursor: pointer"  (click)="openDialog(row)"></tr>
+        <tr class="odd:bg-white even:bg-green-50" mat-row *matRowDef="let row; columns: displayedColumns;" style="cursor: pointer"></tr>
       </table>
     </div>
     <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select users"></mat-paginator>
@@ -42,7 +29,7 @@
     <div class="flex flex-col items-center justify-center">
       <img class="mx-auto h-1/3 w-1/3" src="/assets/no-data.svg">
       <p class="text-center text-gray-400 text-sm mb-4">
-        All the function details you need to review will appear here.
+        All the users of ISO Compliance System will appear here.
       </p>
     </div>
   </ng-template>

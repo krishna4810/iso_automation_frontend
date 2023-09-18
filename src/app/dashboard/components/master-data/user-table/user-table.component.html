@@ -5,17 +5,7 @@
         <ng-container *ngFor="let column of displayedColumns">
           <ng-container matColumnDef="{{ column }}">
             <th mat-header-cell *matHeaderCellDef class="small-green-header">{{ column | headerFormat}}</th>
-            <ng-container *ngIf="isFromPermission; else showCheckBoxes">
-              <td mat-cell *matCellDef="let element">
-                <ng-container *ngIf="column !== 'role_name'">
-                  <mat-checkbox [(ngModel)]="element[column]" [ngModelOptions]="{standalone: true}" (ngModelChange)="element[column] = element[column] ? 1 : 0" color="primary"></mat-checkbox>
-                </ng-container>
-                <ng-container *ngIf="column === 'role_name'">
-                  {{ element[column] }}
-                </ng-container>
-              </td>
-            </ng-container>
-            <ng-template #showCheckBoxes>
+            <div>
               <td class="text-center" mat-cell *matCellDef="let element">
                 <ng-container>
                   <ng-container *ngIf="element[column] === null; else valueTemplate">
@@ -26,16 +16,16 @@
                   </ng-template>
                 </ng-container>
               </td>
-            </ng-template>
+            </div>
 
           </ng-container>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns" class="mat-header-row"></tr>
-        <tr class="odd:bg-white even:bg-green-50" mat-row *matRowDef="let row; columns: displayedColumns;" style="cursor: pointer"  (click)="openDialog(row)"></tr>
+        <tr class="odd:bg-white even:bg-green-50" mat-row *matRowDef="let row; columns: displayedColumns;" style="cursor: pointer"  (click)="viewUserDetail(row)"></tr>
       </table>
     </div>
-    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select users"></mat-paginator>
+    <mat-paginator [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons aria-label="Select users"></mat-paginator>
   </ng-container>
 
   <ng-template #noDataMessage>

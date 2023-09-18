@@ -14,6 +14,7 @@ import {forkJoin, map, Observable, throwError} from "rxjs";
 import {switchMap, catchError, tap} from "rxjs/operators";
 import {StateService} from "./state.service";
 import {AuthService} from "./auth.service";
+import {BlService} from "./bl.service";
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +22,7 @@ import {AuthService} from "./auth.service";
 export class ApiService {
 
   status: string[] = STATUS;
-  constructor(private authService: AuthService, private httpClient: HttpClient, private stateService: StateService) {
+  constructor(private authService: AuthService, private blservice: BlService, private httpClient: HttpClient, private stateService: StateService) {
   }
 
   // USER API CALLS
@@ -59,6 +60,7 @@ export class ApiService {
       catchError(error => {
         if (error.status === 401) {
           this.authService.logout();
+          this.blservice.openSnackBar('Session Ended. Please Log In Again');
         }
         return throwError(error);
       })
@@ -116,23 +118,22 @@ export class ApiService {
     let payload: any;
     let roleStatus: string;
     this.stateService.stateChanged.subscribe(state => {
-      if (state.loggedInUserData.role.id == 4) {
+      if (state?.loggedInUserData?.role.id == 4) {
         roleStatus = this.status[0];
-      } else if (state.loggedInUserData.role.id == 5) {
-        roleStatus = this.status[1];
-      } else if (state.loggedInUserData.role.id == 6) {
-        roleStatus = this.status[3];
-      } else if (state.loggedInUserData.role.id == 7) {
+      } else if (state?.loggedInUserData?.role.id == 5) {
+        roleStatus = this.status[2];
+      } else if (state?.loggedInUserData?.role.id == 6) {
         roleStatus = this.status[4];
-      } else if (state.loggedInUserData.role.id == 8) {
-        roleStatus = this.status[6];
+      } else if (state?.loggedInUserData?.role.id == 7) {
+        roleStatus = this.status[5];
       }
+
       payload = {
-        role_id: state.loggedInUserData.role.id,
-        user_id: state.loggedInUserData.userData.UserId,
-        plant: state.loggedInUserData.userData.Plant,
-        department: state.loggedInUserData.userData.Department,
-        division: state.loggedInUserData.userData.Division,
+        role_id: state?.loggedInUserData?.role.id,
+        user_id: state?.loggedInUserData?.userData?.UserId,
+        plant: state?.loggedInUserData?.userData?.Plant,
+        department: state?.loggedInUserData?.userData?.Department,
+        division: state?.loggedInUserData?.userData?.Division,
         status: roleStatus,
       }
     });
@@ -161,5 +162,18 @@ export class ApiService {
 
   addHiraField(payload: any): Observable<any>{
     return this.httpClient.post(`${API_BASE_URL}/addNewField`, payload);
+  }
+
+  hiraStatusChange(payload: any): Observable<any> {
+    return this.httpClient.put(`${API_BASE_URL}/changeStatus`, payload);
+  }
+
+  // Comment APIS
+  addComment(payload: any): Observable<any> {
+    return this.httpClient.post(`${API_BASE_URL}/addComment`, payload);
+  }
+
+  getComment(id: string): Observable<any[]> {
+    return this.httpClient.get<any[]>(`${API_BASE_URL}/getComment`, {params: {id}});
   }
 }

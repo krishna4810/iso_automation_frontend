@@ -9,12 +9,12 @@ export const API_LOGIN: string = "User/Authenticate";
 
 export const STATUS: string[] = [
   'Awaiting IMS Focal\'s Approval',
-  'Awaiting Head\'s Approval',
-  'Requested Changes by Reviewer',
-  'Awaiting Director\'s Approval',
+  'Requested Changes by IMS Focal',
+  'Awaiting HOD\'s Approval',
+  'Requested Changes by HOD',
+  'Awaiting AO\'s Approval',
   'Awaiting QCAD Approval',
   'Requested Changes by QCAD',
-  'Awaiting Director, CAD Approval',
   'Pre-Activity Details Accepted',
   'Post-Activity Details Accepted',
 ]
@@ -71,13 +71,13 @@ export const NAV_ITEMS: sideNav[] = [
     icon: 'person_add',
     permission: 'create_creators'
   },
-  {
-    id: 4,
-    name: "Forms",
-    icon: 'library_books',
-    link: '/home/forms',
-    permission: 'make_forms'
-  },
+  // {
+  //   id: 4,
+  //   name: "Forms",
+  //   icon: 'library_books',
+  //   link: '/home/forms',
+  //   permission: 'make_forms'
+  // },
   // {
   //   id: 5,
   //   name: "Workflow",

@@ -1,10 +1,11 @@
 import {NgModule} from '@angular/core';
-import { MatNativeDateModule } from '@angular/material/core';
+import {MatNativeDateModule} from '@angular/material/core';
 import {BrowserModule} from '@angular/platform-browser';
-import {HttpClientModule} from '@angular/common/http';
-import { DatePipe } from '@angular/common';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {DatePipe} from '@angular/common';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import {CdkTableModule} from '@angular/cdk/table';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {LoginComponent} from './login/login.component';
@@ -23,7 +24,6 @@ import {FunctionDetailsComponent} from './dashboard/components/function-details/
 import {MasterDataComponent} from './dashboard/components/master-data/master-data.component';
 import {MatTabsModule} from "@angular/material/tabs";
 import {MatTableModule} from "@angular/material/table";
-import {MatPaginatorModule} from "@angular/material/paginator";
 import {HeaderFormatPipe} from './model/header-format.pipe';
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
@@ -31,16 +31,27 @@ import {MatMenuModule} from "@angular/material/menu";
 import {AddUserComponent} from './dashboard/components/master-data/add-user/add-user.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatSelectModule} from "@angular/material/select";
-import { AddHiraComponent } from './dashboard/components/function-details/add-hira/add-hira.component';
+import {AddHiraComponent} from './dashboard/components/function-details/add-hira/add-hira.component';
 import {MatStepperModule} from "@angular/material/stepper";
 import {MatDatepickerModule} from "@angular/material/datepicker";
-import { FormsComponent } from './dashboard/components/forms/forms.component';
-import { HiraFormComponent } from './dashboard/components/forms/hira-form/hira-form.component';
+import {FormsComponent} from './dashboard/components/forms/forms.component';
+import {HiraFormComponent} from './dashboard/components/forms/hira-form/hira-form.component';
 import {MatChipsModule} from "@angular/material/chips";
-import { SharedTableComponent } from './dashboard/components/shared-table/shared-table.component';
-import { ViewFunctionDetailsComponent } from './dashboard/components/function-details/view-function-details/view-function-details.component';
-import { SharedApproveDialogComponent } from './dashboard/components/shared-approve-dialog/shared-approve-dialog.component';
-import { SharedRejectDialogComponent } from './dashboard/components/shared-reject-dialog/shared-reject-dialog.component';
+import {SharedTableComponent} from './dashboard/components/shared-table/shared-table.component';
+import {
+  ViewFunctionDetailsComponent
+} from './dashboard/components/function-details/view-function-details/view-function-details.component';
+import {
+  SharedApproveDialogComponent
+} from './dashboard/components/shared-approve-dialog/shared-approve-dialog.component';
+import {SharedRejectDialogComponent} from './dashboard/components/shared-reject-dialog/shared-reject-dialog.component';
+import {ProfileComponent} from './dashboard/components/profile/profile.component';
+import {SharedLoaderComponent} from './dashboard/components/shared-loader/shared-loader.component';
+import {SpinnerInterceptor} from "./inteceptor/spinner.interceptor";
+import { CommentsComponent } from './dashboard/components/comments/comments.component';
+import { TimeAgoPipe } from './model/time-ago.pipe';
+import { UserTableComponent } from './dashboard/components/master-data/user-table/user-table.component';
+import { PermissionTableComponent } from './dashboard/components/master-data/permission-table/permission-table.component';
 
 @NgModule({
   declarations: [
@@ -59,39 +70,48 @@ import { SharedRejectDialogComponent } from './dashboard/components/shared-rejec
     ViewFunctionDetailsComponent,
     SharedApproveDialogComponent,
     SharedRejectDialogComponent,
-
+    ProfileComponent,
+    SharedLoaderComponent,
+    CommentsComponent,
+    TimeAgoPipe,
+    UserTableComponent,
+    PermissionTableComponent,
   ],
-    imports: [
-        MatDialogModule,
-        CdkTableModule,
-        MatNativeDateModule,
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        MatToolbarModule,
-        MatCardModule,
-        MatInputModule,
-        MatButtonModule,
-        MatIconModule,
-        FormsModule,
-        HttpClientModule,
-        MatSnackBarModule,
-        ReactiveFormsModule,
-        MatSidenavModule,
-        MatListModule,
-        MatTabsModule,
-        MatTableModule,
-        MatPaginatorModule,
-        MatCheckboxModule,
-        MatAutocompleteModule,
-        MatMenuModule,
-        MatSelectModule,
-        MatStepperModule,
-        MatDatepickerModule,
-        MatChipsModule
-    ],
-  providers: [DatePipe],
-  bootstrap: [AppComponent]
+  imports: [
+    MatDialogModule,
+    CdkTableModule,
+    MatNativeDateModule,
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MatToolbarModule,
+    MatCardModule,
+    MatInputModule,
+    MatPaginatorModule,
+    MatButtonModule,
+    MatIconModule,
+    FormsModule,
+    HttpClientModule,
+    MatSnackBarModule,
+    ReactiveFormsModule,
+    MatSidenavModule,
+    MatListModule,
+    MatTabsModule,
+    MatTableModule,
+    MatCheckboxModule,
+    MatAutocompleteModule,
+    MatMenuModule,
+    MatSelectModule,
+    MatStepperModule,
+    MatDatepickerModule,
+    MatChipsModule
+  ],
+  providers: [DatePipe, {
+    provide: HTTP_INTERCEPTORS,
+    useClass: SpinnerInterceptor,
+    multi: true,
+  },],
+  bootstrap: [AppComponent,]
 })
 export class AppModule {
 }

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Router} from "@angular/router";
+import {StateService} from "./state.service";
 
 @Injectable({
   providedIn: 'root'
@@ -7,7 +8,7 @@ import {Router} from "@angular/router";
 export class AuthService {
   private accessToken: string='';
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private stateService: StateService) { }
 
   login(token: string, username: string | null ) {
     this.accessToken = token;
@@ -25,7 +26,6 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    // Check if the token exists
     return !!this.accessToken || !!sessionStorage.getItem('accessToken');
   }
 }

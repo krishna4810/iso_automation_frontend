@@ -3,28 +3,31 @@
     <div class="flex items-center justify-between">
       <h5 class="text-xl"><span class="font-semibold"> {{functionalDetail?.id}}
         : </span> {{functionalDetail?.activity_name}}</h5>
+
       <div class="flex space-x-2">
-        <div class="button-container" *ngIf="userState.role.can_approve">
-          <button mat-flat-button	 mat-button color="primary" (click)="openApproveDialog(functionalDetail)">
-            <mat-icon>check</mat-icon>
-            Accept
-          </button>
-        </div>
-
-        <div class="button-container" *ngIf="userState.role.can_comment">
-          <button mat-flat-button	 mat-button color="warn" (click)="openRejectDialog(functionalDetail)">
-            <mat-icon>highlight_off</mat-icon>
-            Reject
-          </button>
-        </div>
-
-        <div class="button-container" *ngIf="userState.role.edit_function">
-          <button mat-flat-button	 mat-button color="accent" (click)="editHira(functionalDetail)">
-            <mat-icon>edit</mat-icon>
-            Edit
-          </button>
-        </div>
+        <button mat-mini-fab [matMenuTriggerFor]="dropdownMenu" color="primary">
+          <mat-menu #dropdownMenu x-position="before">
+            <a *ngIf="userState?.role?.can_approve" mat-menu-item (click)="openApproveDialog(functionalDetail)">
+              <mat-icon color="primary">check</mat-icon>
+              <span>Accept</span>
+            </a>
+            <a *ngIf="userState?.role?.can_comment" mat-menu-item (click)="openRejectDialog(functionalDetail)">
+              <mat-icon color="primary">close</mat-icon>
+              <span>Request Changes</span>
+            </a>
+            <a mat-menu-item *ngIf="userState?.role?.edit_function || (functionalDetail?.status == status[1] || functionalDetail?.status == status[3] || functionalDetail?.status == status[6] || functionalDetail?.status == status[7])" mat-menu-item (click)="editHira(functionalDetail)">
+              <mat-icon color="primary">edit</mat-icon>
+              <span>Edit Function</span>
+            </a>
+            <a mat-menu-item (click)="viewComment(functionalDetail?.id)">
+              <mat-icon color="primary">comment</mat-icon>
+              <span>View Comments</span>
+            </a>
+          </mat-menu>
+          <mat-icon>more_vert</mat-icon>
+        </button>
       </div>
+
     </div>
   </mat-card-content>
 </mat-card>

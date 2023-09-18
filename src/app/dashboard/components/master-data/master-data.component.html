@@ -3,14 +3,19 @@
     <div>
       <h5 class="card-header">Manage User Details</h5>
       <div class="grid grid-cols-12 gap-4">
-        <div class="mt-2 col-span-5" *ngIf="tabGroup.selectedIndex === 0" >
-          <mat-form-field class="w-full">
+        <div class="mt-2 col-span-5" *ngIf="tabGroup.selectedIndex === 0; else noSearch">
+          <mat-form-field class="w-full" >
             <div class="flex" [formGroup] = "searchFormGroup">
               <mat-icon class="mr-2">search</mat-icon>
               <input matInput formControlName="search" placeholder="Search by name or employee ID">
             </div>
           </mat-form-field>
         </div>
+        <ng-template #noSearch>
+          <div class="mt-2 col-span-5">
+
+          </div>
+        </ng-template>
         <div class="col-span-7">
           <div>
             <div class="button-container" *ngIf="tabGroup.selectedIndex === 0">
@@ -19,7 +24,7 @@
             </div>
             <div class="button-container">
               <button mat-raised-button *ngIf="tabGroup.selectedIndex === 1" mat-button color="primary" (click)="updatePermission()">
-                <mat-icon>edit</mat-icon>  Update Permission</button>
+                <mat-icon>edit</mat-icon> Update Permission</button>
             </div>
           </div>
         </div>
@@ -37,7 +42,7 @@
         </mat-icon>
         <span class="pl-2 font-semibold">Users</span>
       </ng-template>
-      <app-shared-table (openMatDialog)="viewUserDetail($event)" [dataSource]="userDataSource" [displayedColumns]="userDisplayedColumns"></app-shared-table>
+      <app-user-table></app-user-table>
     </mat-tab>
     <mat-tab>
     <ng-template mat-tab-label>
@@ -46,7 +51,7 @@
       </mat-icon>
       <span class="pl-2 font-semibold">Permissions</span>
     </ng-template>
-      <app-shared-table [dataSource]="dataSource" [displayedColumns]="displayedColumns" [isFromPermission]="true "></app-shared-table>
+      <app-permission-table></app-permission-table>
     </mat-tab>
   </mat-tab-group>
 </mat-card>

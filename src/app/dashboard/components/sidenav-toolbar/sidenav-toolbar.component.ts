@@ -5,6 +5,8 @@ import {sideNav, UserRole} from "../../../model/interfaces";
 import {NAV_ITEMS} from "../../../model/constants";
 import {ApiService} from "../../../services/api.service";
 import {StateService} from "../../../services/state.service";
+import {MatDialog} from "@angular/material/dialog";
+import {ProfileComponent} from "../profile/profile.component";
 
 @Component({
   selector: 'app-sidenav-toolbar',
@@ -19,7 +21,12 @@ export class SidenavToolbarComponent {
   userName: string | null = sessionStorage?.getItem('username');
   userState?: any;
 
-  constructor(private stateService: StateService, private apiService: ApiService, private authService: AuthService, changeDetectorRef: ChangeDetectorRef, media: MediaMatcher) {
+  constructor(private stateService: StateService,
+              private apiService: ApiService,
+              private authService: AuthService,
+              private dialog: MatDialog,
+              changeDetectorRef: ChangeDetectorRef,
+              media: MediaMatcher,) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
@@ -38,11 +45,19 @@ export class SidenavToolbarComponent {
       });
     });
     this.stateService.stateChanged.subscribe((state) => {
-      this.userState = state.loggedInUserData
+      (this.userState =  state.loggedInUserData)
     });
   }
 
   logout(): void {
     this.authService.logout();
+  }
+
+  showProfile() {
+    this.dialog.open(ProfileComponent, {
+      data: {
+        userState: this.userState
+      },
+    });
   }
 }

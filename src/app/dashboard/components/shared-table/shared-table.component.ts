@@ -1,5 +1,4 @@
-import {Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
-import {HiraFormFields} from "../../../model/interfaces";
+import {Component, EventEmitter, Input, Output, SimpleChanges, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 
@@ -10,6 +9,8 @@ import {MatPaginator} from "@angular/material/paginator";
 })
 export class SharedTableComponent {
 
+  newDataSource = new MatTableDataSource<any>([]);
+
   @Output() openMatDialog = new EventEmitter<any>();
   // @ts-ignore
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -18,7 +19,7 @@ export class SharedTableComponent {
   @Input() isFromPermission?: boolean = false;
 
   async ngOnInit() {
-    this.dataSource.paginator = this.paginator;
+    console.log(this.dataSource);
   }
 
   openDialog(row: any) {

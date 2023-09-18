@@ -2,7 +2,7 @@
   <mat-card-content>
     <div class="flex items-center justify-between">
       <h5 class="card-header">Function Details</h5>
-      <div class="flex space-x-2" *ngIf="userState.role.create_function">
+      <div class="flex space-x-2" *ngIf="userState?.role?.create_function">
         <div class="button-container">
           <button mat-raised-button mat-button color="primary" (click)="openFunctionalComponent()">
             <mat-icon>add</mat-icon> Add{{tabGroup.selectedIndex === 0 ? ' HIRA ' : tabGroup.selectedIndex === 1 ? ' EAI ' : ' ARR '}} Function
