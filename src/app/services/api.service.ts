@@ -85,7 +85,7 @@ export class ApiService {
     });
   }
 
-  getUsers() {
+  getUsers(): Observable<any> {
     const data = this.httpClient.get<any>(`${API_BASE_URL}/getUsers`).pipe(
       switchMap((users: any[]) => {
         const getUserDataObservables = users.map((user: any) =>
@@ -105,6 +105,8 @@ export class ApiService {
     data.subscribe(res => {
       this.stateService.addUser(res);
     });
+
+    return data;
   }
 
   addUserWithRole(user_name: string, role_id: number): Observable<any> {
@@ -175,5 +177,44 @@ export class ApiService {
 
   getComment(id: string): Observable<any[]> {
     return this.httpClient.get<any[]>(`${API_BASE_URL}/getComment`, {params: {id}});
+  }
+
+  // EAI API CALLS
+  getEAIDocumentNumber(payload: any): Observable<any> {
+    return this.httpClient.get(`${API_BASE_URL}/getEAIDocumentNumber`, { params: payload });
+  }
+
+  addEaiActivity(payload: any): Observable<ApiResponse> {
+    return this.httpClient.post<ApiResponse>(
+      `${API_BASE_URL}/addEai`, payload);
+  }
+
+  getEai() {
+    let payload: any;
+    let roleStatus: string;
+    this.stateService.stateChanged.subscribe(state => {
+      if (state?.loggedInUserData?.role.id == 4) {
+        roleStatus = this.status[0];
+      } else if (state?.loggedInUserData?.role.id == 5) {
+        roleStatus = this.status[2];
+      } else if (state?.loggedInUserData?.role.id == 6) {
+        roleStatus = this.status[4];
+      } else if (state?.loggedInUserData?.role.id == 7) {
+        roleStatus = this.status[5];
+      }
+
+      payload = {
+        role_id: state?.loggedInUserData?.role.id,
+        user_id: state?.loggedInUserData?.userData?.UserId,
+        plant: state?.loggedInUserData?.userData?.Plant,
+        department: state?.loggedInUserData?.userData?.Department,
+        division: state?.loggedInUserData?.userData?.Division,
+        status: roleStatus,
+      }
+    });
+    this.httpClient.get<any>(`${API_BASE_URL}/getEai`, {params: payload}).subscribe( res => {
+        this.stateService.addEaiList(res);
+      }
+    );
   }
 }

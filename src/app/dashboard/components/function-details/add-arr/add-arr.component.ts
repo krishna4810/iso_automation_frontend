@@ -12,11 +12,11 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {DatePipe} from "@angular/common";
 
 @Component({
-  selector: 'app-add-hira',
-  templateUrl: './add-hira.component.html',
-  styleUrls: ['./add-hira.component.scss']
+  selector: 'app-add-arr',
+  templateUrl: './add-arr.component.html',
+  styleUrls: ['./add-arr.component.scss']
 })
-export class AddHiraComponent {
+export class AddArrComponent {
   currentDate: Date = new Date();
   formattedDate = this.datePipe.transform(this.currentDate, 'dd/MM/yyyy');
   grossRanking?: string
@@ -66,9 +66,9 @@ export class AddHiraComponent {
               private apiService: ApiService,
               private stateService: StateService,
               private _formBuilder: FormBuilder,
-              public dialogRef: MatDialogRef<AddHiraComponent>,
+              public dialogRef: MatDialogRef<AddArrComponent>,
               breakpointObserver: BreakpointObserver,
-              @Inject(MAT_DIALOG_DATA) public data: {isFromEdit: boolean, formData?: any}
+              @Inject(MAT_DIALOG_DATA) public data: { isFromEdit: boolean, formData?: any }
   ) {
 
     this.stepperOrientation = breakpointObserver
@@ -83,13 +83,14 @@ export class AddHiraComponent {
     this.data.isFromEdit ? this.editHira() : this.patchAddHiraData();
   }
 
-  patchAddHiraData () {
+  patchAddHiraData() {
     this.apiService.getLoggedInUserDataWithRoles(sessionStorage.getItem('username'));
     this.stateService?.stateChanged.subscribe(state => {
       this.loggedInData = state?.loggedInUserData;
       this.mapFirstFormData(this.loggedInData);
     })
   }
+
   editHira() {
     this.patchFirstFormData();
     this.patchSecondFormData();
@@ -106,6 +107,7 @@ export class AddHiraComponent {
       address: this.data.formData.address,
     });
   }
+
   patchSecondFormData() {
     let selectedGrossLikelihood: any = this.ranking.find(option => option.value == +this.data.formData.gross_likelihood);
     let selectedGrossImpact: any = this.ranking.find(option => option.value == +this.data.formData.gross_impact);
@@ -125,6 +127,7 @@ export class AddHiraComponent {
       this.disableFormControls();
     }
   }
+
   patchThirdFormData() {
     let selectedResidualLikelihood: any = this.ranking.find(option => option.value == +this.data.formData.residual_likelihood);
     let selectedResidualImpact: any = this.ranking.find(option => option.value == +this.data.formData.residual_impact);
@@ -145,10 +148,7 @@ export class AddHiraComponent {
   }
 
   disableFormControls() {
-    // Get all the control names from the form group
     const controlNames = Object.keys(this.secondFormGroup.controls);
-
-    // Loop through each control name and disable the control
     controlNames.forEach((controlName) => {
       const control = this.secondFormGroup.get(controlName);
       control?.disable();
@@ -157,9 +157,9 @@ export class AddHiraComponent {
 
   parseDate(dateStr: string): Date {
     const parts = dateStr?.split('/');
-    const day = parseInt(parts[0]!, 10);
-    const month = parseInt(parts[1]!, 10) - 1;
-    const year = parseInt(parts[2]!, 10);
+    const day = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1;
+    const year = parseInt(parts[2], 10);
     return new Date(year, month, day);
   }
 
@@ -186,7 +186,7 @@ export class AddHiraComponent {
       plant: this.firstFormGroup.get('plant')?.value
     }
 
-    this.apiService.getDocumentNumber(document).subscribe(res => {
+    this.apiService.getEAIDocumentNumber(document).subscribe(res => {
       this.firstFormGroup.get('docNumber')?.setValue(res.documentNumber);
     });
   }
@@ -212,11 +212,12 @@ export class AddHiraComponent {
       this.residualRanking = this.blService.calculateRanking(this.residualRankingValue);
       // @ts-ignore
       this.thirdFormGroup?.get('r_ranking')?.setValue(this.residualRanking);
+      console.log(this.thirdFormGroup);
     }
   }
 
   getRankingBackgroundColor() {
-    if (this.grossRanking  === 'High') {
+    if (this.grossRanking === 'High') {
       return 'bg-red-500';
     } else if (this.grossRanking === 'Medium')
       return 'bg-yellow-200';
@@ -227,7 +228,7 @@ export class AddHiraComponent {
   }
 
   getResidualRankingBackgroundColor() {
-    if (this.residualRanking  === 'High') {
+    if (this.residualRanking === 'High') {
       return 'bg-red-500';
     } else if (this.residualRanking === 'Medium')
       return 'bg-yellow-200';
@@ -238,10 +239,10 @@ export class AddHiraComponent {
   }
 
   addHira() {
+    debugger
     if (this.data?.formData?.status == this.status[7] && this.thirdFormGroup.invalid) {
       this.thirdFormGroup.markAllAsTouched();
-    }
-    else if (this.secondFormGroup.invalid) {
+    } else if (this.secondFormGroup.invalid) {
       this.secondFormGroup.markAllAsTouched();
       return;
     } else {
@@ -261,19 +262,18 @@ export class AddHiraComponent {
         creatorName: this.data?.isFromEdit ? this.data.formData.creator_name : this.userState.userData.Name,
         // @ts-ignore
         year: startDate.split('/')[2],
-        currentUser: this.userState.userData.Name,
         status: this.data?.isFromEdit ?
           (this.data?.formData?.status ===
           this.status[1] || this.data?.formData?.status === this.status[3] ||
           this.data?.formData?.status === this.status[6] ||
           this.data?.formData?.status === this.status[7] ?
-            this.status[0] : this.data?.formData?.status ) : this.status[0]
+            this.status[0] : this.data?.formData?.status) : this.status[0]
       }
       this.secondFormGroup.disable();
       this.thirdFormGroup.disable();
-      this.apiService.addHiraActivity(hiraPayload).subscribe(res => {
+      this.apiService.addEaiActivity(hiraPayload).subscribe(res => {
           this.blService.openSnackBar(res.message);
-            this.apiService.getHira()
+          this.apiService.getEai()
         }
       );
       this.dialogRef.close();

@@ -13,7 +13,8 @@ export class StateService extends ObservableStore<StoreState>{
     const initialState = {
       users: undefined,
       loggedInUserData: undefined,
-      hiraList: undefined
+      hiraList: undefined,
+      eaiList: undefined
     }
     super({ trackStateHistory: true });
     this.setState(initialState, 'INIT_STATE');
@@ -30,5 +31,9 @@ export class StateService extends ObservableStore<StoreState>{
 
   addHiraList(data: any[]) {
     this.setState({hiraList: data}, 'ADD_HIRA_LIST')
+  }
+
+  addEaiList(data: any[]) {
+    this.setState({eaiList: data}, 'ADD_EAI_LIST')
   }
 }

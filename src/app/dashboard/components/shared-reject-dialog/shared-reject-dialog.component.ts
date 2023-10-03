@@ -1,10 +1,11 @@
 import {Component, Inject} from '@angular/core';
 import {ApiService} from "../../../services/api.service";
-import {MAT_DIALOG_DATA} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {STATUS} from "../../../model/constants";
 import {Router} from "@angular/router";
 import {BlService} from "../../../services/bl.service";
 import {StateService} from "../../../services/state.service";
+import {SharedApproveDialogComponent} from "../shared-approve-dialog/shared-approve-dialog.component";
 
 @Component({
   selector: 'app-shared-reject-dialog',
@@ -16,8 +17,10 @@ export class SharedRejectDialogComponent {
   roleStatus?: string;
   userState: any;
   status: string[] = STATUS;
-  constructor(private stateService: StateService, private router: Router, private apiService: ApiService, private blservice: BlService,
-              @Inject(MAT_DIALOG_DATA) public data: {formData: any, role_id: any}) {
+
+  constructor(public dialogRef: MatDialogRef<SharedRejectDialogComponent>,
+              private stateService: StateService, private router: Router, private apiService: ApiService, private blservice: BlService,
+              @Inject(MAT_DIALOG_DATA) public data: { formData: any, role_id: any }) {
   }
 
   ngOnInit() {
@@ -36,6 +39,7 @@ export class SharedRejectDialogComponent {
     }
     this.addComment();
   }
+
   addComment() {
     let commentPayload = {
       function_id: this.data.formData.id,
@@ -50,9 +54,9 @@ export class SharedRejectDialogComponent {
       this.apiService.hiraStatusChange(hiraPayload).subscribe(res => {
         this.apiService.getHira();
         this.blservice.openSnackBar(res.message);
-        this.router.navigate(['/home', 'functionalDetails']);
+        this.router.navigate(['/home', 'dashboard']);
       })
     })
-
+    this.dialogRef.close();
   }
 }

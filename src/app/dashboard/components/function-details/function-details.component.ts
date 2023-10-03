@@ -7,6 +7,11 @@ import {ApiService} from "../../../services/api.service";
 import {StateService} from "../../../services/state.service";
 import {Role, Status} from "../../../model/interfaces";
 import {ActivatedRoute, Router} from "@angular/router";
+import {UserTableComponent} from "../master-data/user-table/user-table.component";
+import {HiraTableComponent} from "./hira-table/hira-table.component";
+import {AddEaiComponent} from "./add-eai/add-eai.component";
+import {EaiTableComponent} from "./eai-table/eai-table.component";
+import {AddArrComponent} from "./add-arr/add-arr.component";
 
 @Component({
   selector: 'app-function-details',
@@ -15,12 +20,10 @@ import {ActivatedRoute, Router} from "@angular/router";
 })
 export class FunctionDetailsComponent {
   selectedTabIndex: number = 0;
-  hiraList: any[] | undefined = [];
-  displayedColumns: string[] = [];
   userState: any;
-  dataSource = new MatTableDataSource<any>([]);
   // @ts-ignore
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(HiraTableComponent) hiraComponent!: HiraTableComponent;
+  @ViewChild(EaiTableComponent) eaiComponent!: EaiTableComponent;
 
   constructor(public dialog: MatDialog,
               private apiService: ApiService,
@@ -33,24 +36,6 @@ export class FunctionDetailsComponent {
       this.userState = state.loggedInUserData
     });
     await this.apiService.getHira();
-    this.stateService.stateChanged.subscribe(state => {
-      if(state?.hiraList) {
-        this.hiraList = state?.hiraList;
-        // @ts-ignore
-        if (this.hiraList?.length>0) {
-          this.displayedColumns = Object.keys(this.hiraList[0]).filter(key => !(
-            ['address','unit', 'doc_number',
-              'routine_activity', 'workers_involved', 'gross_ranking_value',
-              'residual_likelihood', 'residual_impact', 'residual_ranking_value',
-              'created_at', 'updated_at', 'year', 'further_action_required', 'mitigation_measures',
-              'sub_activity_name','gross_likelihood', 'user_id',
-              'gross_impact', 'existing_control', 'completion_date',
-              'start_date'].includes(key)));
-          this.dataSource = new MatTableDataSource<Role>(this.hiraList);
-          this.dataSource.paginator = this.paginator;
-        }
-      }
-    });
   }
   openFunctionalComponent() {
     if (this.selectedTabIndex == 0) {
@@ -61,16 +46,28 @@ export class FunctionDetailsComponent {
         maxHeight: '90vh'
       });
     } else if (this.selectedTabIndex == 1) {
-      console.log(this.selectedTabIndex)
+      this.dialog.open(AddEaiComponent, {
+        data: {
+          isFromEdit: false,
+        },
+        maxHeight: '90vh'
+      });
     } else {
-      console.log(this.selectedTabIndex)
+      this.dialog.open(AddArrComponent, {
+        data: {
+          isFromEdit: false,
+        },
+        maxHeight: '90vh'
+      });
     }
   }
 
-  viewHira(event: any) {
-    this.router.navigate(['../', 'functionalDetails', event.id], {
-      relativeTo: this.route,
-      queryParams: event.id,
-    });
+  filterUser(event: Event){
+    if (this.selectedTabIndex == 0) {
+      this.hiraComponent.applyFilter(event);
+    }
+    else if (this.selectedTabIndex == 1) {
+      this.eaiComponent.applyFilter(event);
+    }
   }
 }

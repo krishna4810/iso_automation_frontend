@@ -90,4 +90,5 @@ export interface StoreState {
   users: any[];
   loggedInUserData: LoggedInUserData;
   hiraList: HiraActivity[]
+  eaiList: any[]
 }

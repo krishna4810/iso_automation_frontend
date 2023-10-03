@@ -11,6 +11,7 @@ import {debounceTime, distinctUntilChanged, filter, switchMap, takeUntil} from "
 import {FormBuilder, FormControl} from "@angular/forms";
 import {Subject} from "rxjs";
 import {PermissionTableComponent} from "./permission-table/permission-table.component";
+import {UserTableComponent} from "./user-table/user-table.component";
 
 @Component({
   selector: 'app-master-data',
@@ -21,15 +22,10 @@ export class MasterDataComponent {
 
   // @ts-ignore
   @ViewChild(PermissionTableComponent) permissionComponent: PermissionTableComponent;
+  @ViewChild(UserTableComponent) userComponent!: UserTableComponent;
 
   constructor(private dialog: MatDialog, private _formBuilder: FormBuilder,) {
   }
-  userList: any = [];
-  searchFormGroup = this._formBuilder.group({
-    search: undefined,
-  });
-  private destroy$ = new Subject<void>();
-  // @ts-ignore
 
   async ngOnInit() {
   }
@@ -43,26 +39,11 @@ export class MasterDataComponent {
     });
   }
 
-
-
-  // searchUser () {
-  //   // @ts-ignore
-  //   this.searchFormGroup.get('search')?.valueChanges.pipe(
-  //     distinctUntilChanged(),
-  //     debounceTime(1000),
-  //     filter((value) => !!value),
-  //     takeUntil(this.destroy$),
-  //     switchMap((value) => this.filterUserData(value)),
-  //   ).subscribe((res)=> {
-  //     this.userDataSource = new MatTableDataSource<Role>(res);
-  //
-  //   });
-  // }
-  //
-  // filterUserData(data: any){
-  //   return this.userDataSource.filteredData.filter(user => user.UserId == +data)
-  // }
   updatePermission() {
     this.permissionComponent.updatePermission();
+  }
+
+  filterUser(event: Event){
+    this.userComponent.applyFilter(event);
   }
 }

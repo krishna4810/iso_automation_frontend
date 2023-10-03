@@ -53,7 +53,7 @@ export class SidenavToolbarComponent {
     this.authService.logout();
   }
 
-  showProfile() {
+  showProfile(): void {
     this.dialog.open(ProfileComponent, {
       data: {
         userState: this.userState

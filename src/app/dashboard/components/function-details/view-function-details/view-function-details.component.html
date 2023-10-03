@@ -15,7 +15,12 @@
               <mat-icon color="primary">close</mat-icon>
               <span>Request Changes</span>
             </a>
-            <a mat-menu-item *ngIf="userState?.role?.edit_function || (functionalDetail?.status == status[1] || functionalDetail?.status == status[3] || functionalDetail?.status == status[6] || functionalDetail?.status == status[7])" mat-menu-item (click)="editHira(functionalDetail)">
+            <a mat-menu-item *ngIf="userState?.role?.edit_function &&
+            (functionalDetail?.status == status[0] || functionalDetail?.status == status[1] ||
+            functionalDetail?.status == status[3] || functionalDetail?.status == status[6] ||
+            functionalDetail?.status == status[7] ||
+            (userState?.role?.id == 6 && functionalDetail?.status == status[4]))"
+               (click)="editHira(functionalDetail)">
               <mat-icon color="primary">edit</mat-icon>
               <span>Edit Function</span>
             </a>
@@ -35,7 +40,7 @@
   <div class="col-span-2">
     <mat-card class="my-5">
       <div class="my-3 ml-4">
-        <p style="font-size: 17px" class="my-3">Before Activity Details</p>
+        <p style="font-size: 17px" class="my-3 font-semibold">Pre-Activity Details</p>
         <hr>
         <div class="my-3">
           <span class="font-medium text-gray-400">Start Date: </span>
@@ -77,7 +82,7 @@
       </div>
       <hr>
       <div class="my-3 ml-4" *ngIf="functionalDetail?.residual_ranking_value !==null">
-        <p style="font-size: 17px" class="my-3">After Activity Details</p>
+        <p style="font-size: 17px" class="my-3 font-semibold">Post-Activity Details</p>
         <hr>
         <div class="my-3">
           <span class="font-medium text-gray-400">Existing Control: </span>
@@ -169,7 +174,6 @@
           <p class="mt-3">{{functionalDetail?.date}}</p>
         </div>
       </div>
-
       <div class="grid grid-cols-5 gap-4">
         <div class="col-span-1">
           <mat-icon class="mt-3 ml-5" style="color: #9CA3AF">timeline</mat-icon>
@@ -178,45 +182,54 @@
           <p class="mt-3 text-green-500">{{functionalDetail?.status}}</p>
         </div>
       </div>
+      <div class="grid grid-cols-5 gap-4 mb-3">
+        <div class="col-span-1">
+<!--          <mat-icon class="mt-3 ml-5" style="color: #9CA3AF">account_circle</mat-icon>-->
+        </div>
+        <div class="col-span-4">
+          <p class="mt-3"><span class="text-gray-400">Created by </span>{{functionalDetail?.creator_name}}</p>
+        </div>
+      </div>
+
     </mat-card>
 
-    <mat-card class="my-5">
-      <div class="grid grid-cols-5 gap-4 bg-green-100">
-        <div class="col-span-1">
-          <mat-icon class="mt-3 ml-5" style="color: #9CA3AF">loyalty</mat-icon>
-        </div>
-        <div class="col-span-4">
-          <p class="mt-3 text-green-500">{{functionalDetail?.doc_number}}</p>
-        </div>
-      </div>
-      <div class="grid grid-cols-5 gap-4">
-        <div class="col-span-1">
-          <mat-icon class="mt-3 ml-5" style="color: #9CA3AF">location_on</mat-icon>
-        </div>
-        <div class="col-span-4">
-          <p class="mt-3">{{functionalDetail?.plant}}, {{functionalDetail?.department}}, {{functionalDetail?.unit}}
-            . </p>
-        </div>
-      </div>
+<!--    <mat-card class="my-5">-->
+<!--      <div class="grid grid-cols-5 gap-4 bg-green-100">-->
+<!--        <div class="col-span-1">-->
+<!--          <mat-icon class="mt-3 ml-5" style="color: #9CA3AF">loyalty</mat-icon>-->
+<!--        </div>-->
+<!--        <div class="col-span-4">-->
+<!--          <p class="mt-3 text-green-500">{{functionalDetail?.doc_number}}</p>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="grid grid-cols-5 gap-4">-->
+<!--        <div class="col-span-1">-->
+<!--          <mat-icon class="mt-3 ml-5" style="color: #9CA3AF">location_on</mat-icon>-->
+<!--        </div>-->
+<!--        <div class="col-span-4">-->
+<!--          <p class="mt-3">{{functionalDetail?.plant}}, {{functionalDetail?.department}}, {{functionalDetail?.unit}}-->
+<!--            . </p>-->
+<!--        </div>-->
+<!--      </div>-->
 
-      <div class="grid grid-cols-5 gap-4">
-        <div class="col-span-1">
-          <mat-icon class="mt-3 ml-5" style="color: #9CA3AF">date_range</mat-icon>
-        </div>
-        <div class="col-span-4">
-          <p class="mt-3">{{functionalDetail?.date}}</p>
-        </div>
-      </div>
+<!--      <div class="grid grid-cols-5 gap-4">-->
+<!--        <div class="col-span-1">-->
+<!--          <mat-icon class="mt-3 ml-5" style="color: #9CA3AF">date_range</mat-icon>-->
+<!--        </div>-->
+<!--        <div class="col-span-4">-->
+<!--          <p class="mt-3">{{functionalDetail?.date}}</p>-->
+<!--        </div>-->
+<!--      </div>-->
 
-      <div class="grid grid-cols-5 gap-4">
-        <div class="col-span-1">
-          <mat-icon class="mt-3 ml-5" style="color: #9CA3AF">timeline</mat-icon>
-        </div>
-        <div class="col-span-4">
-          <p class="mt-3 text-green-500">{{functionalDetail?.status}}</p>
-        </div>
-      </div>
-    </mat-card>
+<!--      <div class="grid grid-cols-5 gap-4">-->
+<!--        <div class="col-span-1">-->
+<!--          <mat-icon class="mt-3 ml-5" style="color: #9CA3AF">timeline</mat-icon>-->
+<!--        </div>-->
+<!--        <div class="col-span-4">-->
+<!--          <p class="mt-3 text-green-500">{{functionalDetail?.status}}</p>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </mat-card>-->
   </div>
 </div>
 

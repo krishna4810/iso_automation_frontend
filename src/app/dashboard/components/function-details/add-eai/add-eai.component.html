@@ -1,0 +1,226 @@
+<ng-container [ngSwitch]="stepperOrientation | async">
+  <div *ngSwitchCase="'horizontal'" class="text-center m-4">
+    <span class="text-2xl">
+    Environment Aspect and Impact
+    </span>
+  </div>
+  <div *ngSwitchCase="'vertical'" class="text-center m-4">
+    <span class="text-2xl">
+    Environment Aspect and Impact
+    </span>
+  </div>
+
+</ng-container>
+
+<mat-stepper
+  class="example-stepper"
+  [orientation]="(stepperOrientation | async)!">
+  <mat-step [stepControl]="firstFormGroup" label="General Details" class="mb-2">
+    <form [formGroup]="firstFormGroup" class="grid grid-cols-4 gap-4">
+      <mat-form-field class="col-span-2">
+        <mat-label>Document Number</mat-label>
+        <input matInput placeholder="Document Number" formControlName="docNumber" required>
+      </mat-form-field>
+      <mat-form-field class="col-span-2">
+        <mat-label>Department</mat-label>
+        <input matInput placeholder="Department" formControlName="department" required>
+      </mat-form-field>
+      <mat-form-field class="col-span-2">
+        <mat-label>Date</mat-label>
+        <input matInput placeholder="Date" formControlName="date" required>
+      </mat-form-field>
+      <mat-form-field class="col-span-2">
+        <mat-label>Plant</mat-label>
+        <input matInput placeholder="Plant" formControlName="plant" required>
+      </mat-form-field>
+      <mat-form-field class="col-span-2">
+        <mat-label>Division</mat-label>
+        <input matInput placeholder="Division" formControlName="unit" required>
+      </mat-form-field>
+      <mat-form-field class="col-span-2">
+        <mat-label>Address</mat-label>
+        <input matInput placeholder="Address" formControlName="address" required>
+      </mat-form-field>
+      <div class="col-span-4 flex justify-end">
+        <button mat-flat-button mat-button matStepperNext color="primary" style="float: right">Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl]="secondFormGroup" label="Pre-Activity Details">
+    <form [formGroup]="secondFormGroup">
+      <div class="grid grid-cols-2 gap-4">
+        <mat-form-field class="col-span-1">
+          <mat-label>Activity Name</mat-label>
+          <textarea matInput placeholder="Activity Name" formControlName="activityName" cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
+          <mat-error class="mb-1" *ngIf="secondFormGroup.get('activityName')?.hasError('required')">
+            Activity Name is required
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-span-1">
+          <mat-label>Sub Activity Name</mat-label>
+          <textarea matInput  placeholder="Sub Activity Name" formControlName="subActivityName" cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
+          <mat-error class="mb-1" *ngIf="secondFormGroup.get('subActivityName')?.hasError('required')">
+            Sub Activity Name is required
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-span-1">
+          <mat-label>Hazard</mat-label>
+          <textarea matInput  placeholder="Sub Activity Name" formControlName="hazard" cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
+          <mat-error class="mb-1" *ngIf="secondFormGroup.get('hazard')?.hasError('required')">
+            Hazard is required
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-span-1">
+          <mat-label>Start Date</mat-label>
+          <input matInput [matDatepicker]="startDate" formControlName="startDate">
+          <mat-datepicker-toggle matIconSuffix [for]="startDate">
+            <mat-icon matDatepickerToggleIcon color="primary">calendar_today</mat-icon>
+          </mat-datepicker-toggle>
+          <mat-datepicker #startDate></mat-datepicker>
+          <mat-error class="mb  -1" *ngIf="secondFormGroup.get('startDate')?.hasError('required')">
+            Start Date is required
+          </mat-error>
+        </mat-form-field>
+        <div class="col-span-1">
+
+        </div>
+        <div class="col-span-1">
+
+        </div>
+      </div>
+      <h1 class="pt-2 text-gray-400 text-xl">Gross Risks</h1>
+      <hr>
+      <div class="grid grid-cols-3 gap-4">
+        <mat-form-field class="col-span-1">
+          <mat-label>Likelihood</mat-label>
+          <mat-select formControlName="g_likelihood" (selectionChange)="clearGrossImpact('gross')">
+            <mat-option *ngFor="let option of ranking" [value]="option.value">
+              {{ option.name}}
+            </mat-option>
+          </mat-select>
+          <mat-error class="mb-1" *ngIf="secondFormGroup.get('g_likelihood')?.hasError('required')">
+            Likelihood is required
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-span-1">
+          <mat-label>Impact</mat-label>
+          <mat-select formControlName="g_impact" (selectionChange)="calculateGrossRanking('gross')">
+            <mat-option *ngFor="let option of ranking" [value]="option.value">
+              {{ option.name}}
+            </mat-option>
+          </mat-select>
+          <mat-error class="mb-1" *ngIf="secondFormGroup.get('g_impact')?.hasError('required')">
+            Impact is required
+          </mat-error>
+        </mat-form-field>
+
+        <div class="g-ranking col-span-1" [ngClass]="getRankingBackgroundColor() ?? ''">
+          <span *ngIf="grossRanking == 'Medium'" style="color:black;">Ranking: {{grossRanking}}</span>
+          <span *ngIf="grossRanking == 'High' || grossRanking == 'Low'" style="color:white;">Ranking: {{grossRanking}}</span>
+        </div>
+        <div class="col-span-3 flex justify-end">
+          <button mat-button matStepperPrevious class="mr-2">Back</button>
+          <button mat-flat-button mat-button matStepperNext color="primary"
+                  (click)="this.data.isFromEdit ? (data?.formData?.status == status[7] || data?.formData?.residual_ranking_value != null) ? null : addHira() : addHira()">
+            {{ this.data.isFromEdit ? (data?.formData?.status == status[7] || data?.formData?.residual_ranking_value != null) ? 'Next' : 'Update' : 'Save' }}
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="thirdFormGroup" label="Post Activity Details" *ngIf="data?.formData?.status == status[7] || data?.formData?.residual_ranking_value != null">
+    <form [formGroup]="thirdFormGroup">
+      <div class="grid grid-cols-4 gap-4">
+        <mat-form-field class="col-span-2">
+          <mat-label>Existing control</mat-label>
+          <textarea matInput  placeholder="Existing control" formControlName="existingControl" cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
+          <mat-error class="mb-1" *ngIf="thirdFormGroup.get('existingControl')?.hasError('required')">
+            Existing Control is required
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-span-2">
+          <mat-label>Mitigation Measures</mat-label>
+          <textarea matInput  placeholder="Mitigation measures identified before start of activity (Resources Required)" formControlName="mitigationMeasures" cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
+          <mat-error class="mb-1" *ngIf="thirdFormGroup.get('mitigationMeasures')?.hasError('required')">
+            Mitigation Measures is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="grid grid-cols-4 gap-4">
+        <mat-form-field class="col-span-2">
+          <mat-label>Further Action Required</mat-label>
+          <textarea matInput  placeholder="Further Actions Required (Resources)" formControlName="furtherAction" cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
+          <mat-error class="mb-1" *ngIf="thirdFormGroup.get('furtherAction')?.hasError('required')">
+            Further Actions is required
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-span-2">
+          <mat-label>Completion Date</mat-label>
+          <input matInput [matDatepicker]="completionDate" formControlName="completionDate">
+          <mat-datepicker-toggle matIconSuffix [for]="completionDate">
+            <mat-icon matDatepickerToggleIcon color="primary">calendar_today</mat-icon>
+          </mat-datepicker-toggle>
+          <mat-datepicker #completionDate></mat-datepicker>
+          <mat-error class="mb-1" *ngIf="thirdFormGroup.get('completionDate')?.hasError('required')">
+            Completion Date is required
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-span-2">
+          <mat-label>Routine/Non routine activity</mat-label>
+          <mat-select formControlName="routineActivity">
+            <mat-option *ngFor="let option of activities" [value]="option.name">
+              {{ option.name}}
+            </mat-option>
+          </mat-select>
+          <mat-error class="mb-1" *ngIf="thirdFormGroup.get('routineActivity')?.hasError('required')">
+            Routine Activity is required
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-span-2">
+          <mat-label>Workers involved</mat-label>
+          <input type="number" matInput placeholder="Workers Involved" formControlName="workersInvolved" required>
+          <mat-error class="mb-1" *ngIf="thirdFormGroup.get('workersInvolved')?.hasError('required')">
+            Workers Involved is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <h1 class="pt-2 text-gray-400 text-xl">Residual Risks</h1>
+      <hr>
+      <div class="grid grid-cols-3 gap-4">
+        <mat-form-field class="col-span-1">
+          <mat-label>Likelihood</mat-label>
+          <mat-select formControlName="r_likelihood"  (selectionChange)="clearGrossImpact('residual')">
+            <mat-option *ngFor="let option of ranking" [value]="option.value">
+              {{ option.name}}
+            </mat-option>
+          </mat-select>
+          <mat-error class="mb-1" *ngIf="thirdFormGroup.get('r_likelihood')?.hasError('required')">
+            Likelihood is required
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-span-1">
+          <mat-label>Impact</mat-label>
+          <mat-select formControlName="r_impact" (selectionChange)="calculateGrossRanking('residual')">
+            <mat-option *ngFor="let option of ranking" [value]="option.value">
+              {{ option.name}}
+            </mat-option>
+          </mat-select>
+          <mat-error class="mb-1" *ngIf="thirdFormGroup.get('r_impact')?.hasError('required')">
+            Impact is required
+          </mat-error>
+        </mat-form-field>
+
+        <div class="g-ranking col-span-1" [ngClass]="getResidualRankingBackgroundColor() ?? ''">
+          <span *ngIf="residualRanking == 'Medium'" style="color:black;">Ranking: {{residualRanking}}</span>
+          <span *ngIf="residualRanking == 'High' || residualRanking == 'Low'" style="color:white;">Ranking: {{residualRanking}}</span>
+        </div>
+        <div class="col-span-3 flex justify-end">
+          <button mat-button matStepperPrevious class="mr-2">Back</button>
+          <button mat-flat-button mat-button matStepperNext color="primary" (click)="addHira()">Submit</button>
+        </div>
+      </div>
+    </form>
+  </mat-step>
+</mat-stepper>

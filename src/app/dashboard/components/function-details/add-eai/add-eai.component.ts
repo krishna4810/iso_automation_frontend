@@ -12,11 +12,11 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {DatePipe} from "@angular/common";
 
 @Component({
-  selector: 'app-add-hira',
-  templateUrl: './add-hira.component.html',
-  styleUrls: ['./add-hira.component.scss']
+  selector: 'app-add-eai',
+  templateUrl: './add-eai.component.html',
+  styleUrls: ['./add-eai.component.scss']
 })
-export class AddHiraComponent {
+export class AddEaiComponent {
   currentDate: Date = new Date();
   formattedDate = this.datePipe.transform(this.currentDate, 'dd/MM/yyyy');
   grossRanking?: string
@@ -66,7 +66,7 @@ export class AddHiraComponent {
               private apiService: ApiService,
               private stateService: StateService,
               private _formBuilder: FormBuilder,
-              public dialogRef: MatDialogRef<AddHiraComponent>,
+              public dialogRef: MatDialogRef<AddEaiComponent>,
               breakpointObserver: BreakpointObserver,
               @Inject(MAT_DIALOG_DATA) public data: {isFromEdit: boolean, formData?: any}
   ) {
@@ -145,10 +145,7 @@ export class AddHiraComponent {
   }
 
   disableFormControls() {
-    // Get all the control names from the form group
     const controlNames = Object.keys(this.secondFormGroup.controls);
-
-    // Loop through each control name and disable the control
     controlNames.forEach((controlName) => {
       const control = this.secondFormGroup.get(controlName);
       control?.disable();
@@ -157,9 +154,9 @@ export class AddHiraComponent {
 
   parseDate(dateStr: string): Date {
     const parts = dateStr?.split('/');
-    const day = parseInt(parts[0]!, 10);
-    const month = parseInt(parts[1]!, 10) - 1;
-    const year = parseInt(parts[2]!, 10);
+    const day = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1;
+    const year = parseInt(parts[2], 10);
     return new Date(year, month, day);
   }
 
@@ -186,7 +183,7 @@ export class AddHiraComponent {
       plant: this.firstFormGroup.get('plant')?.value
     }
 
-    this.apiService.getDocumentNumber(document).subscribe(res => {
+    this.apiService.getEAIDocumentNumber(document).subscribe(res => {
       this.firstFormGroup.get('docNumber')?.setValue(res.documentNumber);
     });
   }
@@ -212,6 +209,7 @@ export class AddHiraComponent {
       this.residualRanking = this.blService.calculateRanking(this.residualRankingValue);
       // @ts-ignore
       this.thirdFormGroup?.get('r_ranking')?.setValue(this.residualRanking);
+      console.log(this.thirdFormGroup);
     }
   }
 
@@ -237,7 +235,7 @@ export class AddHiraComponent {
     return '';
   }
 
-  addHira() {
+  addHira() { debugger
     if (this.data?.formData?.status == this.status[7] && this.thirdFormGroup.invalid) {
       this.thirdFormGroup.markAllAsTouched();
     }
@@ -261,24 +259,24 @@ export class AddHiraComponent {
         creatorName: this.data?.isFromEdit ? this.data.formData.creator_name : this.userState.userData.Name,
         // @ts-ignore
         year: startDate.split('/')[2],
-        currentUser: this.userState.userData.Name,
         status: this.data?.isFromEdit ?
           (this.data?.formData?.status ===
-          this.status[1] || this.data?.formData?.status === this.status[3] ||
-          this.data?.formData?.status === this.status[6] ||
-          this.data?.formData?.status === this.status[7] ?
+            this.status[1] || this.data?.formData?.status === this.status[3] ||
+            this.data?.formData?.status === this.status[6] ||
+            this.data?.formData?.status === this.status[7] ?
             this.status[0] : this.data?.formData?.status ) : this.status[0]
       }
       this.secondFormGroup.disable();
       this.thirdFormGroup.disable();
-      this.apiService.addHiraActivity(hiraPayload).subscribe(res => {
+      this.apiService.addEaiActivity(hiraPayload).subscribe(res => {
           this.blService.openSnackBar(res.message);
-            this.apiService.getHira()
+          this.apiService.getEai()
         }
       );
       this.dialogRef.close();
     }
   }
 }
+
 
 

@@ -10,6 +10,7 @@ import {SharedRejectDialogComponent} from "../../shared-reject-dialog/shared-rej
 import {data} from "autoprefixer";
 import {STATUS} from "../../../../model/constants";
 import {CommentsComponent} from "../../comments/comments.component";
+import {AddEaiComponent} from "../add-eai/add-eai.component";
 
 @Component({
   selector: 'app-view-function-details',
@@ -33,6 +34,7 @@ export class ViewFunctionDetailsComponent {
       this.userState = state.loggedInUserData
     });
     this.apiService.getHira();
+    this.apiService.getEai();
     this.route.params.subscribe((params) => {
       this.id = params['id'];
       this.getFunctionDetail();
@@ -40,14 +42,17 @@ export class ViewFunctionDetailsComponent {
   }
   getFunctionDetail() {
     this.stateService.stateChanged.subscribe(state => {
-      if(state?.hiraList) {
+      if(state?.hiraList && this.id.includes('H')) {
         this.functionalDetail = state?.hiraList?.find(hira => hira.id == this.id);
+      } else if(state?.eaiList && this.id.includes('E')) {
+        this.functionalDetail = state?.eaiList?.find(hira => hira.id == this.id);
       }
     });
   }
 
   editHira(functionalDetail: HiraActivity | undefined) {
-    this.dialog.open(AddHiraComponent, {
+    const componentToOpen = this.id.includes('H') ? AddHiraComponent : AddEaiComponent;
+    this.dialog.open<any, { isFromEdit: boolean; formData: HiraActivity | undefined }>(componentToOpen, {
       data: {
         isFromEdit: true,
         formData: functionalDetail
@@ -55,6 +60,7 @@ export class ViewFunctionDetailsComponent {
       maxHeight: '90vh'
     });
   }
+
 
   openApproveDialog(data: any) {
     this.dialog.open(SharedApproveDialogComponent, {

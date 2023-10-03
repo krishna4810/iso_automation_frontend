@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="master-data.component.scss">
 <mat-card>
   <mat-card-content>
     <div>
@@ -5,9 +6,9 @@
       <div class="grid grid-cols-12 gap-4">
         <div class="mt-2 col-span-5" *ngIf="tabGroup.selectedIndex === 0; else noSearch">
           <mat-form-field class="w-full" >
-            <div class="flex" [formGroup] = "searchFormGroup">
+            <div class="flex">
               <mat-icon class="mr-2">search</mat-icon>
-              <input matInput formControlName="search" placeholder="Search by name or employee ID">
+              <input matInput placeholder="Search by Name, Employee ID, Role Name or anything" (keyup)="filterUser($event)">
             </div>
           </mat-form-field>
         </div>

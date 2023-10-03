@@ -1,41 +1,46 @@
-<div class="flex items-center w-full justify-center">
-  <div class="max-w-xs">
-    <div class="bg-white shadow-xl rounded-lg py-3">
-      <div class="p-2">
-        <h3 class="text-center text-xl text-gray-900 font-medium leading-8">
-          {{data.userState.userData.Name}}</h3>
-        <div class="text-center text-gray-400 text-xs font-semibold">
-          <p>{{data.userState?.role?.role_name}}</p>
+<mat-dialog-content class="mat-typography">
+  <div class="flex items-center w-full justify-center">
+    <div class="max-w-xs">
+      <div>
+        <div class="p-2">
+          <h3 class="text-center text-xl text-gray-900 font-medium leading-8">
+            {{data.userState.userData.Name}}</h3>
+          <div class="text-center text-gray-400 text-xs font-semibold">
+            <p>{{data.userState?.role?.role_name}}</p>
+          </div>
+          <table class="text-xs my-3">
+            <tbody>
+            <tr>
+              <td class="px-2 py-2 text-gray-500 font-semibold">Employee ID</td>
+              <td class="px-2 py-2">{{data.userState.userData.UserId}}</td>
+            </tr>
+            <tr>
+              <td class="px-2 py-2 text-gray-500 font-semibold">Grade</td>
+              <td class="px-2 py-2">{{data.userState.userData.Grade}}</td>
+            </tr>
+            <tr>
+              <td class="px-2 py-2 text-gray-500 font-semibold">Designation</td>
+              <td class="px-2 py-2">{{data.userState.userData.Designation}}</td>
+            </tr>
+            <tr>
+              <td class="px-2 py-2 text-gray-500 font-semibold">Plant</td>
+              <td class="px-2 py-2">{{data.userState.userData.Plant}}</td>
+            </tr>
+            <tr>
+              <td class="px-2 py-2 text-gray-500 font-semibold">Department</td>
+              <td class="px-2 py-2">{{data.userState.userData.Department}}</td>
+            </tr>
+            <tr>
+              <td class="px-2 py-2 text-gray-500 font-semibold">Address</td>
+              <td class="px-2 py-2">{{data.userState.userData.Division}}</td>
+            </tr>
+            </tbody></table>
         </div>
-        <table class="text-xs my-3">
-          <tbody>
-          <tr>
-            <td class="px-2 py-2 text-gray-500 font-semibold">Employee ID</td>
-            <td class="px-2 py-2">{{data.userState.userData.UserId}}</td>
-          </tr>
-          <tr>
-            <td class="px-2 py-2 text-gray-500 font-semibold">Grade</td>
-            <td class="px-2 py-2">{{data.userState.userData.Grade}}</td>
-          </tr>
-          <tr>
-            <td class="px-2 py-2 text-gray-500 font-semibold">Designation</td>
-            <td class="px-2 py-2">{{data.userState.userData.Designation}}</td>
-          </tr>
-          <tr>
-            <td class="px-2 py-2 text-gray-500 font-semibold">Plant</td>
-            <td class="px-2 py-2">{{data.userState.userData.Plant}}</td>
-          </tr>
-          <tr>
-            <td class="px-2 py-2 text-gray-500 font-semibold">Department</td>
-            <td class="px-2 py-2">{{data.userState.userData.Department}}</td>
-          </tr>
-          <tr>
-            <td class="px-2 py-2 text-gray-500 font-semibold">Address</td>
-            <td class="px-2 py-2">{{data.userState.userData.Division}}</td>
-          </tr>
-          </tbody></table>
       </div>
-  </div>
-  </div>
+    </div>
 
-</div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="true" color="primary">Close</button>
+</mat-dialog-actions>

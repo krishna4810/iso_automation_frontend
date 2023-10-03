@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Output, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
 import {Role} from "../../../../model/interfaces";
 import {MatDialog} from "@angular/material/dialog";
@@ -13,7 +13,7 @@ import {BlService} from "../../../../services/bl.service";
   templateUrl: './permission-table.component.html',
   styleUrls: ['./permission-table.component.scss']
 })
-export class PermissionTableComponent {
+export class PermissionTableComponent{
   displayedColumns: string[] = [];
   permissionList: any = [];
   dataSource = new MatTableDataSource<Role>([]);
@@ -21,16 +21,10 @@ export class PermissionTableComponent {
   constructor(private blService: BlService, private dialog: MatDialog, private apiService: ApiService, private stateService: StateService) {
   }
 
-  // @ts-ignore
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-
   ngOnInit() {
     this.getPermissionData();
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator
-  }
 
   getPermissionData() {
     this.apiService.getPermissions().subscribe((permissions: Role[]) => {
@@ -45,5 +39,4 @@ export class PermissionTableComponent {
       this.blService.openSnackBar(res.message);
     });
   }
-
 }

@@ -5,7 +5,6 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {DatePipe} from '@angular/common';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import { MatPaginatorModule } from '@angular/material/paginator';
 import {CdkTableModule} from '@angular/cdk/table';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {LoginComponent} from './login/login.component';
@@ -52,6 +51,12 @@ import { CommentsComponent } from './dashboard/components/comments/comments.comp
 import { TimeAgoPipe } from './model/time-ago.pipe';
 import { UserTableComponent } from './dashboard/components/master-data/user-table/user-table.component';
 import { PermissionTableComponent } from './dashboard/components/master-data/permission-table/permission-table.component';
+import {MatPaginatorModule} from "@angular/material/paginator";
+import {MatSortModule} from "@angular/material/sort";
+import { HiraTableComponent } from './dashboard/components/function-details/hira-table/hira-table.component';
+import { AddEaiComponent } from './dashboard/components/function-details/add-eai/add-eai.component';
+import { EaiTableComponent } from './dashboard/components/function-details/eai-table/eai-table.component';
+import { AddArrComponent } from './dashboard/components/function-details/add-arr/add-arr.component';
 
 @NgModule({
   declarations: [
@@ -76,6 +81,10 @@ import { PermissionTableComponent } from './dashboard/components/master-data/per
     TimeAgoPipe,
     UserTableComponent,
     PermissionTableComponent,
+    HiraTableComponent,
+    AddEaiComponent,
+    EaiTableComponent,
+    AddArrComponent,
   ],
   imports: [
     MatDialogModule,
@@ -87,7 +96,6 @@ import { PermissionTableComponent } from './dashboard/components/master-data/per
     MatToolbarModule,
     MatCardModule,
     MatInputModule,
-    MatPaginatorModule,
     MatButtonModule,
     MatIconModule,
     FormsModule,
@@ -104,7 +112,9 @@ import { PermissionTableComponent } from './dashboard/components/master-data/per
     MatSelectModule,
     MatStepperModule,
     MatDatepickerModule,
-    MatChipsModule
+    MatChipsModule,
+    MatPaginatorModule,
+    MatSortModule
   ],
   providers: [DatePipe, {
     provide: HTTP_INTERCEPTORS,

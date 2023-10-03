@@ -99,6 +99,7 @@ export interface HiraActivity {
   date: string;
   department: string;
   doc_number: string;
+  creator_name: string;
   existing_control: string | null;
   gross_impact: number;
   gross_likelihood: number;
