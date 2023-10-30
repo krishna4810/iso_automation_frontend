@@ -136,5 +136,11 @@ export interface Status {
   action: string
 }
 
+export interface FilterParams {
+  department: string[],
+  plant: string[],
+  year: string[]
+}
+
 
 

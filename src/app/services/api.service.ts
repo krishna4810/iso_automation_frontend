@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {
-  ApiResponse, HiraFormFields,
+  ApiResponse, FilterParams, HiraFormFields,
   LoggedInUserData,
   loginData,
   loginResponse,
@@ -217,4 +217,14 @@ export class ApiService {
       }
     );
   }
+
+  //DASHBOARD API Calls
+  getFilterParam(): Observable<any> {
+    return this.httpClient.get(`${API_BASE_URL}/getFilterParam`);
+  }
+
+  filterDashboard(param: any): Observable<any>{
+    return this.httpClient.get(`${API_BASE_URL}/filterDashboard`, {params: param});
+  }
+
 }

@@ -121,7 +121,7 @@ export class AddEaiComponent {
     });
     this.grossRankingValue = this.data.formData.gross_ranking_value;
     this.grossRanking = this.data.formData.gross_ranking;
-    if (this.data.formData.status == this.status[7]) {
+    if (this.data.formData.residual_ranking_value != null) {
       this.disableFormControls();
     }
   }
@@ -235,7 +235,7 @@ export class AddEaiComponent {
     return '';
   }
 
-  addHira() { debugger
+  addHira() {
     if (this.data?.formData?.status == this.status[7] && this.thirdFormGroup.invalid) {
       this.thirdFormGroup.markAllAsTouched();
     }

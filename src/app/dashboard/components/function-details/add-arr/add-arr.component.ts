@@ -239,7 +239,7 @@ export class AddArrComponent {
   }
 
   addHira() {
-    debugger
+
     if (this.data?.formData?.status == this.status[7] && this.thirdFormGroup.invalid) {
       this.thirdFormGroup.markAllAsTouched();
     } else if (this.secondFormGroup.invalid) {

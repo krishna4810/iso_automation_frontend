@@ -57,6 +57,12 @@ import { HiraTableComponent } from './dashboard/components/function-details/hira
 import { AddEaiComponent } from './dashboard/components/function-details/add-eai/add-eai.component';
 import { EaiTableComponent } from './dashboard/components/function-details/eai-table/eai-table.component';
 import { AddArrComponent } from './dashboard/components/function-details/add-arr/add-arr.component';
+import { InnerDashboardComponent } from './dashboard/components/inner-dashboard/inner-dashboard.component';
+import { NgChartsModule } from 'ng2-charts';
+import { BarGraphComponent } from './dashboard/components/inner-dashboard/bar-graph/bar-graph.component';
+import { HeatMapComponent } from './dashboard/components/inner-dashboard/heat-map/heat-map.component';
+import { FilterDialogComponent } from './dashboard/components/inner-dashboard/filter-dialog/filter-dialog.component';
+import {MatExpansionModule} from "@angular/material/expansion";
 
 @NgModule({
   declarations: [
@@ -85,6 +91,10 @@ import { AddArrComponent } from './dashboard/components/function-details/add-arr
     AddEaiComponent,
     EaiTableComponent,
     AddArrComponent,
+    InnerDashboardComponent,
+    BarGraphComponent,
+    HeatMapComponent,
+    FilterDialogComponent,
   ],
   imports: [
     MatDialogModule,
@@ -114,7 +124,9 @@ import { AddArrComponent } from './dashboard/components/function-details/add-arr
     MatDatepickerModule,
     MatChipsModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    NgChartsModule,
+    MatExpansionModule
   ],
   providers: [DatePipe, {
     provide: HTTP_INTERCEPTORS,

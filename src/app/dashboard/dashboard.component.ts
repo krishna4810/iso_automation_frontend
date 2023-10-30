@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {AuthService} from "../services/auth.service";
+import Chart from 'chart.js/auto';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,15 +8,8 @@ import {AuthService} from "../services/auth.service";
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent {
+
   constructor(private authService: AuthService) {
   }
-  hoveredMessage: string | null = null;
 
-  showMessage(message: string): void {
-    this.hoveredMessage = message;
-  }
-
-  clearMessage(): void {
-    this.hoveredMessage = null;
-  }
 }

@@ -21,7 +21,6 @@ import {AddArrComponent} from "./add-arr/add-arr.component";
 export class FunctionDetailsComponent {
   selectedTabIndex: number = 0;
   userState: any;
-  // @ts-ignore
   @ViewChild(HiraTableComponent) hiraComponent!: HiraTableComponent;
   @ViewChild(EaiTableComponent) eaiComponent!: EaiTableComponent;
 
