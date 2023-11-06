@@ -4,7 +4,6 @@ import {HiraTableComponent} from "../function-details/hira-table/hira-table.comp
 import {ApiService} from "../../../services/api.service";
 import {de} from "date-fns/locale";
 import {MatDialog} from "@angular/material/dialog";
-import {FilterDialogComponent} from "./filter-dialog/filter-dialog.component";
 import {StateService} from "../../../services/state.service";
 import {MatExpansionPanel} from "@angular/material/expansion";
 
@@ -15,8 +14,6 @@ import {MatExpansionPanel} from "@angular/material/expansion";
 })
 export class InnerDashboardComponent{
   @ViewChild(UserTableComponent) hira!: HiraTableComponent;
-  @ViewChild('panel') panel!: MatExpansionPanel;
-
 
   params: any = [];
   selectedPlant?: string;
@@ -30,7 +27,7 @@ export class InnerDashboardComponent{
   }
 
   ngOnInit() {
-    this.apiService.filterDashboard(this.getCurrentParam()).subscribe(res=> { debugger
+    this.apiService.filterDashboard(this.getCurrentParam()).subscribe(res=> {
       this.dashboardData = res;
     })
   }
@@ -51,18 +48,21 @@ export class InnerDashboardComponent{
         year: this.selectedYear
       }
     });
-
     return params;
   }
   filterUser(event: Event){
     this.hira?.applyFilter(event);
   }
 
-  openFilterDialog() {
-    this.dialog.open(FilterDialogComponent);
-  }
+  filterDashboard() {
+    let params = {
+      plant: this.selectedPlant,
+      department: this.selectedDepartment,
+      year: this.selectedYear
+    }
 
-  openPanel() {
-    this.panel.open();
+    this.apiService.filterDashboard(params).subscribe(res=> {
+      this.dashboardData = res;
+    })
   }
 }

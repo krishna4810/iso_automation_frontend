@@ -1,29 +1,39 @@
-import { Component } from '@angular/core';
-import {ChartConfiguration} from "chart.js";
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { ChartConfiguration } from 'chart.js';
 
 @Component({
   selector: 'app-bar-graph',
   templateUrl: './bar-graph.component.html',
   styleUrls: ['./bar-graph.component.scss']
 })
-export class BarGraphComponent {
-  title = 'ng2-charts-demo';
+export class BarGraphComponent implements OnChanges {
+
+  constructor() {}
+
+  @Input() barGraphData?: any;
 
   public barChartLegend = true;
   public barChartPlugins = [];
-
-  public barChartData: ChartConfiguration<'bar'>['data'] = {
-    labels: [ 'H1', 'H2', 'H3', 'H4', 'H5', 'H6'],
-    datasets: [
-      { data: [ 65, 59, 80, 81, 11, 45], label: 'Gross Risk' },
-      { data: [ 28, 48, 40, 19, 12, 78 ], label: 'Residual Risk' }
-    ]
-  };
-
+  serializedData: any = {};
+  public barChartData: ChartConfiguration<'bar'>['data'] = { labels: [], datasets: [] };
   public barChartOptions: ChartConfiguration<'bar'>['options'] = {
     responsive: false,
   };
 
-  constructor() {
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['barGraphData'] && changes['barGraphData'].currentValue) {
+      this.serializedData = changes['barGraphData'].currentValue;
+      this.updateChartData();
+    }
+  }
+
+  private updateChartData() {
+    this.barChartData = {
+      labels: this.serializedData['labels'],
+      datasets: [
+        { data: this.serializedData['gross_risks'], label: 'Gross Risk' },
+        { data: this.serializedData['residual_risks'], label: 'Residual Risk' }
+      ]
+    };
   }
 }

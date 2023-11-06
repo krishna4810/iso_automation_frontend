@@ -61,7 +61,6 @@ import { InnerDashboardComponent } from './dashboard/components/inner-dashboard/
 import { NgChartsModule } from 'ng2-charts';
 import { BarGraphComponent } from './dashboard/components/inner-dashboard/bar-graph/bar-graph.component';
 import { HeatMapComponent } from './dashboard/components/inner-dashboard/heat-map/heat-map.component';
-import { FilterDialogComponent } from './dashboard/components/inner-dashboard/filter-dialog/filter-dialog.component';
 import {MatExpansionModule} from "@angular/material/expansion";
 
 @NgModule({
@@ -94,7 +93,6 @@ import {MatExpansionModule} from "@angular/material/expansion";
     InnerDashboardComponent,
     BarGraphComponent,
     HeatMapComponent,
-    FilterDialogComponent,
   ],
   imports: [
     MatDialogModule,

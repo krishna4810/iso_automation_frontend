@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component, Input, SimpleChanges} from '@angular/core';
+import {ChartConfiguration} from "chart.js";
 
 @Component({
   selector: 'app-heat-map',
@@ -6,9 +7,27 @@ import { Component } from '@angular/core';
   styleUrls: ['./heat-map.component.scss']
 })
 export class HeatMapComponent {
-  graphData: number[][] = [
-    [1, 2, 3],
-    [4, 5, 6],
-    [7, 8, 9]
-  ];
+
+  @Input() graphData?: any;
+  @Input() name?: string;
+
+  serializedData: any = {};
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['barGraphData'] && changes['barGraphData'].currentValue) {
+      this.serializedData = changes['barGraphData'].currentValue;
+      this.updateChartData();
+    }
+  }
+
+  private updateChartData() {
+    this.barChartData = {
+      labels: this.serializedData['labels'],
+      datasets: [
+        { data: this.serializedData['gross_risks'], label: 'Gross Risk' },
+        { data: this.serializedData['residual_risks'], label: 'Residual Risk' }
+      ]
+    };
+  }
+
 }
