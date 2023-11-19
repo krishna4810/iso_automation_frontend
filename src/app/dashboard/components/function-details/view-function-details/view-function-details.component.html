@@ -1,235 +1,398 @@
-<mat-card>
-  <mat-card-content>
-    <div class="flex items-center justify-between">
-      <h5 class="text-xl"><span class="font-semibold"> {{functionalDetail?.id}}
-        : </span> {{functionalDetail?.activity_name}}</h5>
-
-      <div class="flex space-x-2">
-        <button mat-mini-fab [matMenuTriggerFor]="dropdownMenu" color="primary">
-          <mat-menu #dropdownMenu x-position="before">
-            <a *ngIf="userState?.role?.can_approve" mat-menu-item (click)="openApproveDialog(functionalDetail)">
-              <mat-icon color="primary">check</mat-icon>
-              <span>Accept</span>
-            </a>
-            <a *ngIf="userState?.role?.can_comment" mat-menu-item (click)="openRejectDialog(functionalDetail)">
-              <mat-icon color="primary">close</mat-icon>
-              <span>Request Changes</span>
-            </a>
-            <a mat-menu-item *ngIf="userState?.role?.edit_function &&
-            (functionalDetail?.status == status[0] || functionalDetail?.status == status[1] ||
-            functionalDetail?.status == status[3] || functionalDetail?.status == status[6] ||
-            functionalDetail?.status == status[7] ||
-            (userState?.role?.id == 6 && functionalDetail?.status == status[4]))"
-               (click)="editHira(functionalDetail)">
-              <mat-icon color="primary">edit</mat-icon>
-              <span>Edit Function</span>
-            </a>
-            <a mat-menu-item (click)="viewComment(functionalDetail?.id)">
-              <mat-icon color="primary">comment</mat-icon>
-              <span>View Comments</span>
-            </a>
-          </mat-menu>
-          <mat-icon>more_vert</mat-icon>
-        </button>
+<section *ngIf="id.includes('A'); else NotAsset">
+  <mat-card>
+    <mat-card-content>
+      <div class="flex items-center justify-between">
+        <h5 class="text-xl"><span class="font-semibold"> {{functionalDetail?.id}}
+          : </span> {{functionalDetail?.asset_name}}</h5>
       </div>
+    </mat-card-content>
+  </mat-card>
+  <div class="grid grid-cols-3 gap-4">
+    <div class="col-span-2">
+      <mat-card class="my-5">
+        <div class="my-3 ml-4">
+          <p style="font-size: 17px" class="my-3 font-semibold">Asset Details</p>
+          <hr>
+          <div class="my-3">
+            <span class="font-medium text-gray-400">Asset Number: </span>
+            <span class="font-extralight">{{functionalDetail?.asset_number}}</span>
+          </div>
 
+          <div class="my-3">
+            <span class="font-medium text-gray-400">Installation Date </span>
+            <span class="font-extralight">{{functionalDetail?.installation_date}}</span>
+          </div>
+          <div class="my-3">
+            <span class="font-medium text-gray-400">Make: </span>
+            <span class="font-extralight">{{functionalDetail?.make}}</span>
+          </div>
+        </div>
+      </mat-card>
     </div>
-  </mat-card-content>
-</mat-card>
-<div class="grid grid-cols-3 gap-4">
-  <div class="col-span-2">
-    <mat-card class="my-5">
-      <div class="my-3 ml-4">
-        <p style="font-size: 17px" class="my-3 font-semibold">Pre-Activity Details</p>
-        <hr>
-        <div class="my-3">
-          <span class="font-medium text-gray-400">Start Date: </span>
-          <span class="font-extralight">{{functionalDetail?.start_date}}</span>
+    <div class="col-span-1">
+      <mat-card class="my-5">
+        <div class="grid grid-cols-5 gap-4 bg-green-100">
+          <div class="col-span-1">
+            <mat-icon class="mt-3 ml-5" style="color: #9CA3AF">loyalty</mat-icon>
+          </div>
+          <div class="col-span-4">
+            <p class="mt-3 text-green-500">{{functionalDetail?.doc_number}}</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-5 gap-4">
+          <div class="col-span-1">
+            <mat-icon class="mt-3 ml-5" style="color: #9CA3AF">location_on</mat-icon>
+          </div>
+          <div class="col-span-4">
+            <p class="mt-3">{{functionalDetail?.plant}}, {{functionalDetail?.department}}, {{functionalDetail?.unit}}
+              . </p>
+          </div>
         </div>
 
-        <div class="my-3">
-          <span class="font-medium text-gray-400">Sub Activity name: </span>
-          <span class="font-extralight">{{functionalDetail?.sub_activity_name}}</span>
+        <div class="grid grid-cols-5 gap-4">
+          <div class="col-span-1">
+            <mat-icon class="mt-3 ml-5" style="color: #9CA3AF">date_range</mat-icon>
+          </div>
+          <div class="col-span-4">
+            <p class="mt-3">{{functionalDetail?.date}}</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-5 gap-4 mb-3">
+          <div class="col-span-1">
+          </div>
+          <div class="col-span-4">
+            <p class="mt-3"><span class="text-gray-400">Created by </span>{{functionalDetail?.creator_name}}</p>
+          </div>
         </div>
 
-        <div class="my-3">
-          <span class="font-medium text-gray-400">Hazard: </span>
-          <span class="font-extralight">{{functionalDetail?.hazard}}</span>
+      </mat-card>
+    </div>
+  </div>
+  <mat-card>
+    <mat-card-content>
+      <div class="flex justify-between items-center my-2 ml-1">
+        <p style="font-size: 17px" class="my-2 font-semibold">
+          Risk Details
+          ({{ isNullRisk ? '0' : functionalDetail?.risks?.length }})</p>
+        <button *ngIf="userState?.role?.create_function" mat-flat-button color="primary" class="ml-4" (click)="addRisk()"><mat-icon>add</mat-icon> Add Risk</button>
+      </div>
+    </mat-card-content>
+
+  </mat-card>
+
+  <div class="mt-6" *ngIf="!isNullRisk">
+    <div *ngFor="let risk of functionalDetail?.risks">
+      <mat-card class="my-3">
+        <div class="flex justify-between items-center">
+          <div class="div">
+
+          </div>
+          <div class="div">
+            <button mat-icon-button [matMenuTriggerFor]="dropdownMenu" color="primary">
+              <mat-menu #dropdownMenu x-position="before">
+                <a *ngIf="userState?.role?.can_approve" mat-menu-item (click)="openApproveDialog(risk, true)">
+                  <mat-icon color="primary">check</mat-icon>
+                  <span>Accept</span>
+                </a>
+                <a *ngIf="userState?.role?.can_comment" mat-menu-item (click)="openRejectDialog(risk, true)">
+                  <mat-icon color="primary">close</mat-icon>
+                  <span>Request Changes</span>
+                </a>
+                <a mat-menu-item *ngIf="userState?.role?.edit_function &&
+            (risk?.status == status[0] || risk?.status == status[1] ||
+            risk?.status == status[3] || risk?.status == status[6] ||
+            risk?.status == status[7] ||
+            (userState?.role?.id == 6 && risk?.status == status[4]))"
+                   (click)="editHira(risk)">
+                  <mat-icon color="primary">edit</mat-icon>
+                  <span>Edit Risk</span>
+                </a>
+                <a mat-menu-item (click)="viewComment(risk?.risk_id, true)">
+                  <mat-icon color="primary">comment</mat-icon>
+                  <span>View Comments</span>
+                </a>
+              </mat-menu>
+              <mat-icon>more_vert</mat-icon>
+            </button>
+
+          </div>
         </div>
 
-        <div class="my-3 grid grid-cols-3 gap-4">
+        <div class="flex justify-between items-center my-2 ml-1">
+          <div class="my-3 ml-3 font-semibold">
+            <span class="font-medium text-gray-400">Risk Statement: </span>
+            <span class="font-extralight">{{risk?.risk_statement}}</span>
+          </div>
+          <div class="my-3 mr-6">
+            <span class="font-medium text-gray-400">Status: </span>
+            <span class="text-green-600">{{risk?.status}}</span>
+          </div>
+        </div>
+
+        <div class="my-3 ml-4">
+          <span class="font-medium text-gray-400">Existing Control: </span>
+          <span class="font-extralight">{{risk?.existing_control}}</span>
+        </div>
+        <div class="my-3 ml-4">
+          <span class="font-medium text-gray-400">Further Action Required: </span>
+          <span class="font-extralight">{{risk?.further_action_required}}</span>
+        </div>
+        <div class="my-3 ml-4 grid grid-cols-3 gap-4">
           <div class="col-span-1">
             <span class="font-medium text-gray-400">Gross Likelihood: </span>
-            <span *ngIf="functionalDetail?.gross_likelihood == 1" class="font-extralight">Low</span>
-            <span *ngIf="functionalDetail?.gross_likelihood == 2" class="font-extralight">Medium</span>
-            <span *ngIf="functionalDetail?.gross_likelihood == 3" class="font-extralight">High</span>
+            <span *ngIf="risk?.gross_likelihood == 1" class="font-extralight">Low</span>
+            <span *ngIf="risk?.gross_likelihood == 2" class="font-extralight">Medium</span>
+            <span *ngIf="risk?.gross_likelihood == 3" class="font-extralight">High</span>
           </div>
           <div class="col-span-1">
             <span class="font-medium text-gray-400">Gross Impact: </span>
-            <span *ngIf="functionalDetail?.gross_impact == 1" class="font-extralight">Low</span>
-            <span *ngIf="functionalDetail?.gross_impact == 2" class="font-extralight">Medium</span>
-            <span *ngIf="functionalDetail?.gross_impact == 3" class="font-extralight">High</span>
+            <span *ngIf="risk?.gross_impact == 1" class="font-extralight">Low</span>
+            <span *ngIf="risk?.gross_impact == 2" class="font-extralight">Medium</span>
+            <span *ngIf="risk?.gross_impact == 3" class="font-extralight">High</span>
           </div>
           <div class="col-span-1">
             <span class="font-medium text-gray-400">Gross Risk Ranking: </span>
             <mat-chip>
-              <span *ngIf="functionalDetail?.gross_ranking == 'Low'" class="text-green-600">Low</span>
-              <span *ngIf="functionalDetail?.gross_ranking == 'Medium'" class="text-yellow-500">Medium</span>
-              <span *ngIf="functionalDetail?.gross_ranking == 'High'" class="text-red-600">High</span>
+              <span *ngIf="risk?.gross_ranking == 'Low'" class="text-green-600">Low</span>
+              <span *ngIf="risk?.gross_ranking == 'Medium'" class="text-yellow-500">Medium</span>
+              <span *ngIf="risk?.gross_ranking == 'High'" class="text-red-600">High</span>
             </mat-chip>
           </div>
         </div>
-      </div>
-      <hr>
-      <div class="my-3 ml-4" *ngIf="functionalDetail?.residual_ranking_value !==null">
-        <p style="font-size: 17px" class="my-3 font-semibold">Post-Activity Details</p>
-        <hr>
-        <div class="my-3">
-          <span class="font-medium text-gray-400">Existing Control: </span>
-          <span class="font-extralight">{{functionalDetail?.existing_control}}</span>
-        </div>
-
-        <div class="my-3">
-          <span class="font-medium text-gray-400">Mitigation Measures: </span>
-          <span class="font-extralight">{{functionalDetail?.mitigation_measures}}</span>
-        </div>
-
-        <div class="my-3">
-          <span class="font-medium text-gray-400">Further Action Required: </span>
-          <span class="font-extralight">{{functionalDetail?.further_action_required}}</span>
-        </div>
-
-        <div class="my-3 grid grid-cols-3 gap-4">
-          <div class="col-span-1">
-            <div class="my-3">
-              <span class="font-medium text-gray-400">Activity type: </span>
-              <span class="font-extralight">{{functionalDetail?.routine_activity}}</span>
-            </div>
-          </div>
-          <div class="col-span-1">
-            <div class="my-3">
-              <span class="font-medium text-gray-400">Completion Date: </span>
-              <span class="font-extralight">{{functionalDetail?.completion_date}}</span>
-            </div>
-          </div>
-          <div class="col-span-1">
-            <div class="my-3">
-              <span class="font-medium text-gray-400">Workers Involved: </span>
-              <span class="font-extralight">{{functionalDetail?.workers_involved}}</span>
-            </div>
-          </div>
-
-        </div>
-
-        <div class="my-3 grid grid-cols-3 gap-4">
+        <div class="my-3 ml-4 grid grid-cols-3 gap-4">
           <div class="col-span-1">
             <span class="font-medium text-gray-400">Residual Likelihood: </span>
-            <span *ngIf="functionalDetail?.residual_likelihood == 1" class="font-extralight">Low</span>
-            <span *ngIf="functionalDetail?.residual_likelihood == 2" class="font-extralight">Medium</span>
-            <span *ngIf="functionalDetail?.residual_likelihood == 3" class="font-extralight">High</span>
+            <span *ngIf="risk?.residual_likelihood == 1" class="font-extralight">Low</span>
+            <span *ngIf="risk?.residual_likelihood == 2" class="font-extralight">Medium</span>
+            <span *ngIf="risk?.residual_likelihood == 3" class="font-extralight">High</span>
           </div>
           <div class="col-span-1">
             <span class="font-medium text-gray-400">Residual Impact: </span>
-            <span *ngIf="functionalDetail?.residual_impact == 1" class="font-extralight">Low</span>
-            <span *ngIf="functionalDetail?.residual_impact == 2" class="font-extralight">Medium</span>
-            <span *ngIf="functionalDetail?.residual_impact == 3" class="font-extralight">High</span>
+            <span *ngIf="risk?.residual_impact == 1" class="font-extralight">Low</span>
+            <span *ngIf="risk?.residual_impact == 2" class="font-extralight">Medium</span>
+            <span *ngIf="risk?.residual_impact == 3" class="font-extralight">High</span>
           </div>
           <div class="col-span-1">
-            <span class="font-medium text-gray-400">Residual Risk: </span>
+            <span class="font-medium text-gray-400">Residual Risk Ranking: </span>
             <mat-chip>
-              <span *ngIf="functionalDetail?.residual_ranking == 'Low'" class="text-green-600">Low</span>
-              <span *ngIf="functionalDetail?.residual_ranking == 'Medium'" class="text-yellow-500">Medium</span>
-              <span *ngIf="functionalDetail?.residual_ranking == 'High'" class="text-red-600">High</span>
+              <span *ngIf="risk?.residual_ranking == 'Low'" class="text-green-600">Low</span>
+              <span *ngIf="risk?.residual_ranking == 'Medium'" class="text-yellow-500">Medium</span>
+              <span *ngIf="risk?.residual_ranking == 'High'" class="text-red-600">High</span>
             </mat-chip>
           </div>
         </div>
-      </div>
-    </mat-card>
+        <div class="flex justify-between items-center">
+          <div></div>
+          <div class="mr-6 pb-2">
+            <span class="font-medium text-gray-400 italic">Created: </span>
+            <span class="text-gray-400 italic">{{risk?.created_at | timeAgo}}</span>
+          </div>
+
+        </div>
+      </mat-card>
+    </div>
+
   </div>
-  <div class="col-span-1">
-    <mat-card class="my-5">
-      <div class="grid grid-cols-5 gap-4 bg-green-100">
-        <div class="col-span-1">
-          <mat-icon class="mt-3 ml-5" style="color: #9CA3AF">loyalty</mat-icon>
-        </div>
-        <div class="col-span-4">
-          <p class="mt-3 text-green-500">{{functionalDetail?.doc_number}}</p>
-        </div>
-      </div>
-      <div class="grid grid-cols-5 gap-4">
-        <div class="col-span-1">
-          <mat-icon class="mt-3 ml-5" style="color: #9CA3AF">location_on</mat-icon>
-        </div>
-        <div class="col-span-4">
-          <p class="mt-3">{{functionalDetail?.plant}}, {{functionalDetail?.department}}, {{functionalDetail?.unit}}
-            . </p>
-        </div>
-      </div>
 
-      <div class="grid grid-cols-5 gap-4">
-        <div class="col-span-1">
-          <mat-icon class="mt-3 ml-5" style="color: #9CA3AF">date_range</mat-icon>
+</section>
+
+<ng-template #NotAsset>
+  <mat-card>
+    <mat-card-content>
+      <div class="flex items-center justify-between">
+        <h5 class="text-xl"><span class="font-semibold"> {{functionalDetail?.id}}
+          : </span> {{functionalDetail?.activity_name}}</h5>
+
+        <div class="flex space-x-2">
+          <button mat-mini-fab [matMenuTriggerFor]="dropdownMenu" color="primary">
+            <mat-menu #dropdownMenu x-position="before">
+              <a *ngIf="userState?.role?.can_approve" mat-menu-item (click)="openApproveDialog(functionalDetail)">
+                <mat-icon color="primary">check</mat-icon>
+                <span>Accept</span>
+              </a>
+              <a *ngIf="userState?.role?.can_comment" mat-menu-item (click)="openRejectDialog(functionalDetail)">
+                <mat-icon color="primary">close</mat-icon>
+                <span>Request Changes</span>
+              </a>
+              <a mat-menu-item *ngIf="userState?.role?.edit_function &&
+            (functionalDetail?.status == status[0] || functionalDetail?.status == status[1] ||
+            functionalDetail?.status == status[3] || functionalDetail?.status == status[6] ||
+            functionalDetail?.status == status[7] ||
+            (userState?.role?.id == 6 && functionalDetail?.status == status[4]))"
+                 (click)="editHira(functionalDetail)">
+                <mat-icon color="primary">edit</mat-icon>
+                <span>Edit Function</span>
+              </a>
+              <a mat-menu-item (click)="viewComment(functionalDetail?.id)">
+                <mat-icon color="primary">comment</mat-icon>
+                <span>View Comments</span>
+              </a>
+            </mat-menu>
+            <mat-icon>more_vert</mat-icon>
+          </button>
         </div>
-        <div class="col-span-4">
-          <p class="mt-3">{{functionalDetail?.date}}</p>
-        </div>
+
       </div>
-      <div class="grid grid-cols-5 gap-4">
-        <div class="col-span-1">
-          <mat-icon class="mt-3 ml-5" style="color: #9CA3AF">timeline</mat-icon>
-        </div>
-        <div class="col-span-4">
-          <p class="mt-3 text-green-500">{{functionalDetail?.status}}</p>
-        </div>
-      </div>
-      <div class="grid grid-cols-5 gap-4 mb-3">
-        <div class="col-span-1">
-<!--          <mat-icon class="mt-3 ml-5" style="color: #9CA3AF">account_circle</mat-icon>-->
-        </div>
-        <div class="col-span-4">
-          <p class="mt-3"><span class="text-gray-400">Created by </span>{{functionalDetail?.creator_name}}</p>
-        </div>
-      </div>
+    </mat-card-content>
+  </mat-card>
+  <div class="grid grid-cols-3 gap-4">
+    <div class="col-span-2">
+      <mat-card class="my-5">
+        <div class="my-3 ml-4">
+          <p style="font-size: 17px" class="my-3 font-semibold">Pre-Activity Details</p>
+          <hr>
+          <div class="my-3">
+            <span class="font-medium text-gray-400">Start Date: </span>
+            <span class="font-extralight">{{functionalDetail?.start_date}}</span>
+          </div>
 
-    </mat-card>
+          <div class="my-3">
+            <span class="font-medium text-gray-400">Sub Activity name: </span>
+            <span class="font-extralight">{{functionalDetail?.sub_activity_name}}</span>
+          </div>
 
-<!--    <mat-card class="my-5">-->
-<!--      <div class="grid grid-cols-5 gap-4 bg-green-100">-->
-<!--        <div class="col-span-1">-->
-<!--          <mat-icon class="mt-3 ml-5" style="color: #9CA3AF">loyalty</mat-icon>-->
-<!--        </div>-->
-<!--        <div class="col-span-4">-->
-<!--          <p class="mt-3 text-green-500">{{functionalDetail?.doc_number}}</p>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div class="grid grid-cols-5 gap-4">-->
-<!--        <div class="col-span-1">-->
-<!--          <mat-icon class="mt-3 ml-5" style="color: #9CA3AF">location_on</mat-icon>-->
-<!--        </div>-->
-<!--        <div class="col-span-4">-->
-<!--          <p class="mt-3">{{functionalDetail?.plant}}, {{functionalDetail?.department}}, {{functionalDetail?.unit}}-->
-<!--            . </p>-->
-<!--        </div>-->
-<!--      </div>-->
+          <div class="my-3">
+            <span class="font-medium text-gray-400">Hazard: </span>
+            <span class="font-extralight">{{functionalDetail?.hazard}}</span>
+          </div>
 
-<!--      <div class="grid grid-cols-5 gap-4">-->
-<!--        <div class="col-span-1">-->
-<!--          <mat-icon class="mt-3 ml-5" style="color: #9CA3AF">date_range</mat-icon>-->
-<!--        </div>-->
-<!--        <div class="col-span-4">-->
-<!--          <p class="mt-3">{{functionalDetail?.date}}</p>-->
-<!--        </div>-->
-<!--      </div>-->
+          <div class="my-3 grid grid-cols-3 gap-4">
+            <div class="col-span-1">
+              <span class="font-medium text-gray-400">Gross Likelihood: </span>
+              <span *ngIf="functionalDetail?.gross_likelihood == 1" class="font-extralight">Low</span>
+              <span *ngIf="functionalDetail?.gross_likelihood == 2" class="font-extralight">Medium</span>
+              <span *ngIf="functionalDetail?.gross_likelihood == 3" class="font-extralight">High</span>
+            </div>
+            <div class="col-span-1">
+              <span class="font-medium text-gray-400">Gross Impact: </span>
+              <span *ngIf="functionalDetail?.gross_impact == 1" class="font-extralight">Low</span>
+              <span *ngIf="functionalDetail?.gross_impact == 2" class="font-extralight">Medium</span>
+              <span *ngIf="functionalDetail?.gross_impact == 3" class="font-extralight">High</span>
+            </div>
+            <div class="col-span-1">
+              <span class="font-medium text-gray-400">Gross Risk Ranking: </span>
+              <mat-chip>
+                <span *ngIf="functionalDetail?.gross_ranking == 'Low'" class="text-green-600">Low</span>
+                <span *ngIf="functionalDetail?.gross_ranking == 'Medium'" class="text-yellow-500">Medium</span>
+                <span *ngIf="functionalDetail?.gross_ranking == 'High'" class="text-red-600">High</span>
+              </mat-chip>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class="my-3 ml-4" *ngIf="functionalDetail?.residual_ranking_value !==null">
+          <p style="font-size: 17px" class="my-3 font-semibold">Post-Activity Details</p>
+          <hr>
+          <div class="my-3">
+            <span class="font-medium text-gray-400">Existing Control: </span>
+            <span class="font-extralight">{{functionalDetail?.existing_control}}</span>
+          </div>
 
-<!--      <div class="grid grid-cols-5 gap-4">-->
-<!--        <div class="col-span-1">-->
-<!--          <mat-icon class="mt-3 ml-5" style="color: #9CA3AF">timeline</mat-icon>-->
-<!--        </div>-->
-<!--        <div class="col-span-4">-->
-<!--          <p class="mt-3 text-green-500">{{functionalDetail?.status}}</p>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </mat-card>-->
+          <div class="my-3">
+            <span class="font-medium text-gray-400">Mitigation Measures: </span>
+            <span class="font-extralight">{{functionalDetail?.mitigation_measures}}</span>
+          </div>
+
+          <div class="my-3">
+            <span class="font-medium text-gray-400">Further Action Required: </span>
+            <span class="font-extralight">{{functionalDetail?.further_action_required}}</span>
+          </div>
+
+          <div class="my-3 grid grid-cols-3 gap-4">
+            <div class="col-span-1">
+              <div class="my-3">
+                <span class="font-medium text-gray-400">Activity type: </span>
+                <span class="font-extralight">{{functionalDetail?.routine_activity}}</span>
+              </div>
+            </div>
+            <div class="col-span-1">
+              <div class="my-3">
+                <span class="font-medium text-gray-400">Completion Date: </span>
+                <span class="font-extralight">{{functionalDetail?.completion_date}}</span>
+              </div>
+            </div>
+            <div class="col-span-1">
+              <div class="my-3">
+                <span class="font-medium text-gray-400">Workers Involved: </span>
+                <span class="font-extralight">{{functionalDetail?.workers_involved}}</span>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="my-3 grid grid-cols-3 gap-4">
+            <div class="col-span-1">
+              <span class="font-medium text-gray-400">Residual Likelihood: </span>
+              <span *ngIf="functionalDetail?.residual_likelihood == 1" class="font-extralight">Low</span>
+              <span *ngIf="functionalDetail?.residual_likelihood == 2" class="font-extralight">Medium</span>
+              <span *ngIf="functionalDetail?.residual_likelihood == 3" class="font-extralight">High</span>
+            </div>
+            <div class="col-span-1">
+              <span class="font-medium text-gray-400">Residual Impact: </span>
+              <span *ngIf="functionalDetail?.residual_impact == 1" class="font-extralight">Low</span>
+              <span *ngIf="functionalDetail?.residual_impact == 2" class="font-extralight">Medium</span>
+              <span *ngIf="functionalDetail?.residual_impact == 3" class="font-extralight">High</span>
+            </div>
+            <div class="col-span-1">
+              <span class="font-medium text-gray-400">Residual Risk: </span>
+              <mat-chip>
+                <span *ngIf="functionalDetail?.residual_ranking == 'Low'" class="text-green-600">Low</span>
+                <span *ngIf="functionalDetail?.residual_ranking == 'Medium'" class="text-yellow-500">Medium</span>
+                <span *ngIf="functionalDetail?.residual_ranking == 'High'" class="text-red-600">High</span>
+              </mat-chip>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+    <div class="col-span-1">
+      <mat-card class="my-5">
+        <div class="grid grid-cols-5 gap-4 bg-green-100">
+          <div class="col-span-1">
+            <mat-icon class="mt-3 ml-5" style="color: #9CA3AF">loyalty</mat-icon>
+          </div>
+          <div class="col-span-4">
+            <p class="mt-3 text-green-500">{{functionalDetail?.doc_number}}</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-5 gap-4">
+          <div class="col-span-1">
+            <mat-icon class="mt-3 ml-5" style="color: #9CA3AF">location_on</mat-icon>
+          </div>
+          <div class="col-span-4">
+            <p class="mt-3">{{functionalDetail?.plant}}, {{functionalDetail?.department}}, {{functionalDetail?.unit}}
+              . </p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-5 gap-4">
+          <div class="col-span-1">
+            <mat-icon class="mt-3 ml-5" style="color: #9CA3AF">date_range</mat-icon>
+          </div>
+          <div class="col-span-4">
+            <p class="mt-3">{{functionalDetail?.date}}</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-5 gap-4">
+          <div class="col-span-1">
+            <mat-icon class="mt-3 ml-5" style="color: #9CA3AF">timeline</mat-icon>
+          </div>
+          <div class="col-span-4">
+            <p class="mt-3 text-green-500">{{functionalDetail?.status}}</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-5 gap-4 mb-3">
+          <div class="col-span-1">
+            <!--          <mat-icon class="mt-3 ml-5" style="color: #9CA3AF">account_circle</mat-icon>-->
+          </div>
+          <div class="col-span-4">
+            <p class="mt-3"><span class="text-gray-400">Created by </span>{{functionalDetail?.creator_name}}</p>
+          </div>
+        </div>
+
+      </mat-card>
+    </div>
   </div>
-</div>
+</ng-template>
+
 

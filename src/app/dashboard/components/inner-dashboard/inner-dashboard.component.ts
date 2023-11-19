@@ -2,10 +2,8 @@ import {Component, ViewChild} from '@angular/core';
 import {UserTableComponent} from "../master-data/user-table/user-table.component";
 import {HiraTableComponent} from "../function-details/hira-table/hira-table.component";
 import {ApiService} from "../../../services/api.service";
-import {de} from "date-fns/locale";
 import {MatDialog} from "@angular/material/dialog";
 import {StateService} from "../../../services/state.service";
-import {MatExpansionPanel} from "@angular/material/expansion";
 
 @Component({
   selector: 'app-inner-dashboard',
@@ -20,6 +18,7 @@ export class InnerDashboardComponent{
   selectedDepartment?: string;
   selectedYear?: string;
   userState: any;
+  disableDepartmentField: boolean = false;
   currentYear = new Date().getFullYear();
   dashboardData?: any;
 
@@ -64,5 +63,15 @@ export class InnerDashboardComponent{
     this.apiService.filterDashboard(params).subscribe(res=> {
       this.dashboardData = res;
     })
+  }
+
+  clearFilters() {
+    this.selectedDepartment = "null";
+    this.selectedPlant = "null";
+    this.selectedYear = "null";
+  }
+
+  generateHiraReport() {
+  // this.apiService.
   }
 }

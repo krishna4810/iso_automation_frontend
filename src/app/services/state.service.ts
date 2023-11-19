@@ -14,7 +14,9 @@ export class StateService extends ObservableStore<StoreState>{
       users: undefined,
       loggedInUserData: undefined,
       hiraList: undefined,
-      eaiList: undefined
+      eaiList: undefined,
+      arrList: undefined,
+      singleFunction: undefined
     }
     super({ trackStateHistory: true });
     this.setState(initialState, 'INIT_STATE');
@@ -35,5 +37,13 @@ export class StateService extends ObservableStore<StoreState>{
 
   addEaiList(data: any[]) {
     this.setState({eaiList: data}, 'ADD_EAI_LIST')
+  }
+
+  addArrList(data: any[]) {
+    this.setState({arrList: data}, 'ADD_ARR_LIST')
+  }
+
+  addSingleFunction(data: any) {
+    this.setState({singleFunction: data}, 'ADD_SINGLE_FUNCTION')
   }
 }

@@ -56,12 +56,15 @@ import {MatSortModule} from "@angular/material/sort";
 import { HiraTableComponent } from './dashboard/components/function-details/hira-table/hira-table.component';
 import { AddEaiComponent } from './dashboard/components/function-details/add-eai/add-eai.component';
 import { EaiTableComponent } from './dashboard/components/function-details/eai-table/eai-table.component';
-import { AddArrComponent } from './dashboard/components/function-details/add-arr/add-arr.component';
 import { InnerDashboardComponent } from './dashboard/components/inner-dashboard/inner-dashboard.component';
 import { NgChartsModule } from 'ng2-charts';
 import { BarGraphComponent } from './dashboard/components/inner-dashboard/bar-graph/bar-graph.component';
 import { HeatMapComponent } from './dashboard/components/inner-dashboard/heat-map/heat-map.component';
 import {MatExpansionModule} from "@angular/material/expansion";
+import {MatTooltipModule} from "@angular/material/tooltip";
+import { AddArrRiskComponent } from './dashboard/components/function-details/add-arr-risk/add-arr-risk.component';
+import { ArrTableComponent } from './dashboard/components/function-details/arr-table/arr-table.component';
+import { AddRiskComponent } from './dashboard/components/function-details/add-arr-risk/add-risk/add-risk.component';
 
 @NgModule({
   declarations: [
@@ -89,10 +92,12 @@ import {MatExpansionModule} from "@angular/material/expansion";
     HiraTableComponent,
     AddEaiComponent,
     EaiTableComponent,
-    AddArrComponent,
     InnerDashboardComponent,
     BarGraphComponent,
     HeatMapComponent,
+    AddArrRiskComponent,
+    ArrTableComponent,
+    AddRiskComponent,
   ],
   imports: [
     MatDialogModule,
@@ -124,7 +129,8 @@ import {MatExpansionModule} from "@angular/material/expansion";
     MatPaginatorModule,
     MatSortModule,
     NgChartsModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatTooltipModule
   ],
   providers: [DatePipe, {
     provide: HTTP_INTERCEPTORS,

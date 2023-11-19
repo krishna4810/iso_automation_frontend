@@ -1,0 +1,39 @@
+<div>
+  <ng-container *ngIf="dataSource.data.length > 0; else noDataMessage">
+    <div class="table-container">
+      <table mat-table [dataSource]="dataSource" matSort>
+        <ng-container *ngFor="let column of displayedColumns">
+          <ng-container matColumnDef="{{ column }}">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="small-green-header">{{ column | headerFormat}}</th>
+            <div>
+              <td class="text-center" mat-cell *matCellDef="let element">
+                <ng-container>
+                  <ng-container *ngIf="element[column] === null; else valueTemplate">
+                    <p class="text-center"> - </p>
+                  </ng-container>
+                  <ng-template #valueTemplate>
+                    {{ element[column] }}
+                  </ng-template>
+                </ng-container>
+              </td>
+            </div>
+
+          </ng-container>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="mat-header-row"></tr>
+        <tr class="odd:bg-white even:bg-green-50" mat-row *matRowDef="let row; columns: displayedColumns;" style="cursor: pointer"  (click)="viewUserDetail(row)"></tr>
+      </table>
+    </div>
+    <mat-paginator [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons aria-label="Select users"></mat-paginator>
+  </ng-container>
+
+  <ng-template #noDataMessage>
+    <div class="flex flex-col items-center justify-center">
+      <img class="mx-auto h-1/3 w-1/3" src="/assets/no-data.svg">
+      <p class="text-center text-gray-400 text-sm mb-4">
+        All the function details you need to review will appear here.
+      </p>
+    </div>
+  </ng-template>
+</div>

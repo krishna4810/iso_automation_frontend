@@ -1,17 +1,13 @@
 import {Component, ViewChild} from '@angular/core';
 import {AddHiraComponent} from "./add-hira/add-hira.component";
 import {MatDialog} from "@angular/material/dialog";
-import {MatTableDataSource} from "@angular/material/table";
-import {MatPaginator} from "@angular/material/paginator";
 import {ApiService} from "../../../services/api.service";
 import {StateService} from "../../../services/state.service";
-import {Role, Status} from "../../../model/interfaces";
 import {ActivatedRoute, Router} from "@angular/router";
-import {UserTableComponent} from "../master-data/user-table/user-table.component";
 import {HiraTableComponent} from "./hira-table/hira-table.component";
 import {AddEaiComponent} from "./add-eai/add-eai.component";
 import {EaiTableComponent} from "./eai-table/eai-table.component";
-import {AddArrComponent} from "./add-arr/add-arr.component";
+import {AddArrRiskComponent} from "./add-arr-risk/add-arr-risk.component";
 
 @Component({
   selector: 'app-function-details',
@@ -52,7 +48,7 @@ export class FunctionDetailsComponent {
         maxHeight: '90vh'
       });
     } else {
-      this.dialog.open(AddArrComponent, {
+      this.dialog.open(AddArrRiskComponent, {
         data: {
           isFromEdit: false,
         },

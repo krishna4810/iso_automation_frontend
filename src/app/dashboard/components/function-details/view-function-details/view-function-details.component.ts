@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {HiraActivity, Role} from "../../../../model/interfaces";
 import {StateService} from "../../../../services/state.service";
@@ -7,10 +7,10 @@ import {AddHiraComponent} from "../add-hira/add-hira.component";
 import {MatDialog} from "@angular/material/dialog";
 import {SharedApproveDialogComponent} from "../../shared-approve-dialog/shared-approve-dialog.component";
 import {SharedRejectDialogComponent} from "../../shared-reject-dialog/shared-reject-dialog.component";
-import {data} from "autoprefixer";
 import {STATUS} from "../../../../model/constants";
 import {CommentsComponent} from "../../comments/comments.component";
 import {AddEaiComponent} from "../add-eai/add-eai.component";
+import {AddRiskComponent} from "../add-arr-risk/add-risk/add-risk.component";
 
 @Component({
   selector: 'app-view-function-details',
@@ -21,72 +21,85 @@ export class ViewFunctionDetailsComponent {
   id: any = {};
   userState: any;
   // @ts-ignore
-  functionalDetail: HiraActivity | undefined;
+  functionalDetail: any | undefined;
   status = STATUS;
-  constructor( private apiService: ApiService,
-               private route: ActivatedRoute,
-               public dialog: MatDialog,
-               private stateService: StateService) {
+  isNullRisk?: boolean;
+  functionalType?: string;
+
+  constructor(private apiService: ApiService,
+              private route: ActivatedRoute,
+              public dialog: MatDialog,
+              private stateService: StateService) {
   }
 
   ngOnInit(): void {
     this.stateService.stateChanged.subscribe(state => {
       this.userState = state.loggedInUserData
     });
-    this.apiService.getHira();
-    this.apiService.getEai();
     this.route.params.subscribe((params) => {
       this.id = params['id'];
-      this.getFunctionDetail();
-    });
-  }
-  getFunctionDetail() {
-    this.stateService.stateChanged.subscribe(state => {
-      if(state?.hiraList && this.id.includes('H')) {
-        this.functionalDetail = state?.hiraList?.find(hira => hira.id == this.id);
-      } else if(state?.eaiList && this.id.includes('E')) {
-        this.functionalDetail = state?.eaiList?.find(hira => hira.id == this.id);
-      }
+      this.apiService.getSpecificFunction(this.id);
+      this.stateService.stateChanged.subscribe(state => {
+        this.functionalDetail = state?.singleFunction?.find(funct => funct.id == this.id);
+        // @ts-ignore
+        this.id.includes('A') && (this.isNullRisk = this.functionalDetail?.risks.some(risk => risk.gross_likelihood === null));
+
+      });
     });
   }
 
-  editHira(functionalDetail: HiraActivity | undefined) {
-    const componentToOpen = this.id.includes('H') ? AddHiraComponent : AddEaiComponent;
+  editHira(functionalDetail: any) {
+    const componentToOpen = this.id.includes('H') ? AddHiraComponent : this.id.includes('E') ? AddEaiComponent : AddRiskComponent;
     this.dialog.open<any, { isFromEdit: boolean; formData: HiraActivity | undefined }>(componentToOpen, {
       data: {
         isFromEdit: true,
-        formData: functionalDetail
+        formData: functionalDetail,
       },
       maxHeight: '90vh'
     });
   }
 
 
-  openApproveDialog(data: any) {
+  openApproveDialog(data: any, isRisk?: boolean) {
     this.dialog.open(SharedApproveDialogComponent, {
       data: {
         formData: data,
-        role_id: this.userState?.role?.id
+        role_id: this.userState?.role?.id,
+        isRisk: isRisk
       }
     });
   }
 
-  openRejectDialog(data: any) {
+  openRejectDialog(data: any, isRisk?: boolean) {
     this.dialog.open(SharedRejectDialogComponent, {
       data: {
         formData: data,
-        role_id: this.userState?.role?.id
+        role_id: this.userState?.role?.id,
+        isRisk: isRisk
       },
       maxWidth: '900px'
     });
   }
 
-  viewComment(id: any) {
+  viewComment(id: any, isRisk?: boolean) {
     this.dialog.open(CommentsComponent, {
       data: {
-        id: id
+        id: id,
+        isRisk: isRisk
       },
       maxHeight: '90vh'
     });
   }
+
+  addRisk() {
+    this.dialog.open(AddRiskComponent, {
+      data: {
+        formData: this.functionalDetail
+      },
+      maxHeight: '90vh',
+      minWidth: '130vh'
+    });
+  }
+
+
 }

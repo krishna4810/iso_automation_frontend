@@ -1,33 +1,40 @@
-import {Component, Input, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {ChartConfiguration} from "chart.js";
+import {ActivatedRoute, Router} from "@angular/router";
+import {ApiService} from "../../../../services/api.service";
 
 @Component({
   selector: 'app-heat-map',
   templateUrl: './heat-map.component.html',
   styleUrls: ['./heat-map.component.scss']
 })
-export class HeatMapComponent {
+export class HeatMapComponent implements OnChanges {
 
-  @Input() graphData?: any;
+  @Input() heatMapData?: any;
   @Input() name?: string;
+  @Input() isARR?: boolean;
 
   serializedData: any = {};
 
+  constructor(private router: Router,
+              private route: ActivatedRoute,) {
+  }
+
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['barGraphData'] && changes['barGraphData'].currentValue) {
-      this.serializedData = changes['barGraphData'].currentValue;
+    if (changes['heatMapData'] && changes['heatMapData'].currentValue) {
+      this.serializedData = changes['heatMapData'].currentValue;
       this.updateChartData();
     }
   }
 
   private updateChartData() {
-    this.barChartData = {
-      labels: this.serializedData['labels'],
-      datasets: [
-        { data: this.serializedData['gross_risks'], label: 'Gross Risk' },
-        { data: this.serializedData['residual_risks'], label: 'Residual Risk' }
-      ]
-    };
+    this.heatMapData = this.serializedData;
   }
 
+  redirectToAnotherComponent(id: any) {
+    this.router.navigate(['../', 'functionalDetails', id], {
+      relativeTo: this.route,
+      queryParams: id,
+    });
+  }
 }

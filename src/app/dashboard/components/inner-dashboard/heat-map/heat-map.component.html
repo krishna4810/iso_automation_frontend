@@ -5,38 +5,148 @@
   </p>
   <div class="grid grid-cols-3 grid-rows-3 gap-1">
     <!-- First row -->
-    <div class="flex items-center justify-center bg-yellow-400 text-white font-bold p-4">
-      H1 H2 H3
+    <div class="flex items-center justify-center bg-yellow-400 text-white font-bold p-4" >
+      <ng-container *ngFor="let option of heatMapData; let i = index">
+        <ng-container *ngIf="name === 'Residual Risk' " >
+          <ng-container *ngIf="option.residual_likelihood === '1' && option.residual_impact === '3'">
+            <a (click)="redirectToAnotherComponent(!isARR ? option.id : option.asset_id)" class="cursor-pointer">
+              {{ !isARR ? option.id : option.asset_id}} </a>
+            &nbsp;
+          </ng-container>
+        </ng-container>
+        <ng-container *ngIf="name === 'Gross Risk'">
+          <ng-container *ngIf="option.gross_likelihood === '1' && option.gross_impact === '3'">
+            <a (click)="redirectToAnotherComponent(!isARR ? option.id : option.asset_id)" class="cursor-pointer">
+              {{ !isARR ? option.id : option.asset_id}} </a>
+            &nbsp;
+          </ng-container>
+        </ng-container>
+        <br *ngIf="i%2===1">
+      </ng-container>
+
     </div>
     <div class="flex items-center justify-center bg-red-500 text-white font-bold p-4">
-      High
+      <ng-container *ngFor="let option of heatMapData; let i = index">
+        <ng-container *ngIf="name === 'Residual Risk' ">
+          <ng-container *ngIf="option.residual_likelihood === '2' && option.residual_impact === '3'">
+            <a (click)="redirectToAnotherComponent(!isARR ? option.id : option.asset_id)" class="cursor-pointer">
+              {{ !isARR ? option.id : option.asset_id}} </a>&nbsp;</ng-container>
+        </ng-container>
+        <ng-container *ngIf="name === 'Gross Risk'">
+          <ng-container *ngIf="option.gross_likelihood === '2' && option.gross_impact === '3'">
+            <a (click)="redirectToAnotherComponent(!isARR ? option.id : option.asset_id)" class="cursor-pointer">
+              {{ !isARR ? option.id : option.asset_id}} </a>&nbsp;
+          </ng-container>
+        </ng-container>
+        <br *ngIf="i%2===1">
+      </ng-container>
     </div>
     <div class="flex items-center justify-center bg-red-500 text-white font-bold p-4">
-      High
+      <ng-container *ngFor="let option of heatMapData; let i = index">
+        <ng-container *ngIf="name === 'Residual Risk' ">
+          <ng-container *ngIf="option.residual_likelihood === '3' && option.residual_impact === '3'"><a (click)="redirectToAnotherComponent(!isARR ? option.id : option.asset_id)" class="cursor-pointer">
+              {{ !isARR ? option.id : option.asset_id}} </a>&nbsp;</ng-container>
+        </ng-container>
+        <ng-container *ngIf="name === 'Gross Risk'">
+          <ng-container *ngIf="option.gross_likelihood === '3' && option.gross_impact === '3'"><a (click)="redirectToAnotherComponent(!isARR ? option.id : option.asset_id)" class="cursor-pointer">
+              {{ !isARR ? option.id : option.asset_id}} </a>&nbsp;</ng-container>
+        </ng-container>
+        <br *ngIf="i%2===1">
+      </ng-container>
+
     </div>
 
     <!-- Second row -->
     <div class="flex items-center justify-center bg-green-500 text-white font-bold p-4">
-      Medium
+      <ng-container *ngFor="let option of heatMapData; let i = index">
+        <ng-container *ngIf="name === 'Residual Risk' ">
+          <ng-container *ngIf="option.residual_likelihood === '1' && option.residual_impact === '2'">
+            <a (click)="redirectToAnotherComponent(!isARR ? option.id : option.asset_id)" class="cursor-pointer">
+              {{ !isARR ? option.id : option.asset_id}} </a>&nbsp;</ng-container>
+        </ng-container>
+        <ng-container *ngIf="name === 'Gross Risk'">
+          <ng-container *ngIf="option.gross_likelihood === '1' && option.gross_impact === '2'"><a (click)="redirectToAnotherComponent(!isARR ? option.id : option.asset_id)" class="cursor-pointer">
+              {{ !isARR ? option.id : option.asset_id}} </a>&nbsp;</ng-container>
+        </ng-container>
+        <br *ngIf="i%2===1">
+      </ng-container>
+
     </div>
     <div class="flex items-center justify-center bg-yellow-400 text-white font-bold p-4">
-      Medium
+      <ng-container *ngFor="let option of heatMapData; let i = index">
+        <ng-container *ngIf="name === 'Residual Risk' ">
+          <ng-container *ngIf="option.residual_likelihood === '2' && option.residual_impact === '2'">
+            <a (click)="redirectToAnotherComponent(!isARR ? option.id : option.asset_id)" class="cursor-pointer">
+              {{ !isARR ? option.id : option.asset_id}} </a>&nbsp;</ng-container>
+        </ng-container>
+        <ng-container *ngIf="name === 'Gross Risk'">
+          <ng-container *ngIf="option.gross_likelihood === '2' && option.gross_impact === '2'">
+            <a (click)="redirectToAnotherComponent(!isARR ? option.id : option.asset_id)" class="cursor-pointer">
+              {{ !isARR ? option.id : option.asset_id}} </a>
+            &nbsp;</ng-container>
+        </ng-container>
+        <br *ngIf="i%2===1">
+      </ng-container>
+
     </div>
     <div class="flex items-center justify-center bg-red-500 text-white font-bold p-4">
-      High
+      <ng-container *ngFor="let option of heatMapData; let i = index">
+        <ng-container *ngIf="name === 'Residual Risk' ">
+          <ng-container *ngIf="option.residual_likelihood === '3' && option.residual_impact === '2'"><a (click)="redirectToAnotherComponent(!isARR ? option.id : option.asset_id)" class="cursor-pointer">
+              {{ !isARR ? option.id : option.asset_id}} </a>&nbsp;</ng-container>
+        </ng-container>
+        <ng-container *ngIf="name === 'Gross Risk'">
+          <ng-container *ngIf="option.gross_likelihood === '3' && option.gross_impact === '2'"><a (click)="redirectToAnotherComponent(!isARR ? option.id : option.asset_id)" class="cursor-pointer">
+              {{ !isARR ? option.id : option.asset_id}} </a>&nbsp;</ng-container>
+        </ng-container>
+        <br *ngIf="i%2===1">
+      </ng-container>
+
     </div>
 
     <!-- Third row -->
     <div class="flex items-center justify-center bg-green-500 text-white font-bold p-4">
-      H6
+      <ng-container *ngFor="let option of heatMapData; let i = index">
+        <ng-container *ngIf="name === 'Residual Risk' ">
+          <ng-container *ngIf="option.residual_likelihood === '1' && option.residual_impact === '1'"><a (click)="redirectToAnotherComponent(!isARR ? option.id : option.asset_id)" class="cursor-pointer">
+              {{ !isARR ? option.id : option.asset_id}} </a>&nbsp;</ng-container>
+        </ng-container>
+        <ng-container *ngIf="name === 'Gross Risk'">
+          <ng-container *ngIf="option.gross_likelihood === '1' && option.gross_impact === '1'"><a (click)="redirectToAnotherComponent(!isARR ? option.id : option.asset_id)" class="cursor-pointer">
+              {{ !isARR ? option.id : option.asset_id}} </a>&nbsp;</ng-container>
+        </ng-container>
+        <br *ngIf="i%2===1">
+      </ng-container>
+
     </div>
     <div class="flex items-center justify-center bg-green-500 text-white font-bold p-4">
-      Low
+      <ng-container *ngFor="let option of heatMapData; let i = index">
+        <ng-container *ngIf="name === 'Residual Risk' ">
+          <ng-container *ngIf="option.residual_likelihood === '2' && option.residual_impact === '1'"><a (click)="redirectToAnotherComponent(!isARR ? option.id : option.asset_id)" class="cursor-pointer">
+              {{ !isARR ? option.id : option.asset_id}} </a>&nbsp;</ng-container>
+        </ng-container>
+        <ng-container *ngIf="name === 'Gross Risk'">
+          <ng-container *ngIf="option.gross_likelihood === '2' && option.gross_impact === '1'"><a (click)="redirectToAnotherComponent(!isARR ? option.id : option.asset_id)" class="cursor-pointer">
+              {{ !isARR ? option.id : option.asset_id}} </a>&nbsp;</ng-container>
+        </ng-container>
+        <br *ngIf="i%2===1">
+      </ng-container>
+
     </div>
     <div class="flex items-center justify-center bg-yellow-400 text-white font-bold p-4">
-      Low
+      <ng-container *ngFor="let option of heatMapData; let i = index">
+        <ng-container *ngIf="name === 'Residual Risk' ">
+          <ng-container *ngIf="option.residual_likelihood === '3' && option.residual_impact === '1'"><a (click)="redirectToAnotherComponent(!isARR ? option.id : option.asset_id)" class="cursor-pointer">
+              {{ !isARR ? option.id : option.asset_id}} </a>&nbsp;</ng-container>
+        </ng-container>
+        <ng-container *ngIf="name === 'Gross Risk'">
+          <ng-container *ngIf="option.gross_likelihood === '3' && option.gross_impact === '1'"><a (click)="redirectToAnotherComponent(!isARR ? option.id : option.asset_id)" class="cursor-pointer">
+              {{ !isARR ? option.id : option.asset_id}} </a>&nbsp;</ng-container>
+        </ng-container>
+        <br *ngIf="i%2===1">
+      </ng-container>
+
     </div>
     <p class="text-gray-400 ml-20">Likelihood</p>
   </div>
-
 </div>

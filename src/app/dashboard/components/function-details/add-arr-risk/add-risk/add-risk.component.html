@@ -1,0 +1,107 @@
+<h2 mat-dialog-title>
+  <p class="text-xl">Add Risk</p></h2>
+<mat-dialog-content class="mat-typography">
+  <form [formGroup]="riskForm">
+    <div class="grid grid-cols-3 gap-4">
+      <mat-form-field class="col-span-1">
+        <mat-label>Risk Statement</mat-label>
+        <textarea matInput placeholder="Risk Statement" formControlName="riskStatement" cdkTextareaAutosize
+                  #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
+        <mat-error class="mb-1" *ngIf="riskForm.get('riskStatement')?.hasError('required')">
+          Risk Statement is required
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="col-span-1">
+        <mat-label>Existing Control</mat-label>
+        <textarea matInput placeholder="Existing Control" formControlName="existingControl" cdkTextareaAutosize
+                  #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
+        <mat-error class="mb-1" *ngIf="riskForm.get('existingControl')?.hasError('required')">
+          Existing Control is required
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="col-span-1">
+        <mat-label>Further Action Required</mat-label>
+        <textarea matInput placeholder="Further Actions Required (Resources)" formControlName="furtherAction"
+                  cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1"
+                  cdkAutosizeMaxRows="5"></textarea>
+        <mat-error class="mb-1" *ngIf="riskForm.get('furtherAction')?.hasError('required')">
+          Further Actions is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <h1 class="pt-2 text-gray-400 text-xl">Gross Risks</h1>
+    <hr>
+    <br>
+    <div class="grid grid-cols-3 gap-4">
+      <mat-form-field class="col-span-1">
+        <mat-label>Likelihood</mat-label>
+        <mat-select formControlName="grossLikelihood" (selectionChange)="clearGrossImpact('gross')">
+          <mat-option *ngFor="let option of ranking" [value]="option.value">
+            {{ option.name}}
+          </mat-option>
+        </mat-select>
+        <mat-error class="mb-1" *ngIf="riskForm.get('grossLikelihood')?.hasError('required')">
+          Likelihood is required
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="col-span-1">
+        <mat-label>Impact</mat-label>
+        <mat-select formControlName="grossImpact" (selectionChange)="calculateGrossRanking('gross')">
+          <mat-option *ngFor="let option of ranking" [value]="option.value">
+            {{ option.name}}
+          </mat-option>
+        </mat-select>
+        <mat-error class="mb-1" *ngIf="riskForm.get('grossImpact')?.hasError('required')">
+          Impact is required
+        </mat-error>
+      </mat-form-field>
+
+      <div class="g-ranking col-span-1" [ngClass]="getRankingBackgroundColor() ?? ''">
+        <span *ngIf="grossRanking == 'Medium'" style="color:black;">Ranking: {{grossRanking}}</span>
+        <span *ngIf="grossRanking == 'High' || grossRanking == 'Low'"
+              style="color:white;">Ranking: {{grossRanking}}</span>
+      </div>
+    </div>
+
+    <h1 class="pt-2 text-gray-400 text-xl">Residual Risks</h1>
+    <hr>
+    <br>
+    <div class="grid grid-cols-3 gap-4">
+      <mat-form-field class="col-span-1">
+        <mat-label>Likelihood</mat-label>
+        <mat-select formControlName="residualLikelihood" (selectionChange)="clearGrossImpact('residual')">
+          <mat-option *ngFor="let option of ranking" [value]="option.value">
+            {{ option.name}}
+          </mat-option>
+        </mat-select>
+        <mat-error class="mb-1" *ngIf="riskForm.get('residualLikelihood')?.hasError('required')">
+          Likelihood is required
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="col-span-1">
+        <mat-label>Impact</mat-label>
+        <mat-select formControlName="residualImpact" (selectionChange)="calculateGrossRanking('residual')">
+          <mat-option *ngFor="let option of ranking" [value]="option.value">
+            {{ option.name}}
+          </mat-option>
+        </mat-select>
+        <mat-error class="mb-1" *ngIf="riskForm.get('residualImpact')?.hasError('required')">
+          Impact is required
+        </mat-error>
+      </mat-form-field>
+
+      <div class="g-ranking col-span-1" [ngClass]="getResidualRankingBackgroundColor() ?? ''">
+        <span *ngIf="residualRanking == 'Medium'" style="color:black;">Ranking: {{residualRanking}}</span>
+        <span *ngIf="residualRanking == 'High' || residualRanking == 'Low'"
+              style="color:white;">Ranking: {{residualRanking}}</span>
+      </div>
+
+    </div>
+  </form>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="true" color="primary">Cancel</button>
+  <button mat-flat-button mat-button color="primary" (click)="addRisk()">{{!data.isFromEdit ? 'Add Risk' : 'Update Risk'}}</button>
+</mat-dialog-actions>
+

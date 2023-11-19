@@ -4,7 +4,6 @@ import {STATUS} from "../../../model/constants";
 import {ApiService} from "../../../services/api.service";
 import {BlService} from "../../../services/bl.service";
 import {Router} from "@angular/router";
-import {SharedRejectDialogComponent} from "../shared-reject-dialog/shared-reject-dialog.component";
 
 @Component({
   selector: 'app-shared-approve-dialog',
@@ -16,7 +15,7 @@ export class SharedApproveDialogComponent {
   status: string[] = STATUS;
   constructor(public dialogRef: MatDialogRef<SharedApproveDialogComponent>,
     private router: Router, private apiService: ApiService, private blservice: BlService,
-    @Inject(MAT_DIALOG_DATA) public data: {formData: any, role_id: any}) {}
+    @Inject(MAT_DIALOG_DATA) public data: {formData: any, role_id: any, isRisk?: boolean}) {}
 
   approve() {
     if (this.data.role_id == 4) {
@@ -37,7 +36,7 @@ export class SharedApproveDialogComponent {
   callStatusChangeAPI() {
     let payload = {
       status: this.roleStatus,
-      id: this.data.formData.id
+      id: this.data?.isRisk ? this.data?.formData?.risk_id : this.data.formData.id
     }
     this.apiService.hiraStatusChange(payload).subscribe( res => {
       this.apiService.getHira();

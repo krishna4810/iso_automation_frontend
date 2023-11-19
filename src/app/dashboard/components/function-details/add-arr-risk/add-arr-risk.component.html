@@ -1,0 +1,96 @@
+<ng-container [ngSwitch]="stepperOrientation | async">
+  <div *ngSwitchCase="'horizontal'" class="text-center m-4">
+    <span class="text-2xl">
+    Asset Risk Register
+    </span>
+  </div>
+  <div *ngSwitchCase="'vertical'" class="text-center m-4">
+    <span class="text-2xl">
+    Asset Risk Register
+    </span>
+  </div>
+
+</ng-container>
+
+<mat-stepper
+  class="example-stepper"
+  [orientation]="(stepperOrientation | async)!">
+  <mat-step [stepControl]="firstFormGroup" label="General Details" class="mb-2">
+    <form [formGroup]="firstFormGroup" class="grid grid-cols-4 gap-4">
+      <mat-form-field class="col-span-2">
+        <mat-label>Document Number</mat-label>
+        <input matInput placeholder="Document Number" formControlName="docNumber" required>
+      </mat-form-field>
+      <mat-form-field class="col-span-2">
+        <mat-label>Department</mat-label>
+        <input matInput placeholder="Department" formControlName="department" required>
+      </mat-form-field>
+      <mat-form-field class="col-span-2">
+        <mat-label>Date</mat-label>
+        <input matInput placeholder="Date" formControlName="date" required>
+      </mat-form-field>
+      <mat-form-field class="col-span-2">
+        <mat-label>Plant</mat-label>
+        <input matInput placeholder="Plant" formControlName="plant" required>
+      </mat-form-field>
+      <mat-form-field class="col-span-2">
+        <mat-label>Division</mat-label>
+        <input matInput placeholder="Division" formControlName="unit" required>
+      </mat-form-field>
+      <mat-form-field class="col-span-2">
+        <mat-label>Address</mat-label>
+        <input matInput placeholder="Address" formControlName="address" required>
+      </mat-form-field>
+      <div class="col-span-4 flex justify-end">
+        <button mat-flat-button mat-button matStepperNext color="primary" style="float: right">Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl]="secondFormGroup" label="Asset Details">
+    <form [formGroup]="secondFormGroup">
+      <div class="grid grid-cols-2 gap-4">
+        <mat-form-field class="col-span-1">
+          <mat-label>Asset Number</mat-label>
+          <textarea matInput placeholder="Activity Number" formControlName="assetNumber" cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
+          <mat-error class="mb-1" *ngIf="secondFormGroup.get('assetNumber')?.hasError('required')">
+            Asset Number is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="col-span-1">
+          <mat-label>Asset Name</mat-label>
+          <textarea matInput placeholder="Activity Name" formControlName="assetName" cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
+          <mat-error class="mb-1" *ngIf="secondFormGroup.get('assetName')?.hasError('required')">
+            Asset Name is required
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-span-1">
+          <mat-label>Make</mat-label>
+          <textarea matInput  placeholder="Make" formControlName="make" cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
+          <mat-error class="mb-1" *ngIf="secondFormGroup.get('make')?.hasError('required')">
+            Make is required
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-span-1">
+          <mat-label>Installation Date</mat-label>
+          <input matInput [matDatepicker]="startDate" formControlName="installationDate">
+          <mat-datepicker-toggle matIconSuffix [for]="startDate">
+            <mat-icon matDatepickerToggleIcon color="primary">calendar_today</mat-icon>
+          </mat-datepicker-toggle>
+          <mat-datepicker #startDate></mat-datepicker>
+          <mat-error class="mb-1" *ngIf="secondFormGroup.get('installationDate')?.hasError('required')">
+            Installation Date is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-span-3 flex justify-end">
+        <button mat-button matStepperPrevious class="mr-2">Back</button>
+        <button mat-flat-button mat-button matStepperNext color="primary" (click)="addAssetDetails()">
+          Submit
+       </button>
+      </div>
+    </form>
+  </mat-step>
+</mat-stepper>

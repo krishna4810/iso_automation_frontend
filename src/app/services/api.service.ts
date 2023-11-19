@@ -22,6 +22,7 @@ import {BlService} from "./bl.service";
 export class ApiService {
 
   status: string[] = STATUS;
+
   constructor(private authService: AuthService, private blservice: BlService, private httpClient: HttpClient, private stateService: StateService) {
   }
 
@@ -33,7 +34,7 @@ export class ApiService {
   }
 
   addUser(userName: string): Observable<ApiResponse> {
-      return this.httpClient.post<ApiResponse>(
+    return this.httpClient.post<ApiResponse>(
       `${API_BASE_URL}/addUser`, {user_name: userName});
   }
 
@@ -66,10 +67,11 @@ export class ApiService {
       })
     );
   }
+
   getLoggedInUserDataWithRoles(userName: string | null) {
     this.checkRoles(userName).pipe(
       switchMap((role: UserRole) => {
-        const employeeId =userName?.match(/\d+/g)?.map(Number) ;
+        const employeeId = userName?.match(/\d+/g)?.map(Number);
         // @ts-ignore
         return this.getUserData(parseInt(employeeId)).pipe(
           map((userData: UserData) => {
@@ -139,13 +141,14 @@ export class ApiService {
         status: roleStatus,
       }
     });
-    this.httpClient.get<any>(`${API_BASE_URL}/getHira`, {params: payload}).subscribe( res => {
-      this.stateService.addHiraList(res);
+    this.httpClient.get<any>(`${API_BASE_URL}/getHira`, {params: payload}).subscribe(res => {
+        this.stateService.addHiraList(res);
       }
     );
   }
+
   getDocumentNumber(payload: any): Observable<any> {
-    return this.httpClient.get(`${API_BASE_URL}/getDocumentNumber`, { params: payload });
+    return this.httpClient.get(`${API_BASE_URL}/getDocumentNumber`, {params: payload});
   }
 
   addHiraActivity(payload: any): Observable<ApiResponse> {
@@ -153,16 +156,16 @@ export class ApiService {
       `${API_BASE_URL}/addHira`, payload);
   }
 
-  getHiraForms(): Observable<HiraFormFields[]>{
+  getHiraForms(): Observable<HiraFormFields[]> {
     return this.httpClient.get<HiraFormFields[]>(`${API_BASE_URL}/getHiraForms`);
   }
 
-  removeHiraField(column: any, id: any): Observable<any>{
+  removeHiraField(column: any, id: any): Observable<any> {
     let param = {column: column, id: id};
     return this.httpClient.delete(`${API_BASE_URL}/deleteField`, {params: param});
   }
 
-  addHiraField(payload: any): Observable<any>{
+  addHiraField(payload: any): Observable<any> {
     return this.httpClient.post(`${API_BASE_URL}/addNewField`, payload);
   }
 
@@ -181,7 +184,7 @@ export class ApiService {
 
   // EAI API CALLS
   getEAIDocumentNumber(payload: any): Observable<any> {
-    return this.httpClient.get(`${API_BASE_URL}/getEAIDocumentNumber`, { params: payload });
+    return this.httpClient.get(`${API_BASE_URL}/getEAIDocumentNumber`, {params: payload});
   }
 
   addEaiActivity(payload: any): Observable<ApiResponse> {
@@ -212,7 +215,7 @@ export class ApiService {
         status: roleStatus,
       }
     });
-    this.httpClient.get<any>(`${API_BASE_URL}/getEai`, {params: payload}).subscribe( res => {
+    this.httpClient.get<any>(`${API_BASE_URL}/getEai`, {params: payload}).subscribe(res => {
         this.stateService.addEaiList(res);
       }
     );
@@ -223,8 +226,68 @@ export class ApiService {
     return this.httpClient.get(`${API_BASE_URL}/getFilterParam`);
   }
 
-  filterDashboard(param: any): Observable<any>{
+  filterDashboard(param: any): Observable<any> {
     return this.httpClient.get(`${API_BASE_URL}/filterDashboard`, {params: param});
+  }
+
+  // Report APIs
+
+  generateReport(param: any): Observable<any> {
+    return this.httpClient.get(`${API_BASE_URL}/filterDashboard`, {params: param});
+  }
+
+  // ARR API CALLS
+  getARRDocumentNumber(payload: any): Observable<any> {
+    return this.httpClient.get(`${API_BASE_URL}/getARRDocumentNumber`, {params: payload});
+  }
+
+  addAssetDetails(payload: any): Observable<any> {
+    return this.httpClient.post(`${API_BASE_URL}/addAssetDetails`, payload);
+  }
+
+  getAssetRiskFromState() {
+    let payload: any;
+    let roleStatus: string;
+    this.stateService.stateChanged.subscribe(state => {
+      if (state?.loggedInUserData?.role.id == 4) {
+        roleStatus = this.status[0];
+      } else if (state?.loggedInUserData?.role.id == 5) {
+        roleStatus = this.status[2];
+      } else if (state?.loggedInUserData?.role.id == 6) {
+        roleStatus = this.status[4];
+      } else if (state?.loggedInUserData?.role.id == 7) {
+        roleStatus = this.status[5];
+      }
+
+      payload = {
+        role_id: state?.loggedInUserData?.role.id,
+        user_id: state?.loggedInUserData?.userData?.UserId,
+        plant: state?.loggedInUserData?.userData?.Plant,
+        department: state?.loggedInUserData?.userData?.Department,
+        division: state?.loggedInUserData?.userData?.Division,
+        status: roleStatus,
+      }
+    });
+    this.httpClient.get<any>(`${API_BASE_URL}/getArrRisks`, {params: payload}).subscribe(res => {
+        this.stateService.addArrList(res);
+      }
+    );
+  }
+
+  addRisk(payload: any): Observable<any> {
+    console.log(payload);
+    return this.httpClient.post(`${API_BASE_URL}/addRiskDetails`, payload);
+  }
+
+
+  // common APIS
+  getSpecificFunction(id: string) {
+    let payload ={
+      id: id
+    }
+    this.httpClient.get<any>(`${API_BASE_URL}/getSpecificFunction`, {params: payload}).subscribe(res => {
+      this.stateService.addSingleFunction(res);
+    });
   }
 
 }

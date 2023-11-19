@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddArrComponent } from './add-arr.component';
+import { ArrTableComponent } from './arr-table.component';
 
-describe('AddArrComponent', () => {
-  let component: AddArrComponent;
-  let fixture: ComponentFixture<AddArrComponent>;
+describe('ArrTableComponent', () => {
+  let component: ArrTableComponent;
+  let fixture: ComponentFixture<ArrTableComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [AddArrComponent]
+      declarations: [ArrTableComponent]
     });
-    fixture = TestBed.createComponent(AddArrComponent);
+    fixture = TestBed.createComponent(ArrTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -20,7 +20,7 @@ export class SharedRejectDialogComponent {
 
   constructor(public dialogRef: MatDialogRef<SharedRejectDialogComponent>,
               private stateService: StateService, private router: Router, private apiService: ApiService, private blservice: BlService,
-              @Inject(MAT_DIALOG_DATA) public data: { formData: any, role_id: any }) {
+              @Inject(MAT_DIALOG_DATA) public data: { formData: any, role_id: any, isRisk?: boolean }) {
   }
 
   ngOnInit() {
@@ -42,13 +42,14 @@ export class SharedRejectDialogComponent {
 
   addComment() {
     let commentPayload = {
-      function_id: this.data.formData.id,
+      function_id: !this.data?.isRisk ? this.data.formData.id : this.data.formData.risk_id,
       user_id: this.userState.userData.UserId,
       comment: this.rejectionComments,
     }
     let hiraPayload = {
       status: this.roleStatus,
-      id: this.data.formData.id
+      id: !this.data?.isRisk ? this.data.formData.id : this.data.formData.risk_id
+
     }
     this.apiService.addComment(commentPayload).subscribe(res => {
       this.apiService.hiraStatusChange(hiraPayload).subscribe(res => {

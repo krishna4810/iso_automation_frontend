@@ -13,7 +13,8 @@ export class CommentsComponent {
   combinedData: any[] = [];
   comments: any[] = [];
 
-  constructor(private apiService: ApiService, @Inject(MAT_DIALOG_DATA) public data: { id: string }) {
+  constructor(private apiService: ApiService,
+              @Inject(MAT_DIALOG_DATA) public data: { id: string, isRisk?: boolean}) {
   }
 
   ngOnInit() {
@@ -24,7 +25,6 @@ export class CommentsComponent {
     this.apiService.getComment(this.data.id).subscribe((comments: any[]) => {
       this.comments = comments;
       const requests = this.comments.map(comment => this.apiService.getUserData(comment.user_id));
-
       forkJoin(requests).subscribe(userDataResponses => {
         for (let i = 0; i < this.comments.length; i++) {
           const comment = this.comments[i];

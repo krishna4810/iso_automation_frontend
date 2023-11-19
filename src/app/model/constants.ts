@@ -16,7 +16,7 @@ export const STATUS: string[] = [
   'Awaiting QCAD Approval',
   'Requested Changes by QCAD',
   'Pre-Activity Details Accepted',
-  'Post-Activity Details Accepted',
+  'Approved',
 ]
 export const ROUTINE_ACTIVITY: any[] = [
   {
@@ -91,4 +91,6 @@ export interface StoreState {
   loggedInUserData: LoggedInUserData;
   hiraList: HiraActivity[]
   eaiList: any[]
+  arrList: any[]
+  singleFunction: any[]
 }

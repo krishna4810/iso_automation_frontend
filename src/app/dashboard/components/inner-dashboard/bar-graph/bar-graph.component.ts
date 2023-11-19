@@ -19,6 +19,14 @@ export class BarGraphComponent implements OnChanges {
   public barChartOptions: ChartConfiguration<'bar'>['options'] = {
     responsive: false,
   };
+  private donutColors = [
+    {
+      backgroundColor: [
+        '#ced',
+        '#fda',
+      ]
+    }
+  ];
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['barGraphData'] && changes['barGraphData'].currentValue) {
