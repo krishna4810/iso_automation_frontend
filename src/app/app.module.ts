@@ -65,6 +65,7 @@ import {MatTooltipModule} from "@angular/material/tooltip";
 import { AddArrRiskComponent } from './dashboard/components/function-details/add-arr-risk/add-arr-risk.component';
 import { ArrTableComponent } from './dashboard/components/function-details/arr-table/arr-table.component';
 import { AddRiskComponent } from './dashboard/components/function-details/add-arr-risk/add-risk/add-risk.component';
+import { DashboardTableComponent } from './dashboard/components/inner-dashboard/dashboard-table/dashboard-table.component';
 
 @NgModule({
   declarations: [
@@ -98,6 +99,7 @@ import { AddRiskComponent } from './dashboard/components/function-details/add-ar
     AddArrRiskComponent,
     ArrTableComponent,
     AddRiskComponent,
+    DashboardTableComponent,
   ],
   imports: [
     MatDialogModule,

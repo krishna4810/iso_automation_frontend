@@ -2,7 +2,6 @@
   <mat-card-header>
     <mat-card-title>
       <p class="font-semibold">
-<!--        <mat-icon>filter_list </mat-icon>-->
         Filter Dashboard</p></mat-card-title>
   </mat-card-header>
   <mat-card-content class="mt-3">
@@ -110,11 +109,11 @@
         <p class="font-semibold">Hazard Impact Risk Analysis</p>
       </mat-card-title>
       <button class="ml-auto" mat-icon-button
-              matTooltip="Download HIRA Report">
+              matTooltip="Download HIRA Report" (click)="generateReport('hira')">
         <mat-icon color="primary">save_alt</mat-icon>
       </button>
       <button class="ml-2" mat-icon-button
-              matTooltip="View HIRA Table" (click)="generateHiraReport()">
+              matTooltip="View HIRA Table"  (click)="openTable('HIRA')">
         <mat-icon color="primary">view_list</mat-icon>
       </button>
     </mat-card-header>
@@ -137,11 +136,20 @@
 <br>
 <div>
   <mat-card>
-    <mat-card-header>
+    <mat-card-header class="flex">
       <mat-card-title>
         <p class="font-semibold">Environment Aspect and Impact</p>
       </mat-card-title>
+      <button class="ml-auto" mat-icon-button
+              matTooltip="Download EAI Report" (click)="generateReport('eai')">
+        <mat-icon color="primary">save_alt</mat-icon>
+      </button>
+      <button class="ml-2" mat-icon-button
+              matTooltip="View EAI Table"  (click)="openTable('EAI')">
+        <mat-icon color="primary">view_list</mat-icon>
+      </button>
     </mat-card-header>
+
     <mat-card-content>
       <br>
       <div class="grid grid-cols-8 gap-4">
@@ -166,12 +174,12 @@
         <p class="font-semibold">Asset Risk Register</p>
       </mat-card-title>
       <button class="ml-auto" mat-icon-button
-              matTooltip="Download ARR Report">
+              matTooltip="Download ARR Report" (click)="generateReport('arr')">
         <mat-icon color="primary">save_alt</mat-icon>
       </button>
       <button class="ml-2" mat-icon-button
-              matTooltip="View ARR Table" (click)="generateHiraReport()">
-        <mat-icon color="primary">view_list</mat-icon>
+              matTooltip="View ARR Table" (click)="openTable('ARR')">
+        <mat-icon color="primary" >view_list</mat-icon>
       </button>
     </mat-card-header>
     <mat-card-content>

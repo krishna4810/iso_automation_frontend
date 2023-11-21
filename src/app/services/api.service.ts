@@ -230,12 +230,6 @@ export class ApiService {
     return this.httpClient.get(`${API_BASE_URL}/filterDashboard`, {params: param});
   }
 
-  // Report APIs
-
-  generateReport(param: any): Observable<any> {
-    return this.httpClient.get(`${API_BASE_URL}/filterDashboard`, {params: param});
-  }
-
   // ARR API CALLS
   getARRDocumentNumber(payload: any): Observable<any> {
     return this.httpClient.get(`${API_BASE_URL}/getARRDocumentNumber`, {params: payload});
@@ -275,7 +269,6 @@ export class ApiService {
   }
 
   addRisk(payload: any): Observable<any> {
-    console.log(payload);
     return this.httpClient.post(`${API_BASE_URL}/addRiskDetails`, payload);
   }
 
@@ -288,6 +281,10 @@ export class ApiService {
     this.httpClient.get<any>(`${API_BASE_URL}/getSpecificFunction`, {params: payload}).subscribe(res => {
       this.stateService.addSingleFunction(res);
     });
+  }
+
+  generateReport(payload: any): Observable<any>{
+    return this.httpClient.post(`${API_BASE_URL}/generateReport`, payload, {responseType: 'blob'});
   }
 
 }

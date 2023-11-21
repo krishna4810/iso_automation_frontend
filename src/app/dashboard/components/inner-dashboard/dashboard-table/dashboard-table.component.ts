@@ -1,20 +1,19 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, Inject, Input, ViewChild} from '@angular/core';
 import {MatSort} from "@angular/material/sort";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatTableDataSource} from "@angular/material/table";
-import {MatDialog} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialog} from "@angular/material/dialog";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ApiService} from "../../../../services/api.service";
 import {StateService} from "../../../../services/state.service";
 import {Role} from "../../../../model/interfaces";
 
 @Component({
-  selector: 'app-arr-table',
-  templateUrl: './arr-table.component.html',
-  styleUrls: ['./arr-table.component.scss']
+  selector: 'app-dashboard-table',
+  templateUrl: './dashboard-table.component.html',
+  styleUrls: ['./dashboard-table.component.scss']
 })
-export class ArrTableComponent {
-
+export class DashboardTableComponent {
 
   @ViewChild(MatSort) set contentSort(sort: MatSort) {
     this.dataSource.sort = sort;
@@ -33,24 +32,22 @@ export class ArrTableComponent {
     private router: Router,
     private apiService: ApiService,
     private route: ActivatedRoute,
-    private stateService: StateService
+    @Inject(MAT_DIALOG_DATA) public data: {dashboardData?: any, key?: string}
   ) {
-    this.apiService.getAssetRiskFromState();
-    this.stateService.stateChanged.subscribe(state => {
-      if (state.arrList) {
-        this.userList = state.arrList;
-        if (this.userList?.length > 0) {
-          this.displayedColumns = Object.keys(this.userList[0]).filter(key => !(
-            ['address', 'unit', 'doc_number',
-              'existing_control', 'further_action_required', 'gross_ranking_value',
-              'residual_likelihood', 'residual_impact', 'residual_ranking_value',
-              'created_at', 'updated_at', 'year', 'asset_id', 'date', 'continues_update',
-               'gross_likelihood', 'user_id',
-              'gross_impact', 'risks'].includes(key)));
-          this.dataSource = new MatTableDataSource<Role>(this.userList);
-        }
-      }
-    });
+
+    this.userList = this.data?.dashboardData;
+    if (this.userList?.length > 0) {
+      this.displayedColumns = Object.keys(this.userList[0]).filter(key => !(
+        ['address', 'unit',
+          'existing_control', 'further_action_required', 'gross_ranking_value',
+          'residual_likelihood', 'residual_impact', 'residual_ranking_value',
+          'created_at', 'updated_at', 'year', 'further_action_required', 'mitigation_measures', 'asset_id', 'date', 'continues_update',
+          'gross_likelihood', 'user_id', 'risk_id', 'creator_name', 'id', 'status', 'existing_control', 'completion_date', 'workers_involved', 'routine_activity',
+          'gross_impact', 'risks'].includes(key)));
+      this.dataSource = new MatTableDataSource<Role>(this.userList);
+    }
+
+
   }
 
 

@@ -8,6 +8,7 @@ import {HiraTableComponent} from "./hira-table/hira-table.component";
 import {AddEaiComponent} from "./add-eai/add-eai.component";
 import {EaiTableComponent} from "./eai-table/eai-table.component";
 import {AddArrRiskComponent} from "./add-arr-risk/add-arr-risk.component";
+import {ArrTableComponent} from "./arr-table/arr-table.component";
 
 @Component({
   selector: 'app-function-details',
@@ -19,6 +20,7 @@ export class FunctionDetailsComponent {
   userState: any;
   @ViewChild(HiraTableComponent) hiraComponent!: HiraTableComponent;
   @ViewChild(EaiTableComponent) eaiComponent!: EaiTableComponent;
+  @ViewChild(ArrTableComponent) arrComponent!: ArrTableComponent;
 
   constructor(public dialog: MatDialog,
               private apiService: ApiService,
@@ -63,6 +65,8 @@ export class FunctionDetailsComponent {
     }
     else if (this.selectedTabIndex == 1) {
       this.eaiComponent.applyFilter(event);
+    } else {
+      this.arrComponent.applyFilter(event);
     }
   }
 }
