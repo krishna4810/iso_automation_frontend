@@ -40,6 +40,7 @@ export class InnerDashboardComponent{
     this.apiService.getFilterParam().subscribe(res => {
       this.params = res;
     });
+    this.apiService.getLoggedInUserDataWithRoles(sessionStorage.getItem('username'));
     this.stateService.stateChanged.subscribe((state) => {
       this.userState = state?.loggedInUserData;
       this.selectedPlant = this.userState?.userData?.Plant;

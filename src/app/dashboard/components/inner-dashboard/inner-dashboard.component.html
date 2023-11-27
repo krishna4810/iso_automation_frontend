@@ -189,10 +189,10 @@
           <app-bar-graph [barGraphData]="dashboardData?.arr_graph_data"></app-bar-graph>
         </div>
         <div class="col-span-2 flex items-center bg-white border rounded-sm overflow-hidden shadow">
-          <app-heat-map [name]="'Gross Risk'" [isARR]="true" [heatMapData]="dashboardData?.functional_data?.arr"></app-heat-map>
+          <app-heat-map [name]="'Gross Risk'" [isARR]="true" [heatMapData]="dashboardData?.functional_data?.arrHeatMap"></app-heat-map>
         </div>
         <div class="col-span-2 flex items-center bg-white border rounded-sm overflow-hidden shadow">
-          <app-heat-map [name]="'Residual Risk'" [isARR]="true" [heatMapData]="dashboardData?.functional_data?.arr"></app-heat-map>
+          <app-heat-map [name]="'Residual Risk'" [isARR]="true" [heatMapData]="dashboardData?.functional_data?.arrHeatMap"></app-heat-map>
         </div>
       </div>
     </mat-card-content>

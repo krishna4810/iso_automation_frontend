@@ -4,7 +4,12 @@ import {map, Observable} from "rxjs";
 import {BreakpointObserver} from "@angular/cdk/layout";
 import {StepperOrientation} from "@angular/cdk/stepper";
 import {FunctionRanking, LoggedInUserData} from "../../../../model/interfaces";
-import {FUNCTION_RATING_DETAILS, ROUTINE_ACTIVITY, STATUS} from "../../../../model/constants";
+import {
+  HIRA_IMPACT,
+  HIRA_LIKELIHOOD,
+  ROUTINE_ACTIVITY,
+  STATUS
+} from "../../../../model/constants";
 import {BlService} from "../../../../services/bl.service";
 import {StateService} from "../../../../services/state.service";
 import {ApiService} from "../../../../services/api.service";
@@ -24,7 +29,8 @@ export class AddHiraComponent {
   residualRankingValue?: number;
   grossRankingValue?: number;
   userState: any;
-  ranking: FunctionRanking[] = FUNCTION_RATING_DETAILS;
+  hiraLikelihood: FunctionRanking[] = HIRA_LIKELIHOOD;
+  hiraImpact: FunctionRanking[] = HIRA_IMPACT;
   activities: any[] = ROUTINE_ACTIVITY;
 
   firstFormGroup = this._formBuilder.group({
@@ -107,8 +113,8 @@ export class AddHiraComponent {
     });
   }
   patchSecondFormData() {
-    let selectedGrossLikelihood: any = this.ranking.find(option => option.value == +this.data.formData.gross_likelihood);
-    let selectedGrossImpact: any = this.ranking.find(option => option.value == +this.data.formData.gross_impact);
+    let selectedGrossLikelihood: any = this.hiraLikelihood.find(option => option.value == +this.data.formData.gross_likelihood);
+    let selectedGrossImpact: any = this.hiraImpact.find(option => option.value == +this.data.formData.gross_impact);
     this.secondFormGroup.patchValue({
       activityName: this.data.formData.activity_name,
       subActivityName: this.data.formData.sub_activity_name,
@@ -126,8 +132,8 @@ export class AddHiraComponent {
     }
   }
   patchThirdFormData() {
-    let selectedResidualLikelihood: any = this.ranking.find(option => option.value == +this.data.formData.residual_likelihood);
-    let selectedResidualImpact: any = this.ranking.find(option => option.value == +this.data.formData.residual_impact);
+    let selectedResidualLikelihood: any = this.hiraLikelihood.find(option => option.value == +this.data.formData.residual_likelihood);
+    let selectedResidualImpact: any = this.hiraImpact.find(option => option.value == +this.data.formData.residual_impact);
     this.thirdFormGroup.patchValue({
       existingControl: this.data.formData.existing_control,
       mitigationMeasures: this.data.formData.mitigation_measures,
@@ -273,7 +279,7 @@ export class AddHiraComponent {
       this.thirdFormGroup.disable();
       this.apiService.addHiraActivity(hiraPayload).subscribe(res => {
           this.blService.openSnackBar(res.message);
-            this.apiService.getHira()
+          this.data?.isFromEdit ? this.apiService.getSpecificFunction(this.data?.formData?.id) : this.apiService.getHira();
         }
       );
       this.dialogRef.close();

@@ -40,21 +40,24 @@ export class FunctionDetailsComponent {
         data: {
           isFromEdit: false,
         },
-        maxHeight: '90vh'
+        maxHeight: '90vh',
+        minWidth: '150vh'
       });
     } else if (this.selectedTabIndex == 1) {
       this.dialog.open(AddEaiComponent, {
         data: {
           isFromEdit: false,
         },
-        maxHeight: '90vh'
+        maxHeight: '90vh',
+        minWidth: '150vh'
       });
     } else {
       this.dialog.open(AddArrRiskComponent, {
         data: {
           isFromEdit: false,
         },
-        maxHeight: '90vh'
+        maxHeight: '90vh',
+        minWidth: '100vh'
       });
     }
   }

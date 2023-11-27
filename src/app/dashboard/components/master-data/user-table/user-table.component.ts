@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ViewChild } from '@angular/core';
+import {Component, AfterViewInit, ViewChild, Input} from '@angular/core';
 import { ApiService } from '../../../../services/api.service';
 import { StateService } from '../../../../services/state.service';
 import { AddUserComponent } from '../add-user/add-user.component';
@@ -13,6 +13,8 @@ import { MatSort } from '@angular/material/sort';
   styleUrls: ['./user-table.component.scss'],
 })
 export class UserTableComponent implements AfterViewInit {
+
+  @Input() creatorID: string = '';
   @ViewChild(MatSort) set contentSort(sort: MatSort) {
     this.dataSource.sort = sort;
   }
@@ -29,7 +31,7 @@ export class UserTableComponent implements AfterViewInit {
     private apiService: ApiService,
     private stateService: StateService
   ) {
-    this.apiService.getUsers();
+    this.apiService.getUsers(this.creatorID);
     this.stateService.stateChanged.subscribe(state => {
       if(state.users) {
         this.userList = state.users;

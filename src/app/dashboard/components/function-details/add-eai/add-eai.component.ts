@@ -4,7 +4,12 @@ import {map, Observable} from "rxjs";
 import {BreakpointObserver} from "@angular/cdk/layout";
 import {StepperOrientation} from "@angular/cdk/stepper";
 import {FunctionRanking, LoggedInUserData} from "../../../../model/interfaces";
-import {FUNCTION_RATING_DETAILS, ROUTINE_ACTIVITY, STATUS} from "../../../../model/constants";
+import {
+  EAI_IMPACT,
+  EAI_LIKELIHOOD,
+  ROUTINE_ACTIVITY,
+  STATUS
+} from "../../../../model/constants";
 import {BlService} from "../../../../services/bl.service";
 import {StateService} from "../../../../services/state.service";
 import {ApiService} from "../../../../services/api.service";
@@ -24,7 +29,8 @@ export class AddEaiComponent {
   residualRankingValue?: number;
   grossRankingValue?: number;
   userState: any;
-  ranking: FunctionRanking[] = FUNCTION_RATING_DETAILS;
+  eaiLikelihood: FunctionRanking[] = EAI_LIKELIHOOD;
+  eaiImpact: FunctionRanking[] = EAI_IMPACT;
   activities: any[] = ROUTINE_ACTIVITY;
 
   firstFormGroup = this._formBuilder.group({
@@ -107,8 +113,8 @@ export class AddEaiComponent {
     });
   }
   patchSecondFormData() {
-    let selectedGrossLikelihood: any = this.ranking.find(option => option.value == +this.data.formData.gross_likelihood);
-    let selectedGrossImpact: any = this.ranking.find(option => option.value == +this.data.formData.gross_impact);
+    let selectedGrossLikelihood: any = this.eaiLikelihood.find(option => option.value == +this.data.formData.gross_likelihood);
+    let selectedGrossImpact: any = this.eaiImpact.find(option => option.value == +this.data.formData.gross_impact);
     this.secondFormGroup.patchValue({
       activityName: this.data.formData.activity_name,
       subActivityName: this.data.formData.sub_activity_name,
@@ -126,8 +132,8 @@ export class AddEaiComponent {
     }
   }
   patchThirdFormData() {
-    let selectedResidualLikelihood: any = this.ranking.find(option => option.value == +this.data.formData.residual_likelihood);
-    let selectedResidualImpact: any = this.ranking.find(option => option.value == +this.data.formData.residual_impact);
+    let selectedResidualLikelihood: any = this.eaiLikelihood.find(option => option.value == +this.data.formData.residual_likelihood);
+    let selectedResidualImpact: any = this.eaiImpact.find(option => option.value == +this.data.formData.residual_impact);
     this.thirdFormGroup.patchValue({
       existingControl: this.data.formData.existing_control,
       mitigationMeasures: this.data.formData.mitigation_measures,
@@ -270,7 +276,7 @@ export class AddEaiComponent {
       this.thirdFormGroup.disable();
       this.apiService.addEaiActivity(hiraPayload).subscribe(res => {
           this.blService.openSnackBar(res.message);
-          this.apiService.getEai()
+        this.data?.isFromEdit ? this.apiService.getSpecificFunction(this.data?.formData?.id) : this.apiService.getEai();
         }
       );
       this.dialogRef.close();

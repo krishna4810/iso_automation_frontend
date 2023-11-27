@@ -95,7 +95,7 @@
         <mat-form-field class="col-span-1">
           <mat-label>Likelihood</mat-label>
           <mat-select formControlName="g_likelihood" (selectionChange)="clearGrossImpact('gross')">
-            <mat-option *ngFor="let option of ranking" [value]="option.value">
+            <mat-option *ngFor="let option of hiraLikelihood" [value]="option.value">
               {{ option.name}}
             </mat-option>
           </mat-select>
@@ -106,7 +106,7 @@
         <mat-form-field class="col-span-1">
           <mat-label>Impact</mat-label>
           <mat-select formControlName="g_impact" (selectionChange)="calculateGrossRanking('gross')">
-            <mat-option *ngFor="let option of ranking" [value]="option.value">
+            <mat-option *ngFor="let option of hiraImpact" [value]="option.value">
               {{ option.name}}
             </mat-option>
           </mat-select>
@@ -192,7 +192,7 @@
         <mat-form-field class="col-span-1">
           <mat-label>Likelihood</mat-label>
           <mat-select formControlName="r_likelihood"  (selectionChange)="clearGrossImpact('residual')">
-            <mat-option *ngFor="let option of ranking" [value]="option.value">
+            <mat-option *ngFor="let option of hiraLikelihood" [value]="option.value">
               {{ option.name}}
             </mat-option>
           </mat-select>
@@ -203,7 +203,7 @@
         <mat-form-field class="col-span-1">
           <mat-label>Impact</mat-label>
           <mat-select formControlName="r_impact" (selectionChange)="calculateGrossRanking('residual')">
-            <mat-option *ngFor="let option of ranking" [value]="option.value">
+            <mat-option *ngFor="let option of hiraImpact" [value]="option.value">
               {{ option.name}}
             </mat-option>
           </mat-select>

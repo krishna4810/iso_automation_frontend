@@ -1,0 +1,44 @@
+<mat-card>
+  <mat-card-content>
+    <div>
+      <h5 class="card-header">Manage Your Creators</h5>
+      <div class="grid grid-cols-12 gap-4">
+        <div class="mt-2 col-span-5">
+          <mat-form-field class="w-full">
+            <div class="flex">
+              <mat-icon class="mr-2">search</mat-icon>
+              <input matInput placeholder="Search by Name, Employee ID, Role Name or anything">
+            </div>
+          </mat-form-field>
+        </div>
+        <div class="mt-2 col-span-5">
+
+        </div>
+        <div class="col-span-2">
+          <div>
+            <div class="button-container">
+              <button mat-raised-button color="primary" (click)="addUser()">
+                <mat-icon>add</mat-icon>
+                Add Creator
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<mat-card class="my-5">
+  <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" dynamicHeight #tabGroup>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon">
+          <span class="font-semibold">people_outline</span>
+        </mat-icon>
+        <span class="pl-2 font-semibold">Creators</span>
+      </ng-template>
+      <app-user-table [creatorID]="creatorId"></app-user-table>
+    </mat-tab>
+  </mat-tab-group>
+</mat-card>

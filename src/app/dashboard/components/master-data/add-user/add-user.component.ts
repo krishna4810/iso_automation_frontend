@@ -7,6 +7,7 @@ import {Role, UserData} from "../../../../model/interfaces";
 import {Subject} from "rxjs";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {BlService} from "../../../../services/bl.service";
+import {StateService} from "../../../../services/state.service";
 
 @Component({
   selector: 'app-add-user',
@@ -14,6 +15,9 @@ import {BlService} from "../../../../services/bl.service";
   styleUrls: ['./add-user.component.scss']
 })
 export class AddUserComponent {
+  userRoles?: Role[];
+  private destroy$ = new Subject<void>();
+  userState: any;
   employeeForm: FormGroup = this.formBuilder.group({
     UserId: ['', Validators.required],
     Name: [{value: '', disabled: true}],
@@ -27,8 +31,6 @@ export class AddUserComponent {
     UserName: [{value: '', disabled: true}],
     UserRole: [{value: '', disabled: false}, Validators.required],
   });
-  userRoles?: Role[];
-  private destroy$ = new Subject<void>();
 
   // @ts-ignore
   constructor(
@@ -36,6 +38,7 @@ export class AddUserComponent {
     private snackBar: MatSnackBar,
     private formBuilder: FormBuilder,
     private apiService: ApiService,
+    private stateService: StateService,
     public dialogRef: MatDialogRef<AddUserComponent>,
     @Inject(MAT_DIALOG_DATA) public data: {isFromEdit: boolean, userData?: any}
 
@@ -43,6 +46,7 @@ export class AddUserComponent {
   }
 
   async ngOnInit() {
+    this.getLoggedInUserData();
     try {
       const res = await this.apiService.getPermissions().toPromise();
       this.userRoles = res;
@@ -55,6 +59,13 @@ export class AddUserComponent {
     } catch (error) {
       console.error("Error fetching permissions:", error);
     }
+  }
+
+  getLoggedInUserData() {
+    this.apiService.getLoggedInUserDataWithRoles(sessionStorage.getItem('username'));
+    this.stateService?.stateChanged.subscribe(state => {
+      this.userState = state?.loggedInUserData;
+    })
   }
 
   async patchEditData() {
@@ -114,10 +125,10 @@ export class AddUserComponent {
 
   onSubmit() {
     this.apiService.addUserWithRole(this.employeeForm.get('UserName')?.value,
-      this.employeeForm.get('UserRole')?.value)
+      this.employeeForm.get('UserRole')?.value, this.userState?.userData?.UserId)
       .subscribe(res => {
       this.blService.openSnackBar(res.message);
-      this.apiService.getUsers();
+      // this.apiService.getUsers();
     })
     this.dialogRef.close();
   }

@@ -2,7 +2,7 @@ import {Component, Inject, Input, ViewChild} from '@angular/core';
 import {MatSort} from "@angular/material/sort";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatTableDataSource} from "@angular/material/table";
-import {MAT_DIALOG_DATA, MatDialog} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ApiService} from "../../../../services/api.service";
 import {StateService} from "../../../../services/state.service";
@@ -30,15 +30,14 @@ export class DashboardTableComponent {
   constructor(
     private dialog: MatDialog,
     private router: Router,
-    private apiService: ApiService,
-    private route: ActivatedRoute,
-    @Inject(MAT_DIALOG_DATA) public data: {dashboardData?: any, key?: string}
+    public dialogRef: MatDialogRef<DashboardTableComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { dashboardData?: any, key?: string }
   ) {
 
     this.userList = this.data?.dashboardData;
     if (this.userList?.length > 0) {
       this.displayedColumns = Object.keys(this.userList[0]).filter(key => !(
-        ['address', 'unit',
+        ['address', 'unit', 'asset_number',
           'existing_control', 'further_action_required', 'gross_ranking_value',
           'residual_likelihood', 'residual_impact', 'residual_ranking_value',
           'created_at', 'updated_at', 'year', 'further_action_required', 'mitigation_measures', 'asset_id', 'date', 'continues_update',
@@ -52,10 +51,10 @@ export class DashboardTableComponent {
 
 
   viewUserDetail(event: any) {
-    this.router.navigate(['../', 'functionalDetails', event.id], {
-      relativeTo: this.route,
-      queryParams: event.id,
+    this.router.navigate(['/home/functionalDetails', event.id], {
+      queryParams: {id: event.id},
     });
+    this.dialogRef.close();
   }
 
   applyFilter(event: Event) {

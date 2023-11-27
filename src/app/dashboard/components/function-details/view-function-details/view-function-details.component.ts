@@ -40,10 +40,11 @@ export class ViewFunctionDetailsComponent {
       this.id = params['id'];
       this.apiService.getSpecificFunction(this.id);
       this.stateService.stateChanged.subscribe(state => {
-        this.functionalDetail = state?.singleFunction?.find(funct => funct.id == this.id);
-        // @ts-ignore
-        this.id.includes('A') && (this.isNullRisk = this.functionalDetail?.risks.some(risk => risk.gross_likelihood === null));
-
+        if (state?.singleFunction) {
+          this.functionalDetail = state?.singleFunction?.find(funct => funct.id == this.id);
+          // @ts-ignore
+          this.id.includes('A') && (this.isNullRisk = this.functionalDetail?.risks.some(risk => risk.gross_likelihood === null));
+        }
       });
     });
   }
@@ -97,7 +98,7 @@ export class ViewFunctionDetailsComponent {
         formData: this.functionalDetail
       },
       maxHeight: '90vh',
-      minWidth: '130vh'
+      minWidth: '150vh'
     });
   }
 

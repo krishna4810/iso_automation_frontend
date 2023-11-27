@@ -3,7 +3,6 @@ import {FormArray, FormBuilder, Validators} from "@angular/forms";
 import {map, Observable} from "rxjs";
 import {StepperOrientation} from "@angular/cdk/stepper";
 import {BreakpointObserver} from "@angular/cdk/layout";
-import {FUNCTION_RATING_DETAILS, STATUS} from "../../../../model/constants";
 import {ApiService} from "../../../../services/api.service";
 import {StateService} from "../../../../services/state.service";
 import {FunctionRanking, LoggedInUserData} from "../../../../model/interfaces";
@@ -23,8 +22,6 @@ export class AddArrRiskComponent {
   stepperOrientation: Observable<StepperOrientation>;
   loggedInData?: LoggedInUserData;
   formattedDate = this.datePipe.transform(this.currentDate, 'dd/MM/yyyy');
-  ranking: FunctionRanking[] = FUNCTION_RATING_DETAILS;
-
   constructor(private _formBuilder: FormBuilder,
               private datePipe: DatePipe,
               private blService: BlService,
@@ -55,9 +52,6 @@ export class AddArrRiskComponent {
     make: ['', Validators.required],
   });
 
-  thirdFormGroup = this._formBuilder.group({
-    risk: this._formBuilder.array([])
-  });
 
   ngOnInit() {
     this.stateService.stateChanged.subscribe((state) => {

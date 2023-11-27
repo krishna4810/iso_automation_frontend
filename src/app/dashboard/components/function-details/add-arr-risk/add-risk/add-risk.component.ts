@@ -2,7 +2,7 @@ import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {FormBuilder, Validators} from "@angular/forms";
 import {FunctionRanking} from "../../../../../model/interfaces";
-import {FUNCTION_RATING_DETAILS, STATUS} from "../../../../../model/constants";
+import {ARR_IMPACT, ARR_LIKELIHOOD, STATUS} from "../../../../../model/constants";
 import {BlService} from "../../../../../services/bl.service";
 import {ApiService} from "../../../../../services/api.service";
 import {StateService} from "../../../../../services/state.service";
@@ -14,7 +14,8 @@ import {StateService} from "../../../../../services/state.service";
 })
 export class AddRiskComponent {
 
-  ranking: FunctionRanking[] = FUNCTION_RATING_DETAILS;
+  arrImpact: FunctionRanking[] = ARR_IMPACT;
+  arrLikelihood: FunctionRanking[] = ARR_LIKELIHOOD;
   grossRanking?: string
   residualRanking?: string
   residualRankingValue?: number;
@@ -52,10 +53,10 @@ export class AddRiskComponent {
   }
 
   editData() {
-    let selectedGrossLikelihood: any = this.ranking.find(option => option.value == +this.data?.formData?.gross_likelihood);
-    let selectedGrossImpact: any = this.ranking.find(option => option.value == +this.data?.formData.gross_impact);
-    let selectedResidualLikelihood: any = this.ranking.find(option => option.value == +this.data?.formData.residual_likelihood);
-    let selectedResidualImpact: any = this.ranking.find(option => option.value == +this.data?.formData.residual_impact);
+    let selectedGrossLikelihood: any = this.arrLikelihood.find(option => option.value == +this.data?.formData?.gross_likelihood);
+    let selectedGrossImpact: any = this.arrImpact.find(option => option.value == +this.data?.formData.gross_impact);
+    let selectedResidualLikelihood: any = this.arrLikelihood.find(option => option.value == +this.data?.formData.residual_likelihood);
+    let selectedResidualImpact: any = this.arrImpact.find(option => option.value == +this.data?.formData.residual_impact);
 
     this.riskForm.patchValue({
       riskStatement: this.data.formData.risk_statement,
@@ -140,7 +141,7 @@ export class AddRiskComponent {
             this.status[0] : this.data?.formData?.status) : this.status[0]
       }
       this.apiService.addRisk(payload).subscribe(res => {
-        this.apiService.getSpecificFunction(this.data?.formData?.id);
+        this.apiService.getSpecificFunction(this.data.isFromEdit ? this.data?.formData.asset_id : this.data?.formData?.id);
         this.blService.openSnackBar(res.message);
         this.dialogRef.close();
       });
