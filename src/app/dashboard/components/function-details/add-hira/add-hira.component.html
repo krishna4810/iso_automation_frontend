@@ -122,15 +122,15 @@
         <div class="col-span-3 flex justify-end">
           <button mat-button matStepperPrevious class="mr-2">Back</button>
           <button mat-flat-button mat-button matStepperNext color="primary"
-                  (click)="this.data.isFromEdit ? (data?.formData?.status == status[7] || data?.formData?.residual_ranking_value != null) ? null : addHira() : addHira()">
-            {{ this.data.isFromEdit ? (data?.formData?.status == status[7] || data?.formData?.residual_ranking_value != null) ? 'Next' : 'Update' : 'Save' }}
+                  (click)="this.data.isFromEdit ? (data?.formData?.status == status[6] || data?.formData?.residual_ranking_value != null) ? null : addHira() : addHira()">
+            {{ this.data.isFromEdit ? (data?.formData?.status == status[6] || data?.formData?.residual_ranking_value != null) ? 'Next' : 'Update' : 'Save' }}
           </button>
         </div>
       </div>
 
     </form>
   </mat-step>
-  <mat-step [stepControl]="thirdFormGroup" label="Post Activity Details" *ngIf="data?.formData?.status == status[7] || data?.formData?.residual_ranking_value != null">
+  <mat-step [stepControl]="thirdFormGroup" label="Post Activity Details" *ngIf="data?.formData?.status == status[6] || data?.formData?.residual_ranking_value != null">
     <form [formGroup]="thirdFormGroup">
       <div class="grid grid-cols-4 gap-4">
         <mat-form-field class="col-span-2">

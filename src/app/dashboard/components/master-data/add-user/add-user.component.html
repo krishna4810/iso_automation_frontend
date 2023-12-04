@@ -1,5 +1,5 @@
 <div class="text-center p-5">
-  <h2 class="text-2xl">Add User</h2>
+  <h2 class="text-2xl">Add {{data?.isFromCreator ? 'Creator' : 'User'}}</h2>
   <form [formGroup]="employeeForm" class="mt-4">
     <div class="flex flex-wrap">
       <div class="w-full md:w-1/2 pr-4">
@@ -16,7 +16,7 @@
         <mat-form-field class="w-full">
           <mat-label>Choose User Role</mat-label>
           <mat-select formControlName="UserRole">
-            <mat-option *ngFor="let option of userRoles" [value]="option.id">
+            <mat-option *ngFor="let option of userRoles" [value]="option.id" >
               {{ option.role_name }}
             </mat-option>
           </mat-select>
@@ -89,7 +89,8 @@
     </div>
 
     <div class="flex justify-center">
-      <button mat-raised-button color="primary" class="mr-4" [disabled] = "employeeForm.invalid" (click)="onSubmit()">{{data.isFromEdit ? 'Update' : 'Add'}} User</button>
+      <button mat-raised-button color="primary" class="mr-4" [disabled] = "(employeeForm.invalid || isNotSamePlant)" (click)="onSubmit()">
+        {{data.isFromEdit ? 'Update' : 'Add'}} User</button>
       <button mat-raised-button (click)="onCancel()">Cancel</button>
     </div>
   </form>

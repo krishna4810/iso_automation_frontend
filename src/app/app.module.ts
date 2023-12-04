@@ -66,6 +66,8 @@ import { AddArrRiskComponent } from './dashboard/components/function-details/add
 import { ArrTableComponent } from './dashboard/components/function-details/arr-table/arr-table.component';
 import { AddRiskComponent } from './dashboard/components/function-details/add-arr-risk/add-risk/add-risk.component';
 import { DashboardTableComponent } from './dashboard/components/inner-dashboard/dashboard-table/dashboard-table.component';
+import { CreatorsComponent } from './dashboard/components/creators/creators.component';
+import { CreatorTableComponent } from './dashboard/components/creators/creator-table/creator-table.component';
 
 @NgModule({
   declarations: [
@@ -100,6 +102,8 @@ import { DashboardTableComponent } from './dashboard/components/inner-dashboard/
     ArrTableComponent,
     AddRiskComponent,
     DashboardTableComponent,
+    CreatorsComponent,
+    CreatorTableComponent,
   ],
   imports: [
     MatDialogModule,

@@ -87,8 +87,9 @@ export class ApiService {
     });
   }
 
-  getUsers(): Observable<any> {
-    const data = this.httpClient.get<any>(`${API_BASE_URL}/getUsers`).pipe(
+  getUsers(isFromCreator?: boolean, creatorID?: number): Observable<any> {
+    let url: string = isFromCreator ? `getCreators/${creatorID}` : 'getUsers';
+    const data = this.httpClient.get<any>(`${API_BASE_URL}/${url}`).pipe(
       switchMap((users: any[]) => {
         const getUserDataObservables = users.map((user: any) =>
           this.getUserData(user.user_name.match(/\d+/g)?.map(Number))
@@ -105,15 +106,16 @@ export class ApiService {
       })
     );
     data.subscribe(res => {
+      isFromCreator ? this.stateService.addCreator(res) :
       this.stateService.addUser(res);
     });
 
     return data;
   }
 
-  addUserWithRole(user_name: string, role_id: number): Observable<any> {
+  addUserWithRole(user_name: string, role_id: number, created_by: number): Observable<any> {
     return this.httpClient.post<ApiResponse>(
-      `${API_BASE_URL}/createOrUpdateUser`, {user_name: user_name, role_id: role_id});
+      `${API_BASE_URL}/createOrUpdateUser`, {user_name: user_name, role_id: role_id, created_by: created_by});
   }
 
   // HIRA API CALLS
@@ -126,10 +128,8 @@ export class ApiService {
         roleStatus = this.status[0];
       } else if (state?.loggedInUserData?.role.id == 5) {
         roleStatus = this.status[2];
-      } else if (state?.loggedInUserData?.role.id == 6) {
-        roleStatus = this.status[4];
       } else if (state?.loggedInUserData?.role.id == 7) {
-        roleStatus = this.status[5];
+        roleStatus = this.status[4];
       }
 
       payload = {
@@ -200,12 +200,9 @@ export class ApiService {
         roleStatus = this.status[0];
       } else if (state?.loggedInUserData?.role.id == 5) {
         roleStatus = this.status[2];
-      } else if (state?.loggedInUserData?.role.id == 6) {
-        roleStatus = this.status[4];
       } else if (state?.loggedInUserData?.role.id == 7) {
-        roleStatus = this.status[5];
+        roleStatus = this.status[4];
       }
-
       payload = {
         role_id: state?.loggedInUserData?.role.id,
         user_id: state?.loggedInUserData?.userData?.UserId,
@@ -247,10 +244,8 @@ export class ApiService {
         roleStatus = this.status[0];
       } else if (state?.loggedInUserData?.role.id == 5) {
         roleStatus = this.status[2];
-      } else if (state?.loggedInUserData?.role.id == 6) {
-        roleStatus = this.status[4];
       } else if (state?.loggedInUserData?.role.id == 7) {
-        roleStatus = this.status[5];
+        roleStatus = this.status[4];
       }
 
       payload = {
@@ -275,7 +270,7 @@ export class ApiService {
 
   // common APIS
   getSpecificFunction(id: string) {
-    let payload ={
+    let payload = {
       id: id
     }
     this.httpClient.get<any>(`${API_BASE_URL}/getSpecificFunction`, {params: payload}).subscribe(res => {
@@ -283,8 +278,7 @@ export class ApiService {
     });
   }
 
-  generateReport(payload: any): Observable<any>{
+  generateReport(payload: any): Observable<any> {
     return this.httpClient.post(`${API_BASE_URL}/generateReport`, payload, {responseType: 'blob'});
   }
-
 }

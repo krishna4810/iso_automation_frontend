@@ -35,6 +35,7 @@ export class MasterDataComponent {
     this.dialog.open(AddUserComponent, {
       data: {
         isFromEdit: false,
+        isFromCreator: false,
       },
     });
   }

@@ -127,7 +127,7 @@ export class AddEaiComponent {
     });
     this.grossRankingValue = this.data.formData.gross_ranking_value;
     this.grossRanking = this.data.formData.gross_ranking;
-    if (this.data.formData.residual_ranking_value != null) {
+    if (this.data.formData.status == this.status[6] || this.data.formData.residual_ranking_value != null) {
       this.disableFormControls();
     }
   }
@@ -242,7 +242,7 @@ export class AddEaiComponent {
   }
 
   addHira() {
-    if (this.data?.formData?.status == this.status[7] && this.thirdFormGroup.invalid) {
+    if (this.data?.formData?.status == this.status[6] && this.thirdFormGroup.invalid) {
       this.thirdFormGroup.markAllAsTouched();
     }
     else if (this.secondFormGroup.invalid) {
@@ -267,9 +267,9 @@ export class AddEaiComponent {
         year: startDate.split('/')[2],
         status: this.data?.isFromEdit ?
           (this.data?.formData?.status ===
-            this.status[1] || this.data?.formData?.status === this.status[3] ||
-            this.data?.formData?.status === this.status[6] ||
-            this.data?.formData?.status === this.status[7] ?
+          this.status[1] || this.data?.formData?.status === this.status[3] ||
+          this.data?.formData?.status === this.status[5] ||
+          this.data?.formData?.status === this.status[6] ?
             this.status[0] : this.data?.formData?.status ) : this.status[0]
       }
       this.secondFormGroup.disable();

@@ -12,6 +12,7 @@ export class StateService extends ObservableStore<StoreState>{
   constructor() {
     const initialState = {
       users: undefined,
+      creators: undefined,
       loggedInUserData: undefined,
       hiraList: undefined,
       eaiList: undefined,
@@ -25,6 +26,10 @@ export class StateService extends ObservableStore<StoreState>{
 
   addUser(userData: any[]) {
     this.setState({ users: userData }, 'ADD_USER_DATA');
+  }
+
+  addCreator(userData: any[]) {
+    this.setState({ creators: userData }, 'ADD_USER_DATA');
   }
 
   loggedInUserData(data: LoggedInUserData) {

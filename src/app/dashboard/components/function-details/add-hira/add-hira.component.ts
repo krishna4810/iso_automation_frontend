@@ -127,7 +127,7 @@ export class AddHiraComponent {
     });
     this.grossRankingValue = this.data.formData.gross_ranking_value;
     this.grossRanking = this.data.formData.gross_ranking;
-    if (this.data.formData.status == this.status[7]) {
+    if (this.data.formData.status == this.status[6] || this.data.formData.residual_ranking_value != null) {
       this.disableFormControls();
     }
   }
@@ -271,8 +271,8 @@ export class AddHiraComponent {
         status: this.data?.isFromEdit ?
           (this.data?.formData?.status ===
           this.status[1] || this.data?.formData?.status === this.status[3] ||
-          this.data?.formData?.status === this.status[6] ||
-          this.data?.formData?.status === this.status[7] ?
+          this.data?.formData?.status === this.status[5] ||
+          this.data?.formData?.status === this.status[6] ?
             this.status[0] : this.data?.formData?.status ) : this.status[0]
       }
       this.secondFormGroup.disable();

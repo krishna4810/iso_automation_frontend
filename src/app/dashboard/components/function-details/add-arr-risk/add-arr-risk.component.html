@@ -51,10 +51,10 @@
     <form [formGroup]="secondFormGroup">
       <div class="grid grid-cols-2 gap-4">
         <mat-form-field class="col-span-1">
-          <mat-label>Asset Number</mat-label>
+          <mat-label>Asset Code</mat-label>
           <textarea matInput placeholder="Activity Number" formControlName="assetNumber" cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
           <mat-error class="mb-1" *ngIf="secondFormGroup.get('assetNumber')?.hasError('required')">
-            Asset Number is required
+            Asset Code is required
           </mat-error>
         </mat-form-field>
 
@@ -73,14 +73,14 @@
           </mat-error>
         </mat-form-field>
         <mat-form-field class="col-span-1">
-          <mat-label>Installation Date</mat-label>
+          <mat-label>Installation/Acquisition Date</mat-label>
           <input matInput [matDatepicker]="startDate" formControlName="installationDate">
           <mat-datepicker-toggle matIconSuffix [for]="startDate">
             <mat-icon matDatepickerToggleIcon color="primary">calendar_today</mat-icon>
           </mat-datepicker-toggle>
           <mat-datepicker #startDate></mat-datepicker>
           <mat-error class="mb-1" *ngIf="secondFormGroup.get('installationDate')?.hasError('required')">
-            Installation Date is required
+            Installation/Acquisition Date is required
           </mat-error>
         </mat-form-field>
       </div>

@@ -11,7 +11,7 @@ import {StateService} from "../../../services/state.service";
 })
 export class CreatorsComponent {
 
-  creatorId: string = '';
+  creatorId?: number;
   constructor(private dialog: MatDialog, private apiService: ApiService,
               private stateService: StateService,) {
   }
@@ -20,10 +20,10 @@ export class CreatorsComponent {
     this.getLoggedInUserData();
   }
 
-  getLoggedInUserData() { debugger
+  getLoggedInUserData() {
     this.apiService.getLoggedInUserDataWithRoles(sessionStorage.getItem('username'));
     this.stateService?.stateChanged.subscribe(state => {
-      this.creatorId = state?.loggedInUserData?.userData.UserId.toString();
+      this.creatorId = state?.loggedInUserData?.userData.UserId;
     })
   }
 
@@ -31,6 +31,7 @@ export class CreatorsComponent {
     this.dialog.open(AddUserComponent, {
       data: {
         isFromEdit: false,
+        isFromCreator: true,
       },
     });
   }

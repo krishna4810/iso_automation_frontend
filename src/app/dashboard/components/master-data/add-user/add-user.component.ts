@@ -16,6 +16,7 @@ import {StateService} from "../../../../services/state.service";
 })
 export class AddUserComponent {
   userRoles?: Role[];
+  isNotSamePlant: boolean = true;
   private destroy$ = new Subject<void>();
   userState: any;
   employeeForm: FormGroup = this.formBuilder.group({
@@ -40,8 +41,7 @@ export class AddUserComponent {
     private apiService: ApiService,
     private stateService: StateService,
     public dialogRef: MatDialogRef<AddUserComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: {isFromEdit: boolean, userData?: any}
-
+    @Inject(MAT_DIALOG_DATA) public data: { isFromEdit: boolean, userData?: any, isFromCreator?: boolean }
   ) {
   }
 
@@ -49,7 +49,12 @@ export class AddUserComponent {
     this.getLoggedInUserData();
     try {
       const res = await this.apiService.getPermissions().toPromise();
-      this.userRoles = res;
+      if (this.data?.isFromCreator) {
+        this.userRoles = this.data?.isFromEdit  ?
+          res?.filter(key => ([1,3].includes(key.id))) : res?.filter(key => ([3].includes(key.id)));
+      } else {
+        this.userRoles = res;
+      }
 
       if (this.data?.isFromEdit) {
         await this.patchEditData();
@@ -57,7 +62,6 @@ export class AddUserComponent {
         this.initializeForm();
       }
     } catch (error) {
-      console.error("Error fetching permissions:", error);
     }
   }
 
@@ -70,6 +74,7 @@ export class AddUserComponent {
 
   async patchEditData() {
     let roleName: any = this.userRoles?.find(option => option.id == +this.data.userData.role_id);
+    this.employeeForm.get('UserId')?.disable();
     this.employeeForm.patchValue({
       UserId: this.data.userData?.UserId,
       Name: this.data.userData?.Name,
@@ -83,11 +88,11 @@ export class AddUserComponent {
       UserName: this.data.userData?.UserName,
       UserRole: roleName.id
     });
+    this.isNotSamePlant = false;
   }
 
 
-
-  initializeForm () {
+  initializeForm() {
     // @ts-ignore
     this.employeeForm.get('UserId')?.valueChanges.pipe(
       distinctUntilChanged(),
@@ -99,37 +104,51 @@ export class AddUserComponent {
       (response) => {
         if (response == null) {
           this.blService.openSnackBar("No employee found");
-          this.employeeForm.setValue({
-            UserId: '',
-            Name: '',
-            Email: '',
-            Designation: '',
-            Department: '',
-            Plant: '',
-            Unit: '',
-            Division: '',
-            Grade: '',
-            UserRole: ''
-          });
+          this.employeeForm.invalid;
         } else {
+          this.checkSameEmployee(response);
           this.employeeForm.patchValue(response);
         }
       },
       (error) => {
-        console.error('API call failed:', error);
         this.blService.openSnackBar("Failed to load employee Data");
       }
     );
   }
 
+  checkSameEmployee(formData: any) {
+    if(this.userState?.userData?.UserId == formData.UserId) {
+      this.blService.openSnackBar("You cannot add or update your own self.");
+    } else {
+      this.data?.isFromCreator ? this.checkSamePlantOrNot(formData) : (this.isNotSamePlant = false);
+    }
+  }
+  checkSamePlantOrNot(formData: any){
+    if(this.userState?.userData?.Plant == 'Corporate Office') {
+      if(this.userState?.userData?.Plant == formData.Plant &&
+        this.userState?.userData?.Department == formData.Department) {
+        this.isNotSamePlant = false;
+      } else {
+        this.isNotSamePlant = true;
+        this.blService.openSnackBar('You and Creator are not of same plant or department')
+      }
+    } else {
+      if(this.userState?.userData?.Plant == formData.Plant) {
+        this.isNotSamePlant = false;
+      } else {
+        this.isNotSamePlant = true;
+        this.blService.openSnackBar('You and Creator are not of same plant')
+      }
+    }
+  }
 
   onSubmit() {
     this.apiService.addUserWithRole(this.employeeForm.get('UserName')?.value,
       this.employeeForm.get('UserRole')?.value, this.userState?.userData?.UserId)
       .subscribe(res => {
-      this.blService.openSnackBar(res.message);
-      // this.apiService.getUsers();
-    })
+        this.blService.openSnackBar(res.message);
+        this.apiService.getUsers(this.data?.isFromCreator, this.userState?.userData?.UserId);
+      })
     this.dialogRef.close();
   }
 

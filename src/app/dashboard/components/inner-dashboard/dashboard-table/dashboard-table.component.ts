@@ -37,16 +37,14 @@ export class DashboardTableComponent {
     this.userList = this.data?.dashboardData;
     if (this.userList?.length > 0) {
       this.displayedColumns = Object.keys(this.userList[0]).filter(key => !(
-        ['address', 'unit', 'asset_number',
+        ['address', 'unit', 'asset_number', 'doc_number',
           'existing_control', 'further_action_required', 'gross_ranking_value',
           'residual_likelihood', 'residual_impact', 'residual_ranking_value',
           'created_at', 'updated_at', 'year', 'further_action_required', 'mitigation_measures', 'asset_id', 'date', 'continues_update',
-          'gross_likelihood', 'user_id', 'risk_id', 'creator_name', 'id', 'status', 'existing_control', 'completion_date', 'workers_involved', 'routine_activity',
+          'gross_likelihood', 'user_id', 'risk_id', 'creator_name', 'status', 'existing_control', 'completion_date', 'workers_involved', 'routine_activity',
           'gross_impact', 'risks'].includes(key)));
       this.dataSource = new MatTableDataSource<Role>(this.userList);
     }
-
-
   }
 
 

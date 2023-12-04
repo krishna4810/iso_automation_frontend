@@ -10,6 +10,7 @@ import {FormsComponent} from "./dashboard/components/forms/forms.component";
 import {
   ViewFunctionDetailsComponent
 } from "./dashboard/components/function-details/view-function-details/view-function-details.component";
+import {CreatorsComponent} from "./dashboard/components/creators/creators.component";
 
 const routes: Routes = [
   {
@@ -50,6 +51,11 @@ const routes: Routes = [
       {
         path: 'forms',
         component: FormsComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'creators',
+        component: CreatorsComponent,
         canActivate: [AuthGuard]
       },
     ]

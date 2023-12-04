@@ -35,7 +35,7 @@ export class SharedRejectDialogComponent {
     } else if (this.data.role_id == 5) {
       this.roleStatus = this.status[3];
     } else if (this.data.role_id == 7) {
-      this.roleStatus = this.status[6];
+      this.roleStatus = this.status[5];
     }
     this.addComment();
   }
@@ -53,9 +53,12 @@ export class SharedRejectDialogComponent {
     }
     this.apiService.addComment(commentPayload).subscribe(res => {
       this.apiService.hiraStatusChange(hiraPayload).subscribe(res => {
-        this.apiService.getHira();
         this.blservice.openSnackBar(res.message);
-        this.router.navigate(['/home', 'dashboard']);
+        if (this.data?.isRisk) {
+          this.apiService.getSpecificFunction(this.data?.formData?.asset_id);
+        } else {
+          this.router.navigate(['/home', 'dashboard']);
+        }
       })
     })
     this.dialogRef.close();

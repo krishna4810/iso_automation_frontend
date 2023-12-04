@@ -24,7 +24,7 @@ export class ViewFunctionDetailsComponent {
   functionalDetail: any | undefined;
   status = STATUS;
   isNullRisk?: boolean;
-  functionalType?: string;
+  belongsToSame?: boolean;
 
   constructor(private apiService: ApiService,
               private route: ActivatedRoute,
@@ -44,6 +44,24 @@ export class ViewFunctionDetailsComponent {
           this.functionalDetail = state?.singleFunction?.find(funct => funct.id == this.id);
           // @ts-ignore
           this.id.includes('A') && (this.isNullRisk = this.functionalDetail?.risks.some(risk => risk.gross_likelihood === null));
+
+          if (this.userState?.userData?.Plant == 'Corporate Office') {
+            if (this.userState.userData.Plant == this.functionalDetail.plant &&
+              this.userState.userData.Department == this.functionalDetail.department) {
+              this.belongsToSame = true;
+
+            } else {
+              this.belongsToSame = false;
+            }
+          } else {
+            if (this.userState.userData.Plant == this.functionalDetail.plant) {
+              this.belongsToSame = true;
+
+            } else {
+              this.belongsToSame = false;
+            }
+          }
+
         }
       });
     });
@@ -101,6 +119,4 @@ export class ViewFunctionDetailsComponent {
       minWidth: '150vh'
     });
   }
-
-
 }

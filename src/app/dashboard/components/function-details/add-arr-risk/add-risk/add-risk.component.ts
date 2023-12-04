@@ -45,7 +45,6 @@ export class AddRiskComponent {
   }
 
   ngOnInit() {
-    console.log(this.data.formData);
     this.stateService.stateChanged.subscribe((state) => {
       this.userState = state.loggedInUserData
     });
@@ -136,9 +135,9 @@ export class AddRiskComponent {
         status: this.data?.isFromEdit ?
           (this.data?.formData?.status ===
           this.status[1] || this.data?.formData?.status === this.status[3] ||
-          this.data?.formData?.status === this.status[6] ||
-          this.data?.formData?.status === this.status[7] ?
-            this.status[0] : this.data?.formData?.status) : this.status[0]
+          this.data?.formData?.status === this.status[5] ||
+          this.data?.formData?.status === this.status[6] ?
+            this.status[0] : this.data?.formData?.status ) : this.status[0]
       }
       this.apiService.addRisk(payload).subscribe(res => {
         this.apiService.getSpecificFunction(this.data.isFromEdit ? this.data?.formData.asset_id : this.data?.formData?.id);

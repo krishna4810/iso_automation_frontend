@@ -1,22 +1,25 @@
-import {Component, AfterViewInit, ViewChild, Input} from '@angular/core';
-import { ApiService } from '../../../../services/api.service';
-import { StateService } from '../../../../services/state.service';
-import { AddUserComponent } from '../add-user/add-user.component';
-import { MatDialog } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import {Component, Input, ViewChild} from '@angular/core';
+import {MatSort} from "@angular/material/sort";
+import {MatPaginator} from "@angular/material/paginator";
+import {MatTableDataSource} from "@angular/material/table";
+import {MatDialog} from "@angular/material/dialog";
+import {ApiService} from "../../../../services/api.service";
+import {StateService} from "../../../../services/state.service";
+import {AddUserComponent} from "../../master-data/add-user/add-user.component";
 
 @Component({
-  selector: 'app-user-table',
-  templateUrl: './user-table.component.html',
-  styleUrls: ['./user-table.component.scss'],
+  selector: 'app-creator-table',
+  templateUrl: './creator-table.component.html',
+  styleUrls: ['./creator-table.component.scss']
 })
-export class UserTableComponent implements AfterViewInit {
+export class CreatorTableComponent {
+
+  creatorId?: number;
 
   @ViewChild(MatSort) set contentSort(sort: MatSort) {
     this.dataSource.sort = sort;
   }
+
   @ViewChild(MatPaginator) set contentPaginator(paginator: MatPaginator) {
     this.dataSource.paginator = paginator;
   }
@@ -30,10 +33,14 @@ export class UserTableComponent implements AfterViewInit {
     private apiService: ApiService,
     private stateService: StateService
   ) {
-    this.apiService.getUsers();
+    this.apiService.getLoggedInUserDataWithRoles(sessionStorage.getItem('username'));
+    this.stateService?.stateChanged.subscribe(state => {
+      this.creatorId = state?.loggedInUserData?.userData.UserId;
+    });
+    this.apiService.getUsers(true, this.creatorId);
     this.stateService.stateChanged.subscribe(state => {
-      if(state.users) {
-        this.userList = state.users;
+      if (state.creators) {
+        this.userList = state.creators;
         this.displayedColumns = Object.keys(this.userList[0]).filter((key) =>
           ![
             'role_id',
@@ -54,15 +61,12 @@ export class UserTableComponent implements AfterViewInit {
     });
   }
 
-  ngAfterViewInit() {
-  }
-
   viewUserDetail(event: any) {
     this.dialog.open(AddUserComponent, {
       data: {
         isFromEdit: true,
         userData: event,
-        isFromCreator: false,
+        isFromCreator: true,
       },
     });
   }
