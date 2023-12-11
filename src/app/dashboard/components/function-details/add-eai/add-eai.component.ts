@@ -215,7 +215,6 @@ export class AddEaiComponent {
       this.residualRanking = this.blService.calculateRanking(this.residualRankingValue);
       // @ts-ignore
       this.thirdFormGroup?.get('r_ranking')?.setValue(this.residualRanking);
-      console.log(this.thirdFormGroup);
     }
   }
 

@@ -7,7 +7,7 @@
           <mat-form-field class="w-full">
             <div class="flex">
               <mat-icon class="mr-2">search</mat-icon>
-              <input matInput placeholder="Search by Name, Employee ID, Role Name or anything">
+              <input matInput placeholder="Search by Name, Employee ID, Role Name or anything" (keyup)="filterUser($event)">
             </div>
           </mat-form-field>
         </div>

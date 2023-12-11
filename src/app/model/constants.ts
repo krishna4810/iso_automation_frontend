@@ -3,7 +3,7 @@ import {FunctionRanking, HiraActivity, LoggedInUserData, sideNav, Status} from "
 // export const AUTH_TOKEN: string | null =
 export const API_KEY: string = "api_key=%2Fapi%2FUser%2FAuthenticate";
 export const PRIMARY_COLOR: string = '#089046';
-export const API_BASE_URL: string = "http://127.0.0.1:8000/api";
+export const API_BASE_URL: string = "http://172.30.1.95:8080/api";
 export const AUTHENTICATION_API_BASE_URL: string = "https://api.drukgreen.bt/api";
 export const API_LOGIN: string = "User/Authenticate";
 

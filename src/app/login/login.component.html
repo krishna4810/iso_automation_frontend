@@ -1,45 +1,49 @@
 <div class="overlay"></div>
-<div class="flex justify-center items-center">
-  <div class="w-full max-w-md">
-    <mat-card class="login-card">
-      <mat-card-header>
-        <img class="mx-auto h-20 w-50"
-             src="https://eas.drukgreen.bt/assets/images/dgpc_logo.png">
-      </mat-card-header>
-      <br>
-      <mat-card-content>
-        <h2 class="text-center text-2xl font-medium text-green-600 mb-6">ISO Compliance System</h2>
-        <form [formGroup]="loginForm" (submit)="login()">
-          <mat-form-field class="mb-2 w-full">
-            <mat-label>User Name</mat-label>
-            <input matInput type="text" formControlName="username">
-            <mat-icon matSuffix color="primary">supervisor_account</mat-icon>
-            <mat-error class="mb-1" *ngIf="loginForm.get('username')?.hasError('required')">
-              Username is required
-            </mat-error>
-          </mat-form-field>
+<div class="overlay-content">
+  <div class="flex justify-center items-center h-screen">
+    <div class="bg-white p-8 shadow-md rounded-md flex" style="width: 50%">
+      <div class="mr-8 flex-1">
+        <img class="mx-auto h-full w-full" src="/assets/iso.png">
+      </div>
+      <div class="flex-1">
+        <mat-card-content>
+          <mat-card-header>
+            <img class="mx-auto h-20 w-50"
+                 src="/assets/logo.png">
+          </mat-card-header>
+          <br>
+          <h2 class="text-center text-2xl font-medium text-green-600 mb-6">ISO Compliance System</h2>
+          <form [formGroup]="loginForm" (submit)="login()">
+            <mat-form-field class="mb-2 w-full">
+              <mat-label>User Name</mat-label>
+              <input matInput type="text" formControlName="username">
+              <mat-icon matSuffix color="primary">supervisor_account</mat-icon>
+              <mat-error class="mb-1" *ngIf="loginForm.get('username')?.hasError('required')">
+                Username is required
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field class="w-full">
+              <mat-label>Password</mat-label>
+              <input matInput formControlName="password" [type]="hide ? 'text': 'password'">
+              <mat-icon color="primary" matSuffix
+                        (click)="turnVisibility()">{{ hide ? 'visibility' : 'visibility_off'}}</mat-icon>
 
+              <mat-error class="mb-1" *ngIf="loginForm.get('password')?.hasError('required')">
+                Password is required
+              </mat-error>
+            </mat-form-field>
+            <button mat-raised-button type="submit" color="primary" class="mt-4 mb-5 w-full" style="height: 50px">
+              Login
+            </button>
+          </form>
 
-          <mat-form-field class="w-full">
-            <mat-label>Password</mat-label>
-            <input matInput formControlName="password" [type]="hide ? 'text': 'password'">
-            <mat-icon color="primary" matSuffix
-                      (click)="turnVisibility()">{{ hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+        </mat-card-content>
+      </div>
 
-            <mat-error class="mb-1" *ngIf="loginForm.get('password')?.hasError('required')">
-              Password is required
-            </mat-error>
-          </mat-form-field>
-
-
-          <button mat-raised-button type="submit" color="primary" class="mt-4 mb-5 w-full" style="height: 50px">
-            Login
-          </button>
-        </form>
-
-      </mat-card-content>
-    </mat-card>
+    </div>
   </div>
 </div>
+
+
 
 

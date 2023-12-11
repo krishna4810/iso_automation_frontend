@@ -1,8 +1,10 @@
-import {Component} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {AddUserComponent} from "../master-data/add-user/add-user.component";
 import {MatDialog} from "@angular/material/dialog";
 import {ApiService} from "../../../services/api.service";
 import {StateService} from "../../../services/state.service";
+import {UserTableComponent} from "../master-data/user-table/user-table.component";
+import {CreatorTableComponent} from "./creator-table/creator-table.component";
 
 @Component({
   selector: 'app-creators',
@@ -12,6 +14,9 @@ import {StateService} from "../../../services/state.service";
 export class CreatorsComponent {
 
   creatorId?: number;
+
+  @ViewChild(CreatorTableComponent) creatorComponent!: CreatorTableComponent;
+
   constructor(private dialog: MatDialog, private apiService: ApiService,
               private stateService: StateService,) {
   }
@@ -34,5 +39,9 @@ export class CreatorsComponent {
         isFromCreator: true,
       },
     });
+  }
+
+  filterUser(event: Event){
+    this.creatorComponent.applyFilter(event);
   }
 }

@@ -21,7 +21,6 @@ export class StateService extends ObservableStore<StoreState>{
     }
     super({ trackStateHistory: true });
     this.setState(initialState, 'INIT_STATE');
-    console.log(this.stateHistory);
   }
 
   addUser(userData: any[]) {

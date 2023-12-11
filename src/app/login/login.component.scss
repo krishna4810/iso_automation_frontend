@@ -10,19 +10,12 @@
   background-position: center;
 }
 
-.login-card {
-  background-color: white !important;
-  width: 370px;
-  margin: auto;
-  margin-top: 50px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
+.overlay-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  width: 100%;
+  text-align: center;
 }
-
-
-
-
-
-
-
